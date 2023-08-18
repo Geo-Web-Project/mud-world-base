@@ -35,5 +35,24 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    MediaObject: (() => {
+      const tableId = new TableId("geoweb", "MediaObject");
+      return defineComponent(
+        world,
+        {
+          name: RecsType.String,
+          mediaType: RecsType.String,
+          contentHash: RecsType.BigInt,
+          contentSize: RecsType.BigInt,
+          encodingFormat: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHex(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
   };
 }

@@ -7,7 +7,7 @@ export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { worldSend, txReduced$, singletonEntity }: SetupNetworkResult,
-  { Name, Url }: ClientComponents
+  { Name, Url, MediaObject }: ClientComponents
 ) {
   const setName = async (name: string) => {
     const tx = await worldSend("geoweb_ProfileSystem_setName", [name]);

@@ -5,3 +5,4 @@ pragma solidity >=0.8.0;
 
 import { Name, NameTableId } from "./tables/Name.sol";
 import { Url, UrlTableId } from "./tables/Url.sol";
+import { MediaObject, MediaObjectData, MediaObjectTableId } from "./tables/MediaObject.sol";

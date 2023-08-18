@@ -114,6 +114,9 @@ importers:
       '@latticexyz/cli':
         specifier: 2.0.0-next.2
         version: 2.0.0-next.2(google-protobuf@3.21.2)
+      '@latticexyz/config':
+        specifier: 2.0.0-next.2
+        version: 2.0.0-next.2(typescript@5.1.6)
       '@latticexyz/schema-type':
         specifier: 2.0.0-next.2
         version: 2.0.0-next.2(typescript@5.1.6)(zod@3.21.4)
