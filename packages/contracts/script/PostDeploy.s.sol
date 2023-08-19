@@ -21,7 +21,7 @@ contract PostDeploy is Script {
             MediaObjectData({
                 name: "Name",
                 mediaType: MediaObjectType.Image,
-                contentHash: new bytes(0),
+                contentHash: hex"001122",
                 contentSize: 0,
                 encodingFormat: EncodingFormat.Jpeg
             })
