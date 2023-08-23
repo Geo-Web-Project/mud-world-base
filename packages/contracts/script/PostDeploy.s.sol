@@ -23,7 +23,7 @@ contract PostDeploy is Script {
             MediaObjectData({
                 name: "App Logo",
                 mediaType: MediaObjectType.Image,
-                contentHash: hex"e3010182041220ab3df0316897c82f117f079bcd3466d439a3a87eff3fdaf6f6ebdee27c315bf5",
+                contentHash: hex"e3010155122055c19cfa5032eae6cc5cfe6350c5545dc270c0c8e63264da275ad903e50b2ea5",
                 contentSize: 33649,
                 encodingFormat: EncodingFormat.Png
             })
@@ -32,7 +32,7 @@ contract PostDeploy is Script {
             MediaObjectData({
                 name: "Buddha",
                 mediaType: MediaObjectType.Model3D,
-                contentHash: hex"e3010182041220af0a748b2ccc91ee6ad3d7a6b75ab22a9418f2bdc8ee7e9cb2c6613036027027",
+                contentHash: hex"e301017012208fdf9e63064917220218e7b261b39c1cffbe2b66a231ce53bd6f4c29a4b5e6e1",
                 contentSize: 22712008,
                 encodingFormat: EncodingFormat.Usdz
             })
