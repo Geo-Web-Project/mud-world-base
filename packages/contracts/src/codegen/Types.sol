@@ -17,5 +17,6 @@ enum EncodingFormat {
   Png,
   Svg,
   Mpeg,
-  Mp4
+  Mp4,
+  Mp3
 }

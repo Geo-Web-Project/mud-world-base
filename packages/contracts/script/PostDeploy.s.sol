@@ -37,6 +37,24 @@ contract PostDeploy is Script {
                 encodingFormat: EncodingFormat.Usdz
             })
         );
+        IWorld(worldAddress).geoweb_MediaGallerySyst_addToMediaGallery(
+            MediaObjectData({
+                name: "Sample Audio",
+                mediaType: MediaObjectType.Audio,
+                contentHash: hex"e301015512204fcb312155dc09bdfa9c615c5b058e206e36ee4917cb23ea3086dc86afd77540",
+                contentSize: 481161,
+                encodingFormat: EncodingFormat.Mp3
+            })
+        );
+        IWorld(worldAddress).geoweb_MediaGallerySyst_addToMediaGallery(
+            MediaObjectData({
+                name: "Sample Video",
+                mediaType: MediaObjectType.Video,
+                contentHash: hex"e3010170122010744edb4ff8bbcb6203fe3b8fd6fc2bbc9c9e577f720273d79fa220406d2408",
+                contentSize: 13426489,
+                encodingFormat: EncodingFormat.Mp4
+            })
+        );
 
         vm.stopBroadcast();
     }
