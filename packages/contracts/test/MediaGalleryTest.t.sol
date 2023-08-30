@@ -27,7 +27,7 @@ contract MediaGalleryTest is MudTest {
     }
 
     function testAddToMediaGallery() public {
-        world.geoweb_MediaGallerySyst_addToMediaGallery(
+        bytes32 key = world.geoweb_MediaGallerySyst_addToMediaGallery(
             MediaObjectData({
                 name: "Name",
                 mediaType: MediaObjectType.Image,
@@ -37,15 +37,6 @@ contract MediaGalleryTest is MudTest {
             })
         );
 
-        bytes32[][] memory mediaObjects = getKeysInTable(
-            world,
-            MediaObjectTableId
-        );
-
-        assertEq(mediaObjects.length, 1);
-        assertEq(mediaObjects[0].length, 1);
-
-        bytes32 key = mediaObjects[0][0];
         MediaObjectData memory mediaObjectData = MediaObject.get(world, key);
         assertEq(mediaObjectData.name, "Name");
         assertEq(uint(mediaObjectData.mediaType), uint(MediaObjectType.Image));
@@ -57,7 +48,7 @@ contract MediaGalleryTest is MudTest {
     }
 
     function testRemoveFromMediaGallery() public {
-        world.geoweb_MediaGallerySyst_addToMediaGallery(
+        bytes32 key = world.geoweb_MediaGallerySyst_addToMediaGallery(
             MediaObjectData({
                 name: "Name",
                 mediaType: MediaObjectType.Image,
@@ -72,14 +63,12 @@ contract MediaGalleryTest is MudTest {
             MediaObjectTableId
         );
 
-        assertEq(mediaObjects.length, 1);
+        uint256 oldLength = mediaObjects.length;
 
-        world.geoweb_MediaGallerySyst_removeFromMediaGallery(
-            mediaObjects[0][0]
-        );
+        world.geoweb_MediaGallerySyst_removeFromMediaGallery(key);
 
         mediaObjects = getKeysInTable(world, MediaObjectTableId);
 
-        assertEq(mediaObjects.length, 0);
+        assertEq(oldLength - mediaObjects.length, 1);
     }
 }

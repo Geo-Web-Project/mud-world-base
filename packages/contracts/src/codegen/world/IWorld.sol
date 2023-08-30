@@ -5,6 +5,7 @@ pragma solidity >=0.8.0;
 
 import { IBaseWorld } from "@latticexyz/world/src/interfaces/IBaseWorld.sol";
 
+import { IARSystem } from "./IARSystem.sol";
 import { IMediaGallerySystem } from "./IMediaGallerySystem.sol";
 import { IProfileSystem } from "./IProfileSystem.sol";
 
@@ -12,6 +13,6 @@ import { IProfileSystem } from "./IProfileSystem.sol";
  * The IWorld interface includes all systems dynamically added to the World
  * during the deploy process.
  */
-interface IWorld is IBaseWorld, IMediaGallerySystem, IProfileSystem {
+interface IWorld is IBaseWorld, IARSystem, IMediaGallerySystem, IProfileSystem {
 
 }

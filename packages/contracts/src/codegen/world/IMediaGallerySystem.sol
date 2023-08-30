@@ -6,7 +6,9 @@ pragma solidity >=0.8.0;
 import { MediaObjectData } from "./../Tables.sol";
 
 interface IMediaGallerySystem {
-  function geoweb_MediaGallerySyst_addToMediaGallery(MediaObjectData memory mediaObjectData) external;
+  function geoweb_MediaGallerySyst_addToMediaGallery(
+    MediaObjectData memory mediaObjectData
+  ) external returns (bytes32 key);
 
   function geoweb_MediaGallerySyst_removeFromMediaGallery(bytes32 key) external;
 }

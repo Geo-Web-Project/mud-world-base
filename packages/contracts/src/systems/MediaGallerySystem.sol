@@ -10,8 +10,10 @@ contract MediaGallerySystem is System {
     /**
      * @notice - Add to media gallery
      **/
-    function addToMediaGallery(MediaObjectData memory mediaObjectData) public {
-        bytes32 key = getUniqueEntity();
+    function addToMediaGallery(
+        MediaObjectData memory mediaObjectData
+    ) public returns (bytes32 key) {
+        key = getUniqueEntity();
 
         MediaObject.set(key, mediaObjectData);
     }

@@ -4,7 +4,7 @@ pragma solidity >=0.8.0;
 import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
 import {IWorld} from "../src/codegen/world/IWorld.sol";
-import {MediaObjectData} from "../src/codegen/Tables.sol";
+import {MediaObjectData, PositionComponentData, ScaleComponentData, OrientationComponentData, AnchorComponentTableId} from "../src/codegen/Tables.sol";
 import {MediaObjectType, EncodingFormat} from "../src/codegen/Types.sol";
 
 contract PostDeploy is Script {
@@ -54,6 +54,16 @@ contract PostDeploy is Script {
                 contentSize: 13426489,
                 encodingFormat: EncodingFormat.Mp4
             })
+        );
+
+        // Add AR objects
+        bytes32 anchorKey = IWorld(worldAddress).geoweb_ARSystem_addNewAnchor(
+            PositionComponentData({x: 0, y: 0, z: -1})
+        );
+
+        IWorld(worldAddress).geoweb_ARSystem_addNewObject(
+            anchorKey,
+            hex"e301017012208fdf9e63064917220218e7b261b39c1cffbe2b66a231ce53bd6f4c29a4b5e6e1"
         );
 
         vm.stopBroadcast();
