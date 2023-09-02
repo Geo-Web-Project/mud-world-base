@@ -58,7 +58,7 @@ contract PostDeploy is Script {
 
         // Add AR objects
         bytes32 anchorKey = IWorld(worldAddress).geoweb_ARSystem_addNewAnchor(
-            PositionComponentData({x: 0, y: 0, z: -1})
+            PositionComponentData({x: 0, y: 0, z: -1 * (10 ** 18)})
         );
 
         IWorld(worldAddress).geoweb_ARSystem_addNewObject(

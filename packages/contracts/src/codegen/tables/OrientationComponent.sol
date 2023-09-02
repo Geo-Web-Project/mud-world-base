@@ -21,20 +21,20 @@ bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16("geoweb"), bytes16(
 bytes32 constant OrientationComponentTableId = _tableId;
 
 struct OrientationComponentData {
-  int32 x;
-  int32 y;
-  int32 z;
-  int32 w;
+  int256 x;
+  int256 y;
+  int256 z;
+  int256 w;
 }
 
 library OrientationComponent {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](4);
-    _schema[0] = SchemaType.INT32;
-    _schema[1] = SchemaType.INT32;
-    _schema[2] = SchemaType.INT32;
-    _schema[3] = SchemaType.INT32;
+    _schema[0] = SchemaType.INT256;
+    _schema[1] = SchemaType.INT256;
+    _schema[2] = SchemaType.INT256;
+    _schema[3] = SchemaType.INT256;
 
     return SchemaLib.encode(_schema);
   }
@@ -79,25 +79,25 @@ library OrientationComponent {
   }
 
   /** Get x */
-  function getX(bytes32 key) internal view returns (int32 x) {
+  function getX(bytes32 key) internal view returns (int256 x) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
-    return (int32(uint32(Bytes.slice4(_blob, 0))));
+    return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
   /** Get x (using the specified store) */
-  function getX(IStore _store, bytes32 key) internal view returns (int32 x) {
+  function getX(IStore _store, bytes32 key) internal view returns (int256 x) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
-    return (int32(uint32(Bytes.slice4(_blob, 0))));
+    return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
   /** Set x */
-  function setX(bytes32 key, int32 x) internal {
+  function setX(bytes32 key, int256 x) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -105,7 +105,7 @@ library OrientationComponent {
   }
 
   /** Set x (using the specified store) */
-  function setX(IStore _store, bytes32 key, int32 x) internal {
+  function setX(IStore _store, bytes32 key, int256 x) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -113,25 +113,25 @@ library OrientationComponent {
   }
 
   /** Get y */
-  function getY(bytes32 key) internal view returns (int32 y) {
+  function getY(bytes32 key) internal view returns (int256 y) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
-    return (int32(uint32(Bytes.slice4(_blob, 0))));
+    return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
   /** Get y (using the specified store) */
-  function getY(IStore _store, bytes32 key) internal view returns (int32 y) {
+  function getY(IStore _store, bytes32 key) internal view returns (int256 y) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
-    return (int32(uint32(Bytes.slice4(_blob, 0))));
+    return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
   /** Set y */
-  function setY(bytes32 key, int32 y) internal {
+  function setY(bytes32 key, int256 y) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -139,7 +139,7 @@ library OrientationComponent {
   }
 
   /** Set y (using the specified store) */
-  function setY(IStore _store, bytes32 key, int32 y) internal {
+  function setY(IStore _store, bytes32 key, int256 y) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -147,25 +147,25 @@ library OrientationComponent {
   }
 
   /** Get z */
-  function getZ(bytes32 key) internal view returns (int32 z) {
+  function getZ(bytes32 key) internal view returns (int256 z) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
-    return (int32(uint32(Bytes.slice4(_blob, 0))));
+    return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
   /** Get z (using the specified store) */
-  function getZ(IStore _store, bytes32 key) internal view returns (int32 z) {
+  function getZ(IStore _store, bytes32 key) internal view returns (int256 z) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
-    return (int32(uint32(Bytes.slice4(_blob, 0))));
+    return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
   /** Set z */
-  function setZ(bytes32 key, int32 z) internal {
+  function setZ(bytes32 key, int256 z) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -173,7 +173,7 @@ library OrientationComponent {
   }
 
   /** Set z (using the specified store) */
-  function setZ(IStore _store, bytes32 key, int32 z) internal {
+  function setZ(IStore _store, bytes32 key, int256 z) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -181,25 +181,25 @@ library OrientationComponent {
   }
 
   /** Get w */
-  function getW(bytes32 key) internal view returns (int32 w) {
+  function getW(bytes32 key) internal view returns (int256 w) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 3);
-    return (int32(uint32(Bytes.slice4(_blob, 0))));
+    return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
   /** Get w (using the specified store) */
-  function getW(IStore _store, bytes32 key) internal view returns (int32 w) {
+  function getW(IStore _store, bytes32 key) internal view returns (int256 w) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 3);
-    return (int32(uint32(Bytes.slice4(_blob, 0))));
+    return (int256(uint256(Bytes.slice32(_blob, 0))));
   }
 
   /** Set w */
-  function setW(bytes32 key, int32 w) internal {
+  function setW(bytes32 key, int256 w) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -207,7 +207,7 @@ library OrientationComponent {
   }
 
   /** Set w (using the specified store) */
-  function setW(IStore _store, bytes32 key, int32 w) internal {
+  function setW(IStore _store, bytes32 key, int256 w) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -233,7 +233,7 @@ library OrientationComponent {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, int32 x, int32 y, int32 z, int32 w) internal {
+  function set(bytes32 key, int256 x, int256 y, int256 z, int256 w) internal {
     bytes memory _data = encode(x, y, z, w);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -243,7 +243,7 @@ library OrientationComponent {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, int32 x, int32 y, int32 z, int32 w) internal {
+  function set(IStore _store, bytes32 key, int256 x, int256 y, int256 z, int256 w) internal {
     bytes memory _data = encode(x, y, z, w);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -264,17 +264,17 @@ library OrientationComponent {
 
   /** Decode the tightly packed blob using this table's schema */
   function decode(bytes memory _blob) internal pure returns (OrientationComponentData memory _table) {
-    _table.x = (int32(uint32(Bytes.slice4(_blob, 0))));
+    _table.x = (int256(uint256(Bytes.slice32(_blob, 0))));
 
-    _table.y = (int32(uint32(Bytes.slice4(_blob, 4))));
+    _table.y = (int256(uint256(Bytes.slice32(_blob, 32))));
 
-    _table.z = (int32(uint32(Bytes.slice4(_blob, 8))));
+    _table.z = (int256(uint256(Bytes.slice32(_blob, 64))));
 
-    _table.w = (int32(uint32(Bytes.slice4(_blob, 12))));
+    _table.w = (int256(uint256(Bytes.slice32(_blob, 96))));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(int32 x, int32 y, int32 z, int32 w) internal pure returns (bytes memory) {
+  function encode(int256 x, int256 y, int256 z, int256 w) internal pure returns (bytes memory) {
     return abi.encodePacked(x, y, z, w);
   }
 

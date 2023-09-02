@@ -47,13 +47,13 @@ export default mudConfig({
       },
     },
     PositionComponent: {
-      schema: { x: "int32", y: "int32", z: "int32" },
+      schema: { x: "int256", y: "int256", z: "int256" },
     },
     ScaleComponent: {
-      schema: { x: "int32", y: "int32", z: "int32" },
+      schema: { x: "int256", y: "int256", z: "int256" },
     },
     OrientationComponent: {
-      schema: { x: "int32", y: "int32", z: "int32", w: "int32" },
+      schema: { x: "int256", y: "int256", z: "int256", w: "int256" },
     },
     Model3DComponent: {
       schema: { usdz: "bytes" },
