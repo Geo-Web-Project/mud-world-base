@@ -18,7 +18,7 @@ import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
 // Import user types
-import { MediaObjectType, EncodingFormat } from "./../Types.sol";
+import { MediaObjectType, MediaObjectEncodingFormat } from "./../Types.sol";
 
 bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16("geoweb"), bytes16("MediaObject")));
 bytes32 constant MediaObjectTableId = _tableId;
@@ -26,7 +26,7 @@ bytes32 constant MediaObjectTableId = _tableId;
 struct MediaObjectData {
   uint64 contentSize;
   MediaObjectType mediaType;
-  EncodingFormat encodingFormat;
+  MediaObjectEncodingFormat encodingFormat;
   string name;
   bytes contentHash;
 }
@@ -153,25 +153,28 @@ library MediaObject {
   }
 
   /** Get encodingFormat */
-  function getEncodingFormat(bytes32 key) internal view returns (EncodingFormat encodingFormat) {
+  function getEncodingFormat(bytes32 key) internal view returns (MediaObjectEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
-    return EncodingFormat(uint8(Bytes.slice1(_blob, 0)));
+    return MediaObjectEncodingFormat(uint8(Bytes.slice1(_blob, 0)));
   }
 
   /** Get encodingFormat (using the specified store) */
-  function getEncodingFormat(IStore _store, bytes32 key) internal view returns (EncodingFormat encodingFormat) {
+  function getEncodingFormat(
+    IStore _store,
+    bytes32 key
+  ) internal view returns (MediaObjectEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
-    return EncodingFormat(uint8(Bytes.slice1(_blob, 0)));
+    return MediaObjectEncodingFormat(uint8(Bytes.slice1(_blob, 0)));
   }
 
   /** Set encodingFormat */
-  function setEncodingFormat(bytes32 key, EncodingFormat encodingFormat) internal {
+  function setEncodingFormat(bytes32 key, MediaObjectEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -179,7 +182,7 @@ library MediaObject {
   }
 
   /** Set encodingFormat (using the specified store) */
-  function setEncodingFormat(IStore _store, bytes32 key, EncodingFormat encodingFormat) internal {
+  function setEncodingFormat(IStore _store, bytes32 key, MediaObjectEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -445,7 +448,7 @@ library MediaObject {
     bytes32 key,
     uint64 contentSize,
     MediaObjectType mediaType,
-    EncodingFormat encodingFormat,
+    MediaObjectEncodingFormat encodingFormat,
     string memory name,
     bytes memory contentHash
   ) internal {
@@ -463,7 +466,7 @@ library MediaObject {
     bytes32 key,
     uint64 contentSize,
     MediaObjectType mediaType,
-    EncodingFormat encodingFormat,
+    MediaObjectEncodingFormat encodingFormat,
     string memory name,
     bytes memory contentHash
   ) internal {
@@ -494,7 +497,7 @@ library MediaObject {
 
     _table.mediaType = MediaObjectType(uint8(Bytes.slice1(_blob, 8)));
 
-    _table.encodingFormat = EncodingFormat(uint8(Bytes.slice1(_blob, 9)));
+    _table.encodingFormat = MediaObjectEncodingFormat(uint8(Bytes.slice1(_blob, 9)));
 
     // Store trims the blob if dynamic fields are all empty
     if (_blob.length > 10) {
@@ -516,7 +519,7 @@ library MediaObject {
   function encode(
     uint64 contentSize,
     MediaObjectType mediaType,
-    EncodingFormat encodingFormat,
+    MediaObjectEncodingFormat encodingFormat,
     string memory name,
     bytes memory contentHash
   ) internal pure returns (bytes memory) {

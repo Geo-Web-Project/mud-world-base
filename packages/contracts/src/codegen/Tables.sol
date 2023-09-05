@@ -9,6 +9,6 @@ import { MediaObject, MediaObjectData, MediaObjectTableId } from "./tables/Media
 import { PositionComponent, PositionComponentData, PositionComponentTableId } from "./tables/PositionComponent.sol";
 import { ScaleComponent, ScaleComponentData, ScaleComponentTableId } from "./tables/ScaleComponent.sol";
 import { OrientationComponent, OrientationComponentData, OrientationComponentTableId } from "./tables/OrientationComponent.sol";
-import { Model3DComponent, Model3DComponentTableId } from "./tables/Model3DComponent.sol";
+import { ModelComponent, ModelComponentData, ModelComponentTableId } from "./tables/ModelComponent.sol";
 import { TrackedImageComponent, TrackedImageComponentData, TrackedImageComponentTableId } from "./tables/TrackedImageComponent.sol";
 import { AnchorComponent, AnchorComponentData, AnchorComponentTableId } from "./tables/AnchorComponent.sol";

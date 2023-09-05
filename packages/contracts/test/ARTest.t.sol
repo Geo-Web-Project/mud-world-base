@@ -5,8 +5,8 @@ import "forge-std/Test.sol";
 import {MudTest} from "@latticexyz/store/src/MudTest.sol";
 
 import {IWorld} from "../src/codegen/world/IWorld.sol";
-import {TrackedImageComponent, TrackedImageComponentData, ScaleComponentData, PositionComponentData, OrientationComponentData, AnchorComponent, AnchorComponentData, Model3DComponent} from "../src/codegen/Tables.sol";
-import {ImageEncodingFormat} from "../src/codegen/Types.sol";
+import {TrackedImageComponent, TrackedImageComponentData, ScaleComponentData, PositionComponentData, OrientationComponentData, AnchorComponent, AnchorComponentData, ModelComponent, ModelComponentData} from "../src/codegen/Tables.sol";
+import {ImageEncodingFormat, ModelEncodingFormat} from "../src/codegen/Types.sol";
 import {getKeysInTable} from "@latticexyz/world/src/modules/keysintable/getKeysInTable.sol";
 import "forge-std/console.sol";
 
@@ -28,7 +28,7 @@ contract ARTest is MudTest {
     }
 
     function testAddAnchor() public {
-        bytes32 key = world.geoweb_ARSystem_addNewImageAnchor(
+        bytes32 key = world.geoweb_ARSystem_addImageAnchor(
             TrackedImageComponentData({
                 physicalWidthInMillimeters: 165,
                 imageAsset: new bytes(0),
@@ -43,7 +43,7 @@ contract ARTest is MudTest {
     }
 
     function testAddObject() public {
-        bytes32 anchor = world.geoweb_ARSystem_addNewImageAnchor(
+        bytes32 anchor = world.geoweb_ARSystem_addImageAnchor(
             TrackedImageComponentData({
                 physicalWidthInMillimeters: 165,
                 imageAsset: new bytes(0),
@@ -51,16 +51,18 @@ contract ARTest is MudTest {
             })
         );
 
-        bytes32 key = world.geoweb_ARSystem_addNewObject(
+        bytes32 key = world.geoweb_ARSystem_addAnchoredObject(
             anchor,
             PositionComponentData({x: 0, y: 100, z: 0}),
-            ScaleComponentData({x: 1, y: 1, z: 1}),
-            new bytes(0)
+            ModelComponentData({
+                encodingFormat: ModelEncodingFormat.Usdz,
+                contentHash: new bytes(0)
+            })
         );
         AnchorComponentData memory anchorData = AnchorComponent.get(key);
-        bytes memory usdz = Model3DComponent.get(key);
+        bytes memory contentHash = ModelComponent.getContentHash(key);
 
         assertEq(anchorData.anchor, anchor);
-        assertEq(usdz, new bytes(0));
+        assertEq(contentHash, new bytes(0));
     }
 }

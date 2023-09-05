@@ -4,8 +4,8 @@ import { resolveTableId } from "@latticexyz/config";
 export default mudConfig({
   namespace: "geoweb",
   enums: {
-    MediaObjectType: ["Image", "Audio", "Video", "Model3D"],
-    EncodingFormat: [
+    MediaObjectType: ["Image", "Audio", "Video", "Model"],
+    MediaObjectEncodingFormat: [
       "Glb",
       "Usdz",
       "Gif",
@@ -17,6 +17,7 @@ export default mudConfig({
       "Mp3",
     ],
     ImageEncodingFormat: ["Jpeg", "Png", "Svg"],
+    ModelEncodingFormat: ["Glb", "Usdz"],
   },
   modules: [
     {
@@ -42,7 +43,7 @@ export default mudConfig({
       schema: {
         contentSize: "uint64",
         mediaType: "MediaObjectType",
-        encodingFormat: "EncodingFormat",
+        encodingFormat: "MediaObjectEncodingFormat",
         name: "string",
         contentHash: "bytes",
       },
@@ -56,8 +57,8 @@ export default mudConfig({
     OrientationComponent: {
       schema: { x: "int16", y: "int16", z: "int16", w: "int16" },
     },
-    Model3DComponent: {
-      schema: { usdz: "bytes" },
+    ModelComponent: {
+      schema: { encodingFormat: "ModelEncodingFormat", contentHash: "bytes" },
     },
     TrackedImageComponent: {
       schema: {

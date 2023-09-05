@@ -5,7 +5,7 @@ import "forge-std/Test.sol";
 import {MudTest} from "@latticexyz/store/src/MudTest.sol";
 
 import {IWorld} from "../src/codegen/world/IWorld.sol";
-import {MediaObjectType, EncodingFormat} from "../src/codegen/Types.sol";
+import {MediaObjectType, MediaObjectEncodingFormat} from "../src/codegen/Types.sol";
 import {MediaObject, MediaObjectData, MediaObjectTableId} from "../src/codegen/Tables.sol";
 import {getKeysInTable} from "@latticexyz/world/src/modules/keysintable/getKeysInTable.sol";
 
@@ -33,7 +33,7 @@ contract MediaGalleryTest is MudTest {
                 mediaType: MediaObjectType.Image,
                 contentHash: new bytes(0),
                 contentSize: 0,
-                encodingFormat: EncodingFormat.Jpeg
+                encodingFormat: MediaObjectEncodingFormat.Jpeg
             })
         );
 
@@ -43,7 +43,7 @@ contract MediaGalleryTest is MudTest {
         assertEq(mediaObjectData.contentSize, 0);
         assertEq(
             uint(mediaObjectData.encodingFormat),
-            uint(EncodingFormat.Jpeg)
+            uint(MediaObjectEncodingFormat.Jpeg)
         );
     }
 
@@ -54,7 +54,7 @@ contract MediaGalleryTest is MudTest {
                 mediaType: MediaObjectType.Image,
                 contentHash: new bytes(0),
                 contentSize: 0,
-                encodingFormat: EncodingFormat.Jpeg
+                encodingFormat: MediaObjectEncodingFormat.Jpeg
             })
         );
 
