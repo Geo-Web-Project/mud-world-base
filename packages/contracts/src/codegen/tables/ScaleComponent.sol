@@ -21,18 +21,18 @@ bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16("geoweb"), bytes16(
 bytes32 constant ScaleComponentTableId = _tableId;
 
 struct ScaleComponentData {
-  int256 x;
-  int256 y;
-  int256 z;
+  int16 x;
+  int16 y;
+  int16 z;
 }
 
 library ScaleComponent {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](3);
-    _schema[0] = SchemaType.INT256;
-    _schema[1] = SchemaType.INT256;
-    _schema[2] = SchemaType.INT256;
+    _schema[0] = SchemaType.INT16;
+    _schema[1] = SchemaType.INT16;
+    _schema[2] = SchemaType.INT16;
 
     return SchemaLib.encode(_schema);
   }
@@ -76,25 +76,25 @@ library ScaleComponent {
   }
 
   /** Get x */
-  function getX(bytes32 key) internal view returns (int256 x) {
+  function getX(bytes32 key) internal view returns (int16 x) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
-    return (int256(uint256(Bytes.slice32(_blob, 0))));
+    return (int16(uint16(Bytes.slice2(_blob, 0))));
   }
 
   /** Get x (using the specified store) */
-  function getX(IStore _store, bytes32 key) internal view returns (int256 x) {
+  function getX(IStore _store, bytes32 key) internal view returns (int16 x) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
-    return (int256(uint256(Bytes.slice32(_blob, 0))));
+    return (int16(uint16(Bytes.slice2(_blob, 0))));
   }
 
   /** Set x */
-  function setX(bytes32 key, int256 x) internal {
+  function setX(bytes32 key, int16 x) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -102,7 +102,7 @@ library ScaleComponent {
   }
 
   /** Set x (using the specified store) */
-  function setX(IStore _store, bytes32 key, int256 x) internal {
+  function setX(IStore _store, bytes32 key, int16 x) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -110,25 +110,25 @@ library ScaleComponent {
   }
 
   /** Get y */
-  function getY(bytes32 key) internal view returns (int256 y) {
+  function getY(bytes32 key) internal view returns (int16 y) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
-    return (int256(uint256(Bytes.slice32(_blob, 0))));
+    return (int16(uint16(Bytes.slice2(_blob, 0))));
   }
 
   /** Get y (using the specified store) */
-  function getY(IStore _store, bytes32 key) internal view returns (int256 y) {
+  function getY(IStore _store, bytes32 key) internal view returns (int16 y) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
-    return (int256(uint256(Bytes.slice32(_blob, 0))));
+    return (int16(uint16(Bytes.slice2(_blob, 0))));
   }
 
   /** Set y */
-  function setY(bytes32 key, int256 y) internal {
+  function setY(bytes32 key, int16 y) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -136,7 +136,7 @@ library ScaleComponent {
   }
 
   /** Set y (using the specified store) */
-  function setY(IStore _store, bytes32 key, int256 y) internal {
+  function setY(IStore _store, bytes32 key, int16 y) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -144,25 +144,25 @@ library ScaleComponent {
   }
 
   /** Get z */
-  function getZ(bytes32 key) internal view returns (int256 z) {
+  function getZ(bytes32 key) internal view returns (int16 z) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
-    return (int256(uint256(Bytes.slice32(_blob, 0))));
+    return (int16(uint16(Bytes.slice2(_blob, 0))));
   }
 
   /** Get z (using the specified store) */
-  function getZ(IStore _store, bytes32 key) internal view returns (int256 z) {
+  function getZ(IStore _store, bytes32 key) internal view returns (int16 z) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
-    return (int256(uint256(Bytes.slice32(_blob, 0))));
+    return (int16(uint16(Bytes.slice2(_blob, 0))));
   }
 
   /** Set z */
-  function setZ(bytes32 key, int256 z) internal {
+  function setZ(bytes32 key, int16 z) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -170,7 +170,7 @@ library ScaleComponent {
   }
 
   /** Set z (using the specified store) */
-  function setZ(IStore _store, bytes32 key, int256 z) internal {
+  function setZ(IStore _store, bytes32 key, int16 z) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -196,7 +196,7 @@ library ScaleComponent {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, int256 x, int256 y, int256 z) internal {
+  function set(bytes32 key, int16 x, int16 y, int16 z) internal {
     bytes memory _data = encode(x, y, z);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -206,7 +206,7 @@ library ScaleComponent {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, int256 x, int256 y, int256 z) internal {
+  function set(IStore _store, bytes32 key, int16 x, int16 y, int16 z) internal {
     bytes memory _data = encode(x, y, z);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -227,15 +227,15 @@ library ScaleComponent {
 
   /** Decode the tightly packed blob using this table's schema */
   function decode(bytes memory _blob) internal pure returns (ScaleComponentData memory _table) {
-    _table.x = (int256(uint256(Bytes.slice32(_blob, 0))));
+    _table.x = (int16(uint16(Bytes.slice2(_blob, 0))));
 
-    _table.y = (int256(uint256(Bytes.slice32(_blob, 32))));
+    _table.y = (int16(uint16(Bytes.slice2(_blob, 2))));
 
-    _table.z = (int256(uint256(Bytes.slice32(_blob, 64))));
+    _table.z = (int16(uint16(Bytes.slice2(_blob, 4))));
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(int256 x, int256 y, int256 z) internal pure returns (bytes memory) {
+  function encode(int16 x, int16 y, int16 z) internal pure returns (bytes memory) {
     return abi.encodePacked(x, y, z);
   }
 

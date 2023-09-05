@@ -3,19 +3,18 @@ pragma solidity >=0.8.0;
 
 import {System} from "@latticexyz/world/src/System.sol";
 import {getUniqueEntity} from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
-import {IsAnchorComponent, AnchorComponent, AnchorComponentData, Model3DComponent, PositionComponent, PositionComponentData, ScaleComponent, ScaleComponentData, OrientationComponent, OrientationComponentData} from "../codegen/Tables.sol";
+import {AnchorComponent, AnchorComponentData, Model3DComponent, TrackedImageComponent, TrackedImageComponentData, PositionComponent, PositionComponentData, ScaleComponent, ScaleComponentData, OrientationComponent, OrientationComponentData} from "../codegen/Tables.sol";
 
 contract ARSystem is System {
     /**
-     * @notice - Add new anchor
+     * @notice - Add new image anchor
      **/
-    function addNewAnchor(
-        PositionComponentData memory positionData
+    function addNewImageAnchor(
+        TrackedImageComponentData memory trackedImageComponentData
     ) public returns (bytes32 key) {
         key = getUniqueEntity();
 
-        PositionComponent.set(key, positionData);
-        IsAnchorComponent.set(key, true);
+        TrackedImageComponent.set(key, trackedImageComponentData);
     }
 
     /**
@@ -23,11 +22,15 @@ contract ARSystem is System {
      **/
     function addNewObject(
         bytes32 anchor,
+        PositionComponentData memory positionComponentData,
+        ScaleComponentData memory scaleComponentData,
         bytes memory usdz
     ) public returns (bytes32 key) {
         key = getUniqueEntity();
 
         AnchorComponent.setAnchor(key, anchor);
+        PositionComponent.set(key, positionComponentData);
+        ScaleComponent.set(key, scaleComponentData);
         Model3DComponent.set(key, usdz);
     }
 }

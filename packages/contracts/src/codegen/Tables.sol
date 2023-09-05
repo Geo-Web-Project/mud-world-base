@@ -10,6 +10,5 @@ import { PositionComponent, PositionComponentData, PositionComponentTableId } fr
 import { ScaleComponent, ScaleComponentData, ScaleComponentTableId } from "./tables/ScaleComponent.sol";
 import { OrientationComponent, OrientationComponentData, OrientationComponentTableId } from "./tables/OrientationComponent.sol";
 import { Model3DComponent, Model3DComponentTableId } from "./tables/Model3DComponent.sol";
-import { IsAnchorComponent, IsAnchorComponentTableId } from "./tables/IsAnchorComponent.sol";
 import { TrackedImageComponent, TrackedImageComponentData, TrackedImageComponentTableId } from "./tables/TrackedImageComponent.sol";
 import { AnchorComponent, AnchorComponentData, AnchorComponentTableId } from "./tables/AnchorComponent.sol";

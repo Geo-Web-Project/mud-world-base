@@ -16,6 +16,7 @@ export default mudConfig({
       "Mp4",
       "Mp3",
     ],
+    ImageEncodingFormat: ["Jpeg", "Png", "Svg"],
   },
   modules: [
     {
@@ -47,20 +48,23 @@ export default mudConfig({
       },
     },
     PositionComponent: {
-      schema: { x: "int256", y: "int256", z: "int256" },
+      schema: { x: "int16", y: "int16", z: "int16" },
     },
     ScaleComponent: {
-      schema: { x: "int256", y: "int256", z: "int256" },
+      schema: { x: "int16", y: "int16", z: "int16" },
     },
     OrientationComponent: {
-      schema: { x: "int256", y: "int256", z: "int256", w: "int256" },
+      schema: { x: "int16", y: "int16", z: "int16", w: "int16" },
     },
     Model3DComponent: {
       schema: { usdz: "bytes" },
     },
-    IsAnchorComponent: "bool",
     TrackedImageComponent: {
-      schema: { physicalWidthInMeters: "uint32", imageAsset: "bytes" },
+      schema: {
+        physicalWidthInMillimeters: "uint16",
+        encodingFormat: "ImageEncodingFormat",
+        imageAsset: "bytes",
+      },
     },
     AnchorComponent: {
       schema: {

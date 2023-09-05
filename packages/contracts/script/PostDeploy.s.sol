@@ -4,8 +4,8 @@ pragma solidity >=0.8.0;
 import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
 import {IWorld} from "../src/codegen/world/IWorld.sol";
-import {MediaObjectData, PositionComponentData, ScaleComponentData, OrientationComponentData, AnchorComponentTableId} from "../src/codegen/Tables.sol";
-import {MediaObjectType, EncodingFormat} from "../src/codegen/Types.sol";
+import {MediaObjectData, TrackedImageComponentData, ScaleComponentData, OrientationComponentData, PositionComponentData, AnchorComponentTableId} from "../src/codegen/Tables.sol";
+import {MediaObjectType, EncodingFormat, ImageEncodingFormat} from "../src/codegen/Types.sol";
 
 contract PostDeploy is Script {
     function run(address worldAddress) external {
@@ -57,13 +57,20 @@ contract PostDeploy is Script {
         );
 
         // Add AR objects
-        bytes32 anchorKey = IWorld(worldAddress).geoweb_ARSystem_addNewAnchor(
-            PositionComponentData({x: 0, y: 0, z: -1 * (10 ** 18)})
-        );
+        bytes32 anchorKey = IWorld(worldAddress)
+            .geoweb_ARSystem_addNewImageAnchor(
+                TrackedImageComponentData({
+                    physicalWidthInMillimeters: 165,
+                    imageAsset: hex"e3010155122076e1ccb6fee2a1976d0c530ce1fd6ef349c9aa8e636a8a7aea2eb11a2f6cc4fb",
+                    encodingFormat: ImageEncodingFormat.Jpeg
+                })
+            );
 
         IWorld(worldAddress).geoweb_ARSystem_addNewObject(
             anchorKey,
-            hex"e301017012208fdf9e63064917220218e7b261b39c1cffbe2b66a231ce53bd6f4c29a4b5e6e1"
+            PositionComponentData({x: 0, y: 100, z: 0}),
+            ScaleComponentData({x: 10, y: 10, z: 10}),
+            hex"e30101701220cda14ccfb001027ea45e7a1c4d3702df1e7af6bc6fddad148ace0bddac6a5480"
         );
 
         vm.stopBroadcast();

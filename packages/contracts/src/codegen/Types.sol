@@ -20,3 +20,9 @@ enum EncodingFormat {
   Mp4,
   Mp3
 }
+
+enum ImageEncodingFormat {
+  Jpeg,
+  Png,
+  Svg
+}

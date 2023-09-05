@@ -17,20 +17,25 @@ import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
+// Import user types
+import { ImageEncodingFormat } from "./../Types.sol";
+
 bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16("geoweb"), bytes16("TrackedImageComp")));
 bytes32 constant TrackedImageComponentTableId = _tableId;
 
 struct TrackedImageComponentData {
-  uint32 physicalWidthInMeters;
+  uint16 physicalWidthInMillimeters;
+  ImageEncodingFormat encodingFormat;
   bytes imageAsset;
 }
 
 library TrackedImageComponent {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
-    SchemaType[] memory _schema = new SchemaType[](2);
-    _schema[0] = SchemaType.UINT32;
-    _schema[1] = SchemaType.BYTES;
+    SchemaType[] memory _schema = new SchemaType[](3);
+    _schema[0] = SchemaType.UINT16;
+    _schema[1] = SchemaType.UINT8;
+    _schema[2] = SchemaType.BYTES;
 
     return SchemaLib.encode(_schema);
   }
@@ -44,9 +49,10 @@ library TrackedImageComponent {
 
   /** Get the table's metadata */
   function getMetadata() internal pure returns (string memory, string[] memory) {
-    string[] memory _fieldNames = new string[](2);
-    _fieldNames[0] = "physicalWidthInMeters";
-    _fieldNames[1] = "imageAsset";
+    string[] memory _fieldNames = new string[](3);
+    _fieldNames[0] = "physicalWidthInMillimeters";
+    _fieldNames[1] = "encodingFormat";
+    _fieldNames[2] = "imageAsset";
     return ("TrackedImageComponent", _fieldNames);
   }
 
@@ -72,38 +78,75 @@ library TrackedImageComponent {
     _store.setMetadata(_tableId, _tableName, _fieldNames);
   }
 
-  /** Get physicalWidthInMeters */
-  function getPhysicalWidthInMeters(bytes32 key) internal view returns (uint32 physicalWidthInMeters) {
+  /** Get physicalWidthInMillimeters */
+  function getPhysicalWidthInMillimeters(bytes32 key) internal view returns (uint16 physicalWidthInMillimeters) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
-    return (uint32(Bytes.slice4(_blob, 0)));
+    return (uint16(Bytes.slice2(_blob, 0)));
   }
 
-  /** Get physicalWidthInMeters (using the specified store) */
-  function getPhysicalWidthInMeters(IStore _store, bytes32 key) internal view returns (uint32 physicalWidthInMeters) {
+  /** Get physicalWidthInMillimeters (using the specified store) */
+  function getPhysicalWidthInMillimeters(
+    IStore _store,
+    bytes32 key
+  ) internal view returns (uint16 physicalWidthInMillimeters) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
-    return (uint32(Bytes.slice4(_blob, 0)));
+    return (uint16(Bytes.slice2(_blob, 0)));
   }
 
-  /** Set physicalWidthInMeters */
-  function setPhysicalWidthInMeters(bytes32 key, uint32 physicalWidthInMeters) internal {
+  /** Set physicalWidthInMillimeters */
+  function setPhysicalWidthInMillimeters(bytes32 key, uint16 physicalWidthInMillimeters) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((physicalWidthInMeters)));
+    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((physicalWidthInMillimeters)));
   }
 
-  /** Set physicalWidthInMeters (using the specified store) */
-  function setPhysicalWidthInMeters(IStore _store, bytes32 key, uint32 physicalWidthInMeters) internal {
+  /** Set physicalWidthInMillimeters (using the specified store) */
+  function setPhysicalWidthInMillimeters(IStore _store, bytes32 key, uint16 physicalWidthInMillimeters) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((physicalWidthInMeters)));
+    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((physicalWidthInMillimeters)));
+  }
+
+  /** Get encodingFormat */
+  function getEncodingFormat(bytes32 key) internal view returns (ImageEncodingFormat encodingFormat) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
+    return ImageEncodingFormat(uint8(Bytes.slice1(_blob, 0)));
+  }
+
+  /** Get encodingFormat (using the specified store) */
+  function getEncodingFormat(IStore _store, bytes32 key) internal view returns (ImageEncodingFormat encodingFormat) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
+    return ImageEncodingFormat(uint8(Bytes.slice1(_blob, 0)));
+  }
+
+  /** Set encodingFormat */
+  function setEncodingFormat(bytes32 key, ImageEncodingFormat encodingFormat) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked(uint8(encodingFormat)));
+  }
+
+  /** Set encodingFormat (using the specified store) */
+  function setEncodingFormat(IStore _store, bytes32 key, ImageEncodingFormat encodingFormat) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked(uint8(encodingFormat)));
   }
 
   /** Get imageAsset */
@@ -111,7 +154,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 2);
     return (bytes(_blob));
   }
 
@@ -120,7 +163,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 1);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 2);
     return (bytes(_blob));
   }
 
@@ -129,7 +172,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setField(_tableId, _keyTuple, 1, bytes((imageAsset)));
+    StoreSwitch.setField(_tableId, _keyTuple, 2, bytes((imageAsset)));
   }
 
   /** Set imageAsset (using the specified store) */
@@ -137,7 +180,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.setField(_tableId, _keyTuple, 1, bytes((imageAsset)));
+    _store.setField(_tableId, _keyTuple, 2, bytes((imageAsset)));
   }
 
   /** Get the length of imageAsset */
@@ -145,7 +188,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 1, getSchema());
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 2, getSchema());
     return _byteLength / 1;
   }
 
@@ -154,7 +197,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 1, getSchema());
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 2, getSchema());
     return _byteLength / 1;
   }
 
@@ -163,7 +206,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 1, getSchema(), _index * 1, (_index + 1) * 1);
+    bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 2, getSchema(), _index * 1, (_index + 1) * 1);
     return (bytes(_blob));
   }
 
@@ -172,7 +215,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 1, getSchema(), _index * 1, (_index + 1) * 1);
+    bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 2, getSchema(), _index * 1, (_index + 1) * 1);
     return (bytes(_blob));
   }
 
@@ -181,7 +224,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.pushToField(_tableId, _keyTuple, 1, bytes((_slice)));
+    StoreSwitch.pushToField(_tableId, _keyTuple, 2, bytes((_slice)));
   }
 
   /** Push a slice to imageAsset (using the specified store) */
@@ -189,7 +232,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.pushToField(_tableId, _keyTuple, 1, bytes((_slice)));
+    _store.pushToField(_tableId, _keyTuple, 2, bytes((_slice)));
   }
 
   /** Pop a slice from imageAsset */
@@ -197,7 +240,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.popFromField(_tableId, _keyTuple, 1, 1);
+    StoreSwitch.popFromField(_tableId, _keyTuple, 2, 1);
   }
 
   /** Pop a slice from imageAsset (using the specified store) */
@@ -205,7 +248,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.popFromField(_tableId, _keyTuple, 1, 1);
+    _store.popFromField(_tableId, _keyTuple, 2, 1);
   }
 
   /** Update a slice of imageAsset at `_index` */
@@ -213,7 +256,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.updateInField(_tableId, _keyTuple, 1, _index * 1, bytes((_slice)));
+    StoreSwitch.updateInField(_tableId, _keyTuple, 2, _index * 1, bytes((_slice)));
   }
 
   /** Update a slice of imageAsset (using the specified store) at `_index` */
@@ -221,7 +264,7 @@ library TrackedImageComponent {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.updateInField(_tableId, _keyTuple, 1, _index * 1, bytes((_slice)));
+    _store.updateInField(_tableId, _keyTuple, 2, _index * 1, bytes((_slice)));
   }
 
   /** Get the full data */
@@ -243,8 +286,13 @@ library TrackedImageComponent {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, uint32 physicalWidthInMeters, bytes memory imageAsset) internal {
-    bytes memory _data = encode(physicalWidthInMeters, imageAsset);
+  function set(
+    bytes32 key,
+    uint16 physicalWidthInMillimeters,
+    ImageEncodingFormat encodingFormat,
+    bytes memory imageAsset
+  ) internal {
+    bytes memory _data = encode(physicalWidthInMillimeters, encodingFormat, imageAsset);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -253,8 +301,14 @@ library TrackedImageComponent {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, uint32 physicalWidthInMeters, bytes memory imageAsset) internal {
-    bytes memory _data = encode(physicalWidthInMeters, imageAsset);
+  function set(
+    IStore _store,
+    bytes32 key,
+    uint16 physicalWidthInMillimeters,
+    ImageEncodingFormat encodingFormat,
+    bytes memory imageAsset
+  ) internal {
+    bytes memory _data = encode(physicalWidthInMillimeters, encodingFormat, imageAsset);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -264,26 +318,28 @@ library TrackedImageComponent {
 
   /** Set the full data using the data struct */
   function set(bytes32 key, TrackedImageComponentData memory _table) internal {
-    set(key, _table.physicalWidthInMeters, _table.imageAsset);
+    set(key, _table.physicalWidthInMillimeters, _table.encodingFormat, _table.imageAsset);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, bytes32 key, TrackedImageComponentData memory _table) internal {
-    set(_store, key, _table.physicalWidthInMeters, _table.imageAsset);
+    set(_store, key, _table.physicalWidthInMillimeters, _table.encodingFormat, _table.imageAsset);
   }
 
   /** Decode the tightly packed blob using this table's schema */
   function decode(bytes memory _blob) internal pure returns (TrackedImageComponentData memory _table) {
-    // 4 is the total byte length of static data
-    PackedCounter _encodedLengths = PackedCounter.wrap(Bytes.slice32(_blob, 4));
+    // 3 is the total byte length of static data
+    PackedCounter _encodedLengths = PackedCounter.wrap(Bytes.slice32(_blob, 3));
 
-    _table.physicalWidthInMeters = (uint32(Bytes.slice4(_blob, 0)));
+    _table.physicalWidthInMillimeters = (uint16(Bytes.slice2(_blob, 0)));
+
+    _table.encodingFormat = ImageEncodingFormat(uint8(Bytes.slice1(_blob, 2)));
 
     // Store trims the blob if dynamic fields are all empty
-    if (_blob.length > 4) {
+    if (_blob.length > 3) {
       uint256 _start;
       // skip static data length + dynamic lengths word
-      uint256 _end = 36;
+      uint256 _end = 35;
 
       _start = _end;
       _end += _encodedLengths.atIndex(0);
@@ -292,12 +348,16 @@ library TrackedImageComponent {
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(uint32 physicalWidthInMeters, bytes memory imageAsset) internal pure returns (bytes memory) {
+  function encode(
+    uint16 physicalWidthInMillimeters,
+    ImageEncodingFormat encodingFormat,
+    bytes memory imageAsset
+  ) internal pure returns (bytes memory) {
     uint40[] memory _counters = new uint40[](1);
     _counters[0] = uint40(bytes(imageAsset).length);
     PackedCounter _encodedLengths = PackedCounterLib.pack(_counters);
 
-    return abi.encodePacked(physicalWidthInMeters, _encodedLengths.unwrap(), bytes((imageAsset)));
+    return abi.encodePacked(physicalWidthInMillimeters, encodingFormat, _encodedLengths.unwrap(), bytes((imageAsset)));
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
