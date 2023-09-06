@@ -63,4 +63,22 @@ contract ARSystem is System {
         OrientationComponent.set(key, orientationComponentData);
         ModelComponent.set(key, modelComponentData);
     }
+
+    /**
+     * @notice - Remove anchor
+     **/
+    function removeImageAnchor(bytes32 key) public {
+        TrackedImageComponent.deleteRecord(key);
+    }
+
+    /**
+     * @notice - Remove object
+     **/
+    function removeObject(bytes32 key) public {
+        AnchorComponent.deleteRecord(key);
+        PositionComponent.deleteRecord(key);
+        ScaleComponent.deleteRecord(key);
+        OrientationComponent.deleteRecord(key);
+        ModelComponent.deleteRecord(key);
+    }
 }

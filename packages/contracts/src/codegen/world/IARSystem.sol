@@ -28,4 +28,8 @@ interface IARSystem {
     OrientationComponentData memory orientationComponentData,
     ModelComponentData memory modelComponentData
   ) external returns (bytes32 key);
+
+  function geoweb_ARSystem_removeImageAnchor(bytes32 key) external;
+
+  function geoweb_ARSystem_removeObject(bytes32 key) external;
 }
