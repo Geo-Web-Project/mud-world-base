@@ -1,8 +1,11 @@
 {
   "name": "@geo-web/mud-world-base-contracts",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "main": "./types/ethers-contracts/index",
+  "files": [
+    "./types/"
+  ],
   "scripts": {
     "build": "pnpm run build:mud && pnpm run build:abi && pnpm run build:typechain",
     "build:abi": "forge clean && forge build",
