@@ -3,15 +3,18 @@ import { createFaucetService } from "@latticexyz/services/faucet";
 import { encodeEntity, syncToRecs } from "@latticexyz/store-sync/recs";
 import { getNetworkConfig } from "./getNetworkConfig";
 import { world } from "./world";
-import { IWorld__factory } from "@geo-web/mud-world-base-contracts/types/ethers-contracts/factories/IWorld__factory";
+import { IWorld__factory } from "@geo-web/mud-world-base-contracts";
 import { createBurnerAccount, createContract, transportObserver, ContractWrite } from "@latticexyz/common";
 import { Subject, share } from "rxjs";
 import mudConfig from "@geo-web/mud-world-base-contracts/mud.config";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
-export async function setupNetwork() {
-  const networkConfig = await getNetworkConfig();
+export async function setupNetwork(networkParams: {
+  chainId: Number;
+  worlds: Partial<Record<string, { address: string; blockNumber?: number }>>;
+}) {
+  const networkConfig = await getNetworkConfig(networkParams);
 
   const clientOptions = {
     chain: networkConfig.chain,

@@ -2,13 +2,19 @@ import ReactDOM from "react-dom/client";
 import { App } from "./App";
 import { MUDProvider, setup } from "../lib";
 import mudConfig from "@geo-web/mud-world-base-contracts/mud.config";
+import worldsJson from "@geo-web/mud-world-base-contracts/worlds.json";
 
 const rootElement = document.getElementById("react-root");
 if (!rootElement) throw new Error("React root not found");
 const root = ReactDOM.createRoot(rootElement);
 
+const chainId = import.meta.env.VITE_CHAIN_ID || 31337;
+const worlds = worldsJson as Partial<
+  Record<string, { address: string; blockNumber?: number }>
+>;
+
 // TODO: figure out if we actually want this to be async or if we should render something else in the meantime
-setup().then(async (result) => {
+setup({ chainId, worlds }).then(async (result) => {
   root.render(
     <MUDProvider value={result}>
       <App />
