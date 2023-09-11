@@ -10,7 +10,7 @@ export async function getNetworkConfig({
   worlds: Partial<Record<string, { address: string; blockNumber?: number }>>;
   supportedChains: MUDChain[];
 }) {
-  const chainIndex = supportedChains.findIndex((c) => c.id === chainId);
+  const chainIndex = supportedChains.findIndex((c) => c.id == chainId);
   const chain = supportedChains[chainIndex];
   if (!chain) {
     throw new Error(`Chain ${chainId} not found`);
