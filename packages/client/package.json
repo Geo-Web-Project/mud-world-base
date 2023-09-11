@@ -1,6 +1,6 @@
 {
   "name": "@geo-web/mud-world-base-client",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -23,7 +23,7 @@
     "@latticexyz/store-sync": "2.0.0-next.5",
     "@latticexyz/utils": "2.0.0-next.5",
     "@latticexyz/world": "2.0.0-next.5",
-    "@geo-web/mud-world-base-contracts": "workspace:^0.0.2",
+    "@geo-web/mud-world-base-contracts": "workspace:*",
     "ethers": "^5.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
