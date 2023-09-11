@@ -1,12 +1,14 @@
 import { getBurnerPrivateKey } from "@latticexyz/common";
-import { supportedChains } from "./supportedChains";
+import { MUDChain } from "@latticexyz/common/chains";
 
 export async function getNetworkConfig({
   chainId,
   worlds,
+  supportedChains,
 }: {
   chainId: Number;
   worlds: Partial<Record<string, { address: string; blockNumber?: number }>>;
+  supportedChains: MUDChain[];
 }) {
   const chainIndex = supportedChains.findIndex((c) => c.id === chainId);
   const chain = supportedChains[chainIndex];
