@@ -35,6 +35,9 @@ importers:
       '@ethersproject/providers':
         specifier: ^5.7.2
         version: 5.7.2
+      '@geo-web/mud-world-base-contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@latticexyz/common':
         specifier: 2.0.0-next.5
         version: 2.0.0-next.5(typescript@5.1.6)(zod@3.21.4)
@@ -62,9 +65,6 @@ importers:
       '@latticexyz/world':
         specifier: 2.0.0-next.5
         version: 2.0.0-next.5(typescript@5.1.6)
-      contracts:
-        specifier: workspace:*
-        version: link:../contracts
       ethers:
         specifier: ^5.7.2
         version: 5.7.2
@@ -163,76 +163,6 @@ importers:
       typechain:
         specifier: ^8.1.1
         version: 8.1.1(typescript@5.1.6)
-
-  packages/old-client:
-    dependencies:
-      '@ethersproject/providers':
-        specifier: ^5.7.2
-        version: 5.7.2
-      '@latticexyz/common':
-        specifier: 2.0.0-next.0
-        version: 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/dev-tools':
-        specifier: 2.0.0-next.0
-        version: 2.0.0-next.0(@latticexyz/network@2.0.0-next.0)(@latticexyz/std-client@2.0.0-next.0)(@latticexyz/utils@2.0.0-next.0)(@latticexyz/world@2.0.0-next.0)(@types/react@18.2.6)(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/network':
-        specifier: 2.0.0-next.0
-        version: 2.0.0-next.0(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/react':
-        specifier: 2.0.0-next.0
-        version: 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/recs':
-        specifier: 2.0.0-next.0
-        version: 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/schema-type':
-        specifier: 2.0.0-next.0
-        version: 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/std-client':
-        specifier: 2.0.0-next.0
-        version: 2.0.0-next.0(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/utils':
-        specifier: 2.0.0-next.0
-        version: 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/world':
-        specifier: 2.0.0-next.0
-        version: 2.0.0-next.0(typescript@5.1.6)
-      contracts:
-        specifier: workspace:*
-        version: link:../contracts
-      ethers:
-        specifier: ^5.7.2
-        version: 5.7.2
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: ^18.2.0
-        version: 18.2.0(react@18.2.0)
-      viem:
-        specifier: 1.3.1
-        version: 1.3.1(typescript@5.1.6)(zod@3.21.4)
-    devDependencies:
-      '@types/react':
-        specifier: ^18.2.6
-        version: 18.2.6
-      '@types/react-dom':
-        specifier: ^18.2.4
-        version: 18.2.4
-      '@vitejs/plugin-react':
-        specifier: ^3.1.0
-        version: 3.1.0(vite@4.2.1)
-      eslint-plugin-react:
-        specifier: 7.31.11
-        version: 7.31.11(eslint@8.29.0)
-      eslint-plugin-react-hooks:
-        specifier: 4.6.0
-        version: 4.6.0(eslint@8.29.0)
-      vite:
-        specifier: ^4.2.1
-        version: 4.2.1
-      wait-port:
-        specifier: ^1.0.4
-        version: 1.0.4
 
 packages:
 
@@ -1042,48 +972,6 @@ packages:
       - zod
     dev: false
 
-  /@latticexyz/cli@2.0.0-next.0(google-protobuf@3.21.2):
-    resolution: {integrity: sha512-moJE226c+I22BKhw9l/qvZtVLfxtk8xb8M61Y5H35K6BD4nxj2/wfxQtqCGWL5daev8P4fyi5pwdm3y2WrIOOg==}
-    hasBin: true
-    dependencies:
-      '@ethersproject/abi': 5.7.0
-      '@ethersproject/providers': 5.7.2
-      '@improbable-eng/grpc-web': 0.15.0(google-protobuf@3.21.2)
-      '@improbable-eng/grpc-web-node-http-transport': 0.15.0(@improbable-eng/grpc-web@0.15.0)
-      '@latticexyz/common': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/config': 2.0.0-next.0(typescript@5.1.6)
-      '@latticexyz/gas-report': 2.0.0-next.0
-      '@latticexyz/schema-type': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/services': 2.0.0-next.0
-      '@latticexyz/solecs': 2.0.0-next.0
-      '@latticexyz/std-contracts': 2.0.0-next.0
-      '@latticexyz/store': 2.0.0-next.0(typescript@5.1.6)
-      '@latticexyz/utils': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/world': 2.0.0-next.0(typescript@5.1.6)
-      '@typechain/ethers-v5': 10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2)(ethers@5.7.2)(typechain@8.3.1)(typescript@5.1.6)
-      chalk: 5.3.0
-      chokidar: 3.5.3
-      dotenv: 16.3.1
-      ejs: 3.1.9
-      ethers: 5.7.2
-      execa: 7.2.0
-      glob: 8.1.0
-      nice-grpc-web: 2.0.2(google-protobuf@3.21.2)
-      openurl: 1.1.1
-      path: 0.12.7
-      throttle-debounce: 5.0.0
-      typechain: 8.3.1(typescript@5.1.6)
-      typescript: 5.1.6
-      yargs: 17.7.2
-      zod: 3.21.4
-      zod-validation-error: 1.3.1(zod@3.21.4)
-    transitivePeerDependencies:
-      - bufferutil
-      - google-protobuf
-      - supports-color
-      - utf-8-validate
-    dev: false
-
   /@latticexyz/cli@2.0.0-next.2(google-protobuf@3.21.2):
     resolution: {integrity: sha512-55ZJDDcAVTANY/1sRzefUKb9D4rE/ureREZ945atXelfC+a7W1PoQAmnjkLnaY2iy8A+QL6KG/h9RPNLEXS/8Q==}
     hasBin: true
@@ -1167,23 +1055,6 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@latticexyz/common@2.0.0-next.0(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-zo69HffKQzCAcwdgLOEX9K6zXMLI5GAi4fK6xqYOa5EQABbGa/AyHK5S7bnpod5LDuzofhkbkt3pGnWUfapS6Q==}
-    dependencies:
-      '@latticexyz/schema-type': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@solidity-parser/parser': 0.16.1
-      chalk: 5.3.0
-      execa: 7.2.0
-      prettier: 2.8.8
-      prettier-plugin-solidity: 1.1.3(prettier@2.8.8)
-      viem: 1.3.1(typescript@5.1.6)(zod@3.21.4)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
   /@latticexyz/common@2.0.0-next.2(typescript@5.1.6)(zod@3.21.4):
     resolution: {integrity: sha512-NTcK3NEFeF9HqRT8XAbjkGG4QTnBJELzksi67OE/brInkmLSwQB14vyXHmVU/JVUsiSsFtNQse81erOjXwMJVg==}
     dependencies:
@@ -1226,23 +1097,6 @@ packages:
       - zod
     dev: false
 
-  /@latticexyz/config@2.0.0-next.0(typescript@5.1.6):
-    resolution: {integrity: sha512-4uFD9uhvSm9tofo31NpCM8jtZQG74AbK3HU04gQimTdG8hPREPSOJrdXrwzMh058rO1l8NMXrIDx9DS89bC3jQ==}
-    dependencies:
-      '@latticexyz/common': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/schema-type': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      chalk: 5.3.0
-      esbuild: 0.17.19
-      ethers: 5.7.2
-      find-up: 6.3.0
-      zod: 3.21.4
-      zod-validation-error: 1.3.1(zod@3.21.4)
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-    dev: false
-
   /@latticexyz/config@2.0.0-next.2(typescript@5.1.6):
     resolution: {integrity: sha512-zH4da7taelUvaVwYHV4h9SN+UuVS2IZxwITHDi4y/JxgIGDDXoR1rkV3oypln1mc/6FkfwejRE6U16c1sCCl3A==}
     dependencies:
@@ -1277,38 +1131,6 @@ packages:
       - supports-color
       - typescript
       - utf-8-validate
-    dev: false
-
-  /@latticexyz/dev-tools@2.0.0-next.0(@latticexyz/network@2.0.0-next.0)(@latticexyz/std-client@2.0.0-next.0)(@latticexyz/utils@2.0.0-next.0)(@latticexyz/world@2.0.0-next.0)(@types/react@18.2.6)(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-y9/bPCm+rUrN9zG8+Rvygb2OFYrsjX+H5360VfpAzjxbr1zy/42Jk+YZylkpM7aWjwjRPBMHyalihe4wslLzAQ==}
-    peerDependencies:
-      '@latticexyz/network': 2.0.0-next.0
-      '@latticexyz/std-client': 2.0.0-next.0
-      '@latticexyz/utils': 2.0.0-next.0
-      '@latticexyz/world': 2.0.0-next.0
-    dependencies:
-      '@latticexyz/common': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/network': 2.0.0-next.0(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/react': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/std-client': 2.0.0-next.0(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/utils': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/world': 2.0.0-next.0(typescript@5.1.6)
-      abitype: 0.9.3(typescript@5.1.6)(zod@3.21.4)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-router-dom: 6.14.2(react-dom@18.2.0)(react@18.2.0)
-      rxjs: 7.5.5
-      tailwind-merge: 1.14.0
-      use-local-storage-state: 18.3.3(react-dom@18.2.0)(react@18.2.0)
-      viem: 1.3.1(typescript@5.1.6)(zod@3.21.4)
-      zustand: 4.4.0(@types/react@18.2.6)(react@18.2.0)
-    transitivePeerDependencies:
-      - '@types/react'
-      - bufferutil
-      - immer
-      - typescript
-      - utf-8-validate
-      - zod
     dev: false
 
   /@latticexyz/dev-tools@2.0.0-next.5(@latticexyz/common@2.0.0-next.5)(@latticexyz/recs@2.0.0-next.5)(@latticexyz/store-sync@2.0.0-next.5)(@latticexyz/store@2.0.0-next.5)(@latticexyz/utils@2.0.0-next.5)(@latticexyz/world@2.0.0-next.5)(@types/react@18.2.6)(typescript@5.1.6)(zod@3.21.4):
@@ -1347,18 +1169,6 @@ packages:
       - zod
     dev: false
 
-  /@latticexyz/gas-report@2.0.0-next.0:
-    resolution: {integrity: sha512-NhcgKJqt1PflW+qTLuLac2GOuYTnd+QCJG9VedgsHwCgxGdN/xw3hC/hZVnT6QvA14uhxw9fouyoL0IaleNNlw==}
-    hasBin: true
-    dependencies:
-      chalk: 5.3.0
-      dotenv: 16.3.1
-      execa: 7.2.0
-      strip-ansi: 7.1.0
-      table: 6.8.1
-      yargs: 17.7.2
-    dev: false
-
   /@latticexyz/gas-report@2.0.0-next.2:
     resolution: {integrity: sha512-UPopFBgW1bn0Me/Gjg7SVfRxbFuQNv1a/+WXfXmjwqknleCLoSnXvowlF+cLXnvOql7sxAi4gN5GDgUOQwhnDg==}
     hasBin: true
@@ -1383,39 +1193,6 @@ packages:
       yargs: 17.7.2
     dev: false
 
-  /@latticexyz/network@2.0.0-next.0(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-9/XqgE/PAPiACtEWnIXs9o/OpR3npwEXNzkwxt3++G9B0wVQ8khkBtvr0yHWsR45hP20GDirKx5KvRad3pGVWg==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    dependencies:
-      '@ethersproject/abi': 5.7.0
-      '@ethersproject/providers': 5.7.2
-      '@improbable-eng/grpc-web': 0.15.0(google-protobuf@3.21.2)
-      '@latticexyz/common': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/recs': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/schema-type': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/services': 2.0.0-next.0
-      '@latticexyz/solecs': 2.0.0-next.0
-      '@latticexyz/store': 2.0.0-next.0(typescript@5.1.6)
-      '@latticexyz/utils': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/world': 2.0.0-next.0(typescript@5.1.6)
-      async-mutex: 0.3.2
-      debug: 4.3.4
-      ethers: 5.7.2
-      lodash: 4.17.21
-      mobx: 6.10.0
-      nice-grpc-web: 2.0.2(google-protobuf@3.21.2)
-      rxjs: 7.5.5
-      threads: 1.7.0
-      viem: 1.3.1(typescript@5.1.6)(zod@3.21.4)
-    transitivePeerDependencies:
-      - bufferutil
-      - google-protobuf
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
   /@latticexyz/protocol-parser@2.0.0-next.5(typescript@5.1.6)(zod@3.21.4):
     resolution: {integrity: sha512-8s2SoGIarQijwF9OXOlO5gXc5LuZUtKFYVcFCZ23XZIKVoACNFhqcpW1oulCUkqutyk5D43CKVdDsuYdVKJhIw==}
     dependencies:
@@ -1426,23 +1203,6 @@ packages:
     transitivePeerDependencies:
       - bufferutil
       - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
-  /@latticexyz/react@2.0.0-next.0(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-80izmJoZgs7Q43ao6HUu+x23x66r3P1Qqp8IKfBpHbQt9nDo8KPsHnrUUiXdrBxf1BDMLRcAOdYSPq+M2B8SRg==}
-    dependencies:
-      '@latticexyz/recs': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/store': 2.0.0-next.0(typescript@5.1.6)
-      '@latticexyz/store-cache': 2.0.0-next.0(react@18.2.0)(typescript@5.1.6)(zod@3.21.4)
-      fast-deep-equal: 3.1.3
-      mobx: 6.10.0
-      react: 18.2.0
-      rxjs: 7.5.5
-    transitivePeerDependencies:
-      - bufferutil
       - typescript
       - utf-8-validate
       - zod
@@ -1465,20 +1225,6 @@ packages:
       - zod
     dev: false
 
-  /@latticexyz/recs@2.0.0-next.0(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-htxBkUuu+bU8QDDKzJ9MRsR+FiMgZu7oM7FtnZGKeQ0RRCfXphR42Pvz9Pt/TnlEt7OWYStmQluPNlVCvxSWxA==}
-    dependencies:
-      '@latticexyz/schema-type': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/utils': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      mobx: 6.10.0
-      rxjs: 7.5.5
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
   /@latticexyz/recs@2.0.0-next.5(typescript@5.1.6)(zod@3.21.4):
     resolution: {integrity: sha512-4JKwB5IJoyJYXmL0hDtdCdopaWphnLXlYOTHIw3UncoVHiZCRfqtNxmeVEHORO2EJ4mjBHQ5OOEDE/4IltE9Yg==}
     dependencies:
@@ -1486,18 +1232,6 @@ packages:
       '@latticexyz/utils': 2.0.0-next.5
       mobx: 6.10.0
       rxjs: 7.5.5
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
-  /@latticexyz/schema-type@2.0.0-next.0(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-AAkieXFflh6V+NuM5J/E3FPbII2yqkR5KO61qPIb7GsDbsBLceKTS0as/A1MPeC7P4QJl/ZiWkkB1bb6JKC9Ew==}
-    dependencies:
-      abitype: 0.9.3(typescript@5.1.6)(zod@3.21.4)
-      viem: 1.3.1(typescript@5.1.6)(zod@3.21.4)
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -1529,14 +1263,6 @@ packages:
       - zod
     dev: false
 
-  /@latticexyz/services@2.0.0-next.0:
-    resolution: {integrity: sha512-uuzLVM8/Y85rpVKym3p3rp0OE0fr8AMkHl7h/peUmzpB6IA1qWZppBslQu1+zC25VSxk6Or0vy+Df8/lD1tmpQ==}
-    dependencies:
-      long: 5.2.3
-      nice-grpc-common: 2.0.2
-      protobufjs: 7.2.4
-    dev: false
-
   /@latticexyz/services@2.0.0-next.2:
     resolution: {integrity: sha512-QbvFdJwim+dZhwzua0IWsH5Y47sGhzsq+lTHHzT2NY60g/Ou0NKTzyP8TQzQmQXomWFhGHC1xbIUfPc7TNEevA==}
     dependencies:
@@ -1556,21 +1282,6 @@ packages:
       - google-protobuf
     dev: false
 
-  /@latticexyz/solecs@2.0.0-next.0:
-    resolution: {integrity: sha512-87PACIPtULDNQrZNgSPRVJInYtx9oV17HHE7T8g2ByHNc0D3V4lGkDHDDXnLvkOuEPGFCyNphvm+HBNdb7D7xA==}
-    dependencies:
-      '@ethersproject/abi': 5.7.0
-      '@ethersproject/providers': 5.7.2
-      '@solidstate/contracts': 0.0.52
-      ds-test: github.com/dapphub/ds-test/e282159d5170298eb2455a6c05280ab5a73a4ef0
-      ethers: 5.7.2
-      memmove: github.com/dk1a/memmove/ffd71cd77b1708574ef46a667b23ca3a5cc9fa27
-      solmate: github.com/transmissions11/solmate/9cf1428245074e39090dceacb0c28b1f684f584c
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-    dev: false
-
   /@latticexyz/solecs@2.0.0-next.2:
     resolution: {integrity: sha512-Vk4ywOPQ8LcKp/xP3zWUTsYdBVLU/J5pgyS/BRCPteefQ4ID481jW+SB0YO1pI2rk/rIPcE0okD9efvCOpQI9w==}
     dependencies:
@@ -1586,60 +1297,9 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@latticexyz/std-client@2.0.0-next.0(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-paskR040SfktqpbWpahzADkeMf4dhPOM/7VmBmlwP7Y3Qarrb7WEXt2SH0YPyvwx+sc6MK8172hkUasS38PzCg==}
-    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
-    dependencies:
-      '@ethersproject/providers': 5.7.2
-      '@latticexyz/cli': 2.0.0-next.0(google-protobuf@3.21.2)
-      '@latticexyz/common': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/config': 2.0.0-next.0(typescript@5.1.6)
-      '@latticexyz/network': 2.0.0-next.0(google-protobuf@3.21.2)(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/recs': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/solecs': 2.0.0-next.0
-      '@latticexyz/store': 2.0.0-next.0(typescript@5.1.6)
-      '@latticexyz/store-cache': 2.0.0-next.0(react@18.2.0)(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/utils': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/world': 2.0.0-next.0(typescript@5.1.6)
-      abitype: 0.9.3(typescript@5.1.6)(zod@3.21.4)
-      ethers: 5.7.2
-      mobx: 6.10.0
-      react: 18.2.0
-      rxjs: 7.5.5
-      viem: 1.3.1(typescript@5.1.6)(zod@3.21.4)
-    transitivePeerDependencies:
-      - bufferutil
-      - google-protobuf
-      - supports-color
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
-  /@latticexyz/std-contracts@2.0.0-next.0:
-    resolution: {integrity: sha512-WIcyaLfhfXdoj6okJLoh4U8wm6+lsBhXqpLIrDlp5/BFj1ICOstJuuECXtkD+itIvaNKfs9Tqi+Fm1A1qS8CxQ==}
-    dev: false
-
   /@latticexyz/std-contracts@2.0.0-next.2:
     resolution: {integrity: sha512-8rJTuA7f6dtFVHntDdE7pwi5wHd6rTxM9P8y3y58lSyMWeHfFlkHD4D1P1WaMqdW1LqNt0RrR3pPJI68DrAeaA==}
     dev: true
-
-  /@latticexyz/store-cache@2.0.0-next.0(react@18.2.0)(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-JffTeWxHcG/Cwm4WDnK1HxfF9t/TukYtkTMJ0u5PWYUwrAaXJTgQkF8fWmk6e4VKC98cgGWA9H/fSOmCICX2EA==}
-    dependencies:
-      '@latticexyz/common': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/config': 2.0.0-next.0(typescript@5.1.6)
-      '@latticexyz/schema-type': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/store': 2.0.0-next.0(typescript@5.1.6)
-      abitype: 0.9.3(typescript@5.1.6)(zod@3.21.4)
-      tuple-database: 2.2.0(react@18.2.0)
-    transitivePeerDependencies:
-      - bufferutil
-      - react
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
 
   /@latticexyz/store-sync@2.0.0-next.5(typescript@5.1.6):
     resolution: {integrity: sha512-PiGLMj53uz1Qmi5mgs+Pr3CwC+WU1Ygk3BrAn8NUMqF0F9jl8DIOMDkAv8pCeRygZQg24t4bRzWFAmGnG1NY4w==}
@@ -1685,24 +1345,6 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@latticexyz/store@2.0.0-next.0(typescript@5.1.6):
-    resolution: {integrity: sha512-fCDWTsDBcoLHgxnwe2b/YIRapq0i9EujP9DNhwCZBZbn/8SSmWM7m4lBYdV/F327zpj18OvGiG1IdmoJMjHhZg==}
-    dependencies:
-      '@ethersproject/abi': 5.7.0
-      '@ethersproject/providers': 5.7.2
-      '@latticexyz/common': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/config': 2.0.0-next.0(typescript@5.1.6)
-      '@latticexyz/gas-report': 2.0.0-next.0
-      '@latticexyz/schema-type': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      abitype: 0.9.3(typescript@5.1.6)(zod@3.21.4)
-      ethers: 5.7.2
-      zod: 3.21.4
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-    dev: false
-
   /@latticexyz/store@2.0.0-next.2(typescript@5.1.6):
     resolution: {integrity: sha512-r6HbrB4L2u8dh3mpGRLYUuVdcgkgZgP+tQPEmP6BHqXn7/VVJ6XdSzQ/FKfMYtiIwMvR1PW8g1z8KfS7JnSeag==}
     dependencies:
@@ -1741,21 +1383,6 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@latticexyz/utils@2.0.0-next.0(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-rA+NExMGrBXUI6QNFuN7BliMdZaja9C78O+CzRTl5uc3x/TntsIDjS+vpi7LI0SJ2pQEIaQeSV2QkqgQU3/H1g==}
-    dependencies:
-      '@latticexyz/common': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      ethers: 5.7.2
-      mobx: 6.10.0
-      proxy-deep: 3.1.1
-      rxjs: 7.5.5
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
-      - utf-8-validate
-      - zod
-    dev: false
-
   /@latticexyz/utils@2.0.0-next.2:
     resolution: {integrity: sha512-6aFrXB6OsVkhEeYoMlhRg2ESCiEwhQ0IuzsQcoLDkkFNIYBEbij2VRSCMlUw+MeRcZ0KEGqaKZ6Psfxcgk2VhA==}
     dependencies:
@@ -1777,24 +1404,6 @@ packages:
       rxjs: 7.5.5
     transitivePeerDependencies:
       - bufferutil
-      - utf-8-validate
-    dev: false
-
-  /@latticexyz/world@2.0.0-next.0(typescript@5.1.6):
-    resolution: {integrity: sha512-Pj84nT0IIMAaZ8ef+Is8RuVR9quH2kdgBQ6Xvnr5asAaPS/mcBThRP+muqN4D4VKRDh211CTe4/mhoAaVhCTew==}
-    dependencies:
-      '@ethersproject/abi': 5.7.0
-      '@ethersproject/providers': 5.7.2
-      '@latticexyz/common': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/config': 2.0.0-next.0(typescript@5.1.6)
-      '@latticexyz/gas-report': 2.0.0-next.0
-      '@latticexyz/schema-type': 2.0.0-next.0(typescript@5.1.6)(zod@3.21.4)
-      '@latticexyz/store': 2.0.0-next.0(typescript@5.1.6)
-      ethers: 5.7.2
-      zod: 3.21.4
-    transitivePeerDependencies:
-      - bufferutil
-      - typescript
       - utf-8-validate
     dev: false
 
@@ -1941,6 +1550,7 @@ packages:
 
   /@solidstate/contracts@0.0.52:
     resolution: {integrity: sha512-xSBn5oLnfYtgNYrsRq/COlWHt0NxK26PFQ3FvI2DDMAFpZKFsffGLzUl8umezj2gVKpN7EZ+EVLdPKjqx6eUOw==}
+    dev: true
 
   /@trpc/client@10.34.0(@trpc/server@10.34.0):
     resolution: {integrity: sha512-nqtDTIqSY/9syo2EjSy4WWWXPU9GsamEh9Tsg698gLAh1nhgFc5+/YYeb+Ne1pbvWGZ5/3t9Dcz3h4wMyyJ9gQ==}
@@ -2401,12 +2011,6 @@ packages:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
     engines: {node: '>=8'}
 
-  /async-mutex@0.3.2:
-    resolution: {integrity: sha512-HuTK7E7MT7jZEh1P9GtRW9+aTWiDWWi9InbZ5hjxrnRa39KS4BW04+xLBhYNS2aXhHUIKZSw3gj4Pn1pj+qGAA==}
-    dependencies:
-      tslib: 2.6.1
-    dev: false
-
   /async@3.2.4:
     resolution: {integrity: sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==}
 
@@ -2494,6 +2098,7 @@ packages:
   /callsites@3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
+    dev: true
 
   /caniuse-lite@1.0.30001519:
     resolution: {integrity: sha512-0QHgqR+Jv4bxHMp8kZ1Kn8CH55OikjKJ6JmKkZYP1F3D7w+lnFXF70nG5eNfsZS89jadi5Ywy5UCSKLAglIRkg==}
@@ -2521,10 +2126,6 @@ packages:
   /chardet@0.7.0:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
     dev: true
-
-  /charenc@0.0.2:
-    resolution: {integrity: sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==}
-    dev: false
 
   /chokidar@3.5.3:
     resolution: {integrity: sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==}
@@ -2661,10 +2262,6 @@ packages:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
-
-  /crypt@0.0.2:
-    resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
-    dev: false
 
   /csstype@3.1.2:
     resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
@@ -2805,10 +2402,6 @@ packages:
   /electron-to-chromium@1.4.485:
     resolution: {integrity: sha512-1ndQ5IBNEnFirPwvyud69GHL+31FkE09gH/CJ6m3KCbkx3i0EVOrjwz4UNxRmN9H8OVHbC6vMRZGN1yCvjSs9w==}
     dev: true
-
-  /elen@1.0.10:
-    resolution: {integrity: sha512-ZL799/V/kzxYJ6Wlfktreq6qQWfGc3VkGUQJW5lZQ8/MhsQiKTAwERPfhEwIsV2movRGe2DfV7H2MjRw76Z7Wg==}
-    dev: false
 
   /elliptic@6.5.4:
     resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
@@ -3131,13 +2724,6 @@ packages:
       - supports-color
     dev: true
 
-  /esm@3.2.25:
-    resolution: {integrity: sha512-U1suiZ2oDVWv4zPO56S0NcR5QriEahGtdN2OR6FiOG4WJvcjBVFB0qI4+eKoWFH483PKGuLuu6V8Z4T5g63UVA==}
-    engines: {node: '>=6'}
-    requiresBuild: true
-    dev: false
-    optional: true
-
   /espree@5.0.1:
     resolution: {integrity: sha512-qWAZcWh4XE/RwzLJejfcofscgMc9CamR6Tn1+XRXNzrvUSSbiAjGOI/fggztjIi7y9VLPqnICMIPiGyr8JaZ0A==}
     engines: {node: '>=6.0.0'}
@@ -3366,20 +2952,6 @@ packages:
     dependencies:
       is-callable: 1.2.7
     dev: true
-
-  /fractional-indexing@3.2.0:
-    resolution: {integrity: sha512-PcOxmqwYCW7O2ovKRU8OoQQj2yqTfEB/yeTYk4gPid6dN5ODRfU1hXd9tTVZzax/0NkO7AxpHykvZnT1aYp/BQ==}
-    engines: {node: ^14.13.1 || >=16.0.0}
-    dev: false
-
-  /fs-extra@11.1.1:
-    resolution: {integrity: sha512-MGIE4HOvQCeUCzmlHs0vXpih4ysz4wg9qiSAu6cd42lVwPbTM1TjV7RusoyQqMmk/95gdQZX72u+YW+c3eEpFQ==}
-    engines: {node: '>=14.14'}
-    dependencies:
-      graceful-fs: 4.2.11
-      jsonfile: 6.1.0
-      universalify: 2.0.0
-    dev: false
 
   /fs-extra@7.0.1:
     resolution: {integrity: sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==}
@@ -3711,10 +3283,6 @@ packages:
       has-tostringtag: 1.0.0
     dev: true
 
-  /is-buffer@1.1.6:
-    resolution: {integrity: sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==}
-    dev: false
-
   /is-callable@1.2.7:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
     engines: {node: '>= 0.4'}
@@ -3772,11 +3340,6 @@ packages:
   /is-number@7.0.0:
     resolution: {integrity: sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==}
     engines: {node: '>=0.12.0'}
-
-  /is-observable@2.1.0:
-    resolution: {integrity: sha512-DailKdLb0WU+xX8K5w7VsJhapwHLZ9jjmazqCJq4X12CTgqq73TKnbRcnSLuXYPOoLQgV5IrD7ePiX/h1vnkBw==}
-    engines: {node: '>=8'}
-    dev: false
 
   /is-path-inside@3.0.3:
     resolution: {integrity: sha512-Fd4gABb+ycGAmKou8eMftCupSir5lRxqf4aD/vd0cD2qc4HL07OjCeuHMr8Ro4CoMaeCKDB0/ECBOVWjTwUvPQ==}
@@ -3917,14 +3480,6 @@ packages:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  /jsonfile@6.1.0:
-    resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
-    dependencies:
-      universalify: 2.0.0
-    optionalDependencies:
-      graceful-fs: 4.2.11
-    dev: false
-
   /jsx-ast-utils@3.3.5:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
@@ -4009,14 +3564,6 @@ packages:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
-
-  /md5@2.3.0:
-    resolution: {integrity: sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==}
-    dependencies:
-      charenc: 0.0.2
-      crypt: 0.0.2
-      is-buffer: 1.1.6
-    dev: false
 
   /merge-stream@2.0.0:
     resolution: {integrity: sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w==}
@@ -4190,10 +3737,6 @@ packages:
       define-properties: 1.2.0
       es-abstract: 1.22.1
     dev: true
-
-  /observable-fns@0.6.1:
-    resolution: {integrity: sha512-9gRK4+sRWzeN6AOewNBTLXir7Zl/i3GB6Yl26gK4flxz8BXVpD3kt8amREmWNb0mxYOGDotvE5a4N+PtGGKdkg==}
-    dev: false
 
   /once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
@@ -4981,19 +4524,6 @@ packages:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
     dev: true
 
-  /threads@1.7.0:
-    resolution: {integrity: sha512-Mx5NBSHX3sQYR6iI9VYbgHKBLisyB+xROCBGjjWm1O9wb9vfLxdaGtmT/KCjUqMsSNW6nERzCW3T6H43LqjDZQ==}
-    dependencies:
-      callsites: 3.1.0
-      debug: 4.3.4
-      is-observable: 2.1.0
-      observable-fns: 0.6.1
-    optionalDependencies:
-      tiny-worker: 2.3.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
   /throttle-debounce@5.0.0:
     resolution: {integrity: sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==}
     engines: {node: '>=12.22'}
@@ -5001,14 +4531,6 @@ packages:
   /through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
     dev: true
-
-  /tiny-worker@2.3.0:
-    resolution: {integrity: sha512-pJ70wq5EAqTAEl9IkGzA+fN0836rycEuz2Cn6yeZ6FRzlVS5IDOkFHpIoEsksPRQV34GDqXm65+OlnZqUSyK2g==}
-    requiresBuild: true
-    dependencies:
-      esm: 3.2.25
-    dev: false
-    optional: true
 
   /tmp@0.0.33:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}
@@ -5068,23 +4590,6 @@ packages:
       tslib: 1.14.1
       typescript: 5.1.6
     dev: true
-
-  /tuple-database@2.2.0(react@18.2.0):
-    resolution: {integrity: sha512-sovO193K6NhAXmuc/1eFpfZ0iZSPf4NMi1X4bfK1Q//9DrBICRL1Cn3tOSjLsWYIG5wqOzhM7voUfne7RmSkdA==}
-    peerDependencies:
-      react: '*'
-    peerDependenciesMeta:
-      react:
-        optional: true
-    dependencies:
-      elen: 1.0.10
-      fractional-indexing: 3.2.0
-      fs-extra: 11.1.1
-      lodash: 4.17.21
-      md5: 2.3.0
-      react: 18.2.0
-      uuid: 9.0.0
-    dev: false
 
   /type-check@0.3.2:
     resolution: {integrity: sha512-ZCmOJdvOWDBYJlzAoFkC+Q0+bUyEOS1ltgp1MGU03fqHG+dbi9tBFU2Rd9QKiDZFAYrhPh2JUf7rZRIuHRKtOg==}
@@ -5210,11 +4715,6 @@ packages:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
 
-  /universalify@2.0.0:
-    resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}
-    engines: {node: '>= 10.0.0'}
-    dev: false
-
   /update-browserslist-db@1.0.11(browserslist@4.21.10):
     resolution: {integrity: sha512-dCwEFf0/oT85M1fHBg4F0jtLwJrutGoHSQXCh7u4o2t1drG+c0a9Flnqww6XUKSfQMPpJBRjU8d4RXB09qtvaA==}
     hasBin: true
@@ -5254,35 +4754,6 @@ packages:
     resolution: {integrity: sha512-0Pm9hTQ3se5ll1XihRic3FDIku70C+iHUdT/W926rSgHV5QgXsYbKZN8MSC3tJtSkhuROzvsQjAaFENRXr+19A==}
     dependencies:
       inherits: 2.0.3
-
-  /uuid@9.0.0:
-    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
-    hasBin: true
-    dev: false
-
-  /viem@1.3.1(typescript@5.1.6)(zod@3.21.4):
-    resolution: {integrity: sha512-Yv+y3/exrrEN4EAkVUtUuQxsjF4+3taHY2aSinJnNWtcA4fBZ+WfPJBTywcnFIa/Q5oDcQN85yqPFBbkXqWHdw==}
-    peerDependencies:
-      typescript: '>=5.0.4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-    dependencies:
-      '@adraffy/ens-normalize': 1.9.0
-      '@noble/curves': 1.0.0
-      '@noble/hashes': 1.3.0
-      '@scure/bip32': 1.3.0
-      '@scure/bip39': 1.2.0
-      '@wagmi/chains': 1.6.0(typescript@5.1.6)
-      abitype: 0.9.3(typescript@5.1.6)(zod@3.21.4)
-      isomorphic-ws: 5.0.0(ws@8.12.0)
-      typescript: 5.1.6
-      ws: 8.12.0
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-      - zod
-    dev: false
 
   /viem@1.6.0(typescript@5.1.6)(zod@3.21.4):
     resolution: {integrity: sha512-ae9Twkd0q2Qlj4yYpWjb4DzYAhKY0ibEpRH8FJaTywZXNpTjFidSdBaT0CVn1BaH7O7cnX4/O47zvDUMGJD1AA==}
@@ -5513,11 +4984,13 @@ packages:
     resolution: {tarball: https://codeload.github.com/dapphub/ds-test/tar.gz/e282159d5170298eb2455a6c05280ab5a73a4ef0}
     name: ds-test
     version: 1.0.0
+    dev: true
 
   github.com/dk1a/memmove/ffd71cd77b1708574ef46a667b23ca3a5cc9fa27:
     resolution: {tarball: https://codeload.github.com/dk1a/memmove/tar.gz/ffd71cd77b1708574ef46a667b23ca3a5cc9fa27}
     name: memmove
     version: 0.1.0
+    dev: true
 
   github.com/foundry-rs/forge-std/74cfb77e308dd188d2f58864aaf44963ae6b88b1:
     resolution: {tarball: https://codeload.github.com/foundry-rs/forge-std/tar.gz/74cfb77e308dd188d2f58864aaf44963ae6b88b1}
@@ -5529,3 +5002,4 @@ packages:
     resolution: {tarball: https://codeload.github.com/transmissions11/solmate/tar.gz/9cf1428245074e39090dceacb0c28b1f684f584c}
     name: solmate
     version: 6.5.0
+    dev: true
