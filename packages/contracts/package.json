@@ -1,9 +1,11 @@
 {
   "name": "@geo-web/mud-world-base-contracts",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "exports": {
-    ".": "./types/ethers-contracts"
+    ".": "./types/ethers-contracts",
+    "./mud.config": "./mud.config.ts",
+    "./worlds.json": "./worlds.json"
   },
   "scripts": {
     "build": "pnpm run build:mud && pnpm run build:abi && pnpm run build:typechain",
