@@ -1,7 +1,6 @@
 {
-  "name": "contracts",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@geo-web/mud-world-base-contracts",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "build": "pnpm run build:mud && pnpm run build:abi && pnpm run build:typechain",
