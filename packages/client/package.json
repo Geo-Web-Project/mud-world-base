@@ -1,9 +1,11 @@
 {
-  "name": "client",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@geoweb/mud-world-base-client",
+  "version": "0.0.1",
   "license": "MIT",
   "type": "module",
+  "exports": {
+    ".": "./lib"
+  },
   "scripts": {
     "build": "vite build",
     "dev": "wait-port localhost:8545 && vite",

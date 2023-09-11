@@ -1,5 +1,5 @@
 import { useComponentValue, useEntityQuery } from "@latticexyz/react";
-import { useMUD } from "./MUDContext";
+import { useMUD } from "../lib/MUDContext";
 import { singletonEntity } from "@latticexyz/store-sync/recs";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 
@@ -9,7 +9,7 @@ export const App = () => {
   } = useMUD();
 
   const name = useComponentValue(Name, singletonEntity);
-  const mediaObjects = useEntityQuery([Has(MediaObject)])
+  const mediaObjects = useEntityQuery([Has(MediaObject)]);
 
   return (
     <>
@@ -17,9 +17,9 @@ export const App = () => {
         Name: <span>{name?.value ?? "??"}</span>
       </div>
       <div>
-      {mediaObjects.map(mediaObject => (
-        <p>{getComponentValueStrict(MediaObject, mediaObject).name}</p>
-      ))}
+        {mediaObjects.map((mediaObject) => (
+          <p>{getComponentValueStrict(MediaObject, mediaObject).name}</p>
+        ))}
       </div>
     </>
   );
