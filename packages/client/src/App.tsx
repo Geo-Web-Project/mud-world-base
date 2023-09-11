@@ -1,5 +1,5 @@
 import { useComponentValue, useEntityQuery } from "@latticexyz/react";
-import { useMUD } from "../lib/MUDContext";
+import { useMUD } from "../lib";
 import { singletonEntity } from "@latticexyz/store-sync/recs";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 

@@ -3,10 +3,10 @@ import { createFaucetService } from "@latticexyz/services/faucet";
 import { encodeEntity, syncToRecs } from "@latticexyz/store-sync/recs";
 import { getNetworkConfig } from "./getNetworkConfig";
 import { world } from "./world";
-import { IWorld__factory } from "contracts/types/ethers-contracts/factories/IWorld__factory";
+import { IWorld__factory } from "@geo-web/mud-world-base-contracts/types/ethers-contracts/factories/IWorld__factory";
 import { createBurnerAccount, createContract, transportObserver, ContractWrite } from "@latticexyz/common";
 import { Subject, share } from "rxjs";
-import mudConfig from "contracts/mud.config";
+import mudConfig from "@geo-web/mud-world-base-contracts/mud.config";
 
 export type SetupNetworkResult = Awaited<ReturnType<typeof setupNetwork>>;
 
