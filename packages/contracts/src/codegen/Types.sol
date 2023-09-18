@@ -6,10 +6,10 @@ enum MediaObjectType {
   Image,
   Audio,
   Video,
-  Model3D
+  Model
 }
 
-enum EncodingFormat {
+enum MediaObjectEncodingFormat {
   Glb,
   Usdz,
   Gif,
@@ -19,4 +19,15 @@ enum EncodingFormat {
   Mpeg,
   Mp4,
   Mp3
+}
+
+enum ImageEncodingFormat {
+  Jpeg,
+  Png,
+  Svg
+}
+
+enum ModelEncodingFormat {
+  Glb,
+  Usdz
 }

@@ -1,18 +1,20 @@
 {
   "compilerOptions": {
-    "types": ["vite/client"],
-    "target": "ESNext",
+    "target": "es2021",
+    "module": "esnext",
+    "moduleResolution": "node10",
+    "declaration": true,
     "useDefineForClassFields": true,
-    "module": "ESNext",
     "lib": ["ESNext", "DOM"],
-    "moduleResolution": "Node",
     "strict": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "outDir": "dist",
     "jsx": "react-jsx",
     "jsxImportSource": "react"
   },
-  "include": ["src", "lib"]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
