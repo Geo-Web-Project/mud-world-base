@@ -15,7 +15,7 @@ export async function setupNetwork(networkParams: {
   chainId: Number;
   worlds: Partial<Record<string, { address: string; blockNumber?: number }>>;
   supportedChains: MUDChain[];
-}) {
+}): Promise<any> {
   const networkConfig = await getNetworkConfig(networkParams);
 
   const clientOptions = {
