@@ -1,11 +1,13 @@
 {
   "name": "@geo-web/mud-world-base-contracts",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "license": "MIT",
-  "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.mjs",
+  "types": "./types/ethers-contracts/index.ts",
   "files": [
-    "dist"
+    "./dist/",
+    "./types/",
+    "./mud.config.ts"
   ],
   "scripts": {
     "build": "pnpm run build:mud && pnpm run build:abi && pnpm run build:typechain && pnpm run build:types",
