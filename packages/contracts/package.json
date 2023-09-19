@@ -1,9 +1,11 @@
 {
   "name": "@geo-web/mud-world-base-contracts",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "license": "MIT",
-  "main": "./types/ethers-contracts/index.js",
+  "main": "./dist/index.mjs",
+  "types": "./types/ethers-contracts/index.ts",
   "files": [
+    "./dist/",
     "./types/",
     "./mud.config.ts"
   ],
