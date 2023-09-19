@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client";
 import { App } from "./App";
-import { MUDProvider, setup } from "../lib";
+import { MUDProvider, setup } from "@geo-web/mud-world-base-setup";
 import mudConfig from "@geo-web/mud-world-base-contracts/mud.config";
 import worldsJson from "@geo-web/mud-world-base-contracts/worlds.json";
 import {

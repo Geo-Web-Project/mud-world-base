@@ -4,33 +4,24 @@
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": "./dist/index.js"
-  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build:clean": "del dist",
-    "build:js": "swc src -d ./dist --config-file ../../.swcrc",
-    "build:types": "tsc",
-    "build": "pnpm build:clean && pnpm build:types && pnpm build:js",
-    "lint": "eslint src/* --fix",
-    "prepare": "pnpm build"
+    "build": "pnpm run build:js",
+    "build:js": "tsup",
+    "clean": "pnpm run clean:js",
+    "clean:js": "rimraf dist",
+    "dev": "tsup --watch",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
     "@geo-web/mud-world-base-contracts": "workspace:*",
     "@latticexyz/common": "2.0.0-next.8",
-    "@latticexyz/dev-tools": "2.0.0-next.8",
-    "@latticexyz/react": "2.0.0-next.8",
     "@latticexyz/recs": "2.0.0-next.8",
-    "@latticexyz/schema-type": "2.0.0-next.8",
     "@latticexyz/services": "2.0.0-next.8",
     "@latticexyz/store-sync": "2.0.0-next.8",
-    "@latticexyz/utils": "2.0.0-next.8",
-    "@latticexyz/world": "2.0.0-next.8",
     "ethers": "^5.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -41,9 +32,9 @@
     "@types/debug": "^4.1.8",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
-    "del-cli": "^5.0.0",
     "eslint-plugin-react": "7.31.11",
     "eslint-plugin-react-hooks": "4.6.0",
+    "tsup": "^7.2.0",
     "wait-port": "^1.0.4"
   }
 }
