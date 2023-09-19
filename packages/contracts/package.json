@@ -1,17 +1,18 @@
 {
   "name": "@geo-web/mud-world-base-contracts",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
-  "main": "./types/ethers-contracts/index",
+  "main": "./types/ethers-contracts/index.js",
   "files": [
     "./types/",
     "./mud.config.ts"
   ],
   "scripts": {
-    "build": "pnpm run build:mud && pnpm run build:abi && pnpm run build:typechain",
+    "build": "pnpm run build:mud && pnpm run build:abi && pnpm run build:typechain && pnpm run build:types",
     "build:abi": "forge clean && forge build",
     "build:mud": "mud tablegen && mud worldgen",
     "build:typechain": "rimraf types && typechain --target=ethers-v5 out/IWorld.sol/IWorld.json",
+    "build:types": "tsup",
     "deploy:local": "pnpm run build && mud deploy",
     "deploy:testnet": "pnpm run build && mud deploy --profile=lattice-testnet",
     "dev": "pnpm mud dev-contracts",
@@ -41,6 +42,7 @@
     "solhint": "^3.3.7",
     "solhint-config-mud": "2.0.0-next.5",
     "solhint-plugin-mud": "2.0.0-next.5",
+    "tsup": "^7.2.0",
     "typechain": "^8.1.1"
   }
 }
