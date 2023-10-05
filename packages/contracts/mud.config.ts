@@ -1,23 +1,12 @@
 import { mudConfig } from "@latticexyz/world/register";
-import { resolveTableId } from "@latticexyz/config";
 
 export default mudConfig({
   namespace: "geoweb",
   enums: {
-    MediaObjectType: ["Image", "Audio", "Video", "Model"],
-    MediaObjectEncodingFormat: [
-      "Glb",
-      "Usdz",
-      "Gif",
-      "Jpeg",
-      "Png",
-      "Svg",
-      "Mpeg",
-      "Mp4",
-      "Mp3",
-    ],
     ImageEncodingFormat: ["Jpeg", "Png", "Svg"],
     ModelEncodingFormat: ["Glb", "Usdz"],
+    AudioEncodingFormat: ["Mpeg", "Mp4", "Mp3"],
+    VideoEncodingFormat: ["Mpeg", "Mp4", "Mp3"],
   },
   modules: [
     {
@@ -25,53 +14,55 @@ export default mudConfig({
       root: true,
     },
     {
-      name: "KeysInTableModule",
+      name: "PCOOwnershipModule",
       root: true,
-      args: [resolveTableId("MediaObject")],
+      args: [
+        {
+          type: "address",
+          value: "0xBA1231785A7b4AC0E8dC9a0403938C2182cE4A4e",
+        },
+      ],
     },
   ],
   tables: {
-    Name: {
-      keySchema: {},
-      schema: "string",
+    ModelComponent: {
+      valueSchema: {
+        encodingFormat: "ModelEncodingFormat",
+        contentHash: "bytes",
+      },
     },
-    Url: {
-      keySchema: {},
-      schema: "string",
+    ImageComponent: {
+      valueSchema: {
+        encodingFormat: "ImageEncodingFormat",
+        contentHash: "bytes",
+      },
     },
-    MediaObject: {
-      schema: {
-        contentSize: "uint64",
-        mediaType: "MediaObjectType",
-        encodingFormat: "MediaObjectEncodingFormat",
-        name: "string",
+    AudioComponent: {
+      valueSchema: {
+        encodingFormat: "AudioEncodingFormat",
+        contentHash: "bytes",
+      },
+    },
+    VideoComponent: {
+      valueSchema: {
+        encodingFormat: "VideoEncodingFormat",
         contentHash: "bytes",
       },
     },
     PositionComponent: {
-      schema: { x: "int16", y: "int16", z: "int16" },
+      valueSchema: { h: "int32", geohash: "bytes" },
+    },
+    OrientationQuaternionComponent: {
+      valueSchema: { x: "int16", y: "int16", z: "int16", w: "int16" },
     },
     ScaleComponent: {
-      schema: { x: "int16", y: "int16", z: "int16" },
-    },
-    OrientationComponent: {
-      schema: { x: "int16", y: "int16", z: "int16", w: "int16" },
-    },
-    ModelComponent: {
-      schema: { encodingFormat: "ModelEncodingFormat", contentHash: "bytes" },
+      valueSchema: { x: "int16", y: "int16", z: "int16" },
     },
     TrackedImageComponent: {
-      schema: {
+      valueSchema: {
         physicalWidthInMillimeters: "uint16",
         encodingFormat: "ImageEncodingFormat",
         imageAsset: "bytes",
-      },
-    },
-    AnchorComponent: {
-      schema: {
-        anchor: "bytes32",
-        position: "bytes",
-        orientation: "bytes",
       },
     },
   },

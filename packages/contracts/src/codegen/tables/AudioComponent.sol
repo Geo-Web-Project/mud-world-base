@@ -20,21 +20,24 @@ import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCou
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/storeResourceTypes.sol";
 
+// Import user types
+import { AudioEncodingFormat } from "./../common.sol";
+
 ResourceId constant _tableId = ResourceId.wrap(
-  bytes32(abi.encodePacked(RESOURCE_TABLE, bytes14("geoweb"), bytes16("PositionComponen")))
+  bytes32(abi.encodePacked(RESOURCE_TABLE, bytes14("geoweb"), bytes16("AudioComponent")))
 );
-ResourceId constant PositionComponentTableId = _tableId;
+ResourceId constant AudioComponentTableId = _tableId;
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x0004010104000000000000000000000000000000000000000000000000000000
+  0x0001010101000000000000000000000000000000000000000000000000000000
 );
 
-struct PositionComponentData {
-  int32 h;
-  bytes geohash;
+struct AudioComponentData {
+  AudioEncodingFormat encodingFormat;
+  bytes contentHash;
 }
 
-library PositionComponent {
+library AudioComponent {
   /**
    * @notice Get the table values' field layout.
    * @return _fieldLayout The field layout for the table.
@@ -60,7 +63,7 @@ library PositionComponent {
    */
   function getValueSchema() internal pure returns (Schema) {
     SchemaType[] memory _valueSchema = new SchemaType[](2);
-    _valueSchema[0] = SchemaType.INT32;
+    _valueSchema[0] = SchemaType.UINT8;
     _valueSchema[1] = SchemaType.BYTES;
 
     return SchemaLib.encode(_valueSchema);
@@ -81,8 +84,8 @@ library PositionComponent {
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
     fieldNames = new string[](2);
-    fieldNames[0] = "h";
-    fieldNames[1] = "geohash";
+    fieldNames[0] = "encodingFormat";
+    fieldNames[1] = "contentHash";
   }
 
   /**
@@ -107,72 +110,72 @@ library PositionComponent {
   }
 
   /**
-   * @notice Get h.
+   * @notice Get encodingFormat.
    */
-  function getH(bytes32 key) internal view returns (int32 h) {
+  function getEncodingFormat(bytes32 key) internal view returns (AudioEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (int32(uint32(bytes4(_blob))));
+    return AudioEncodingFormat(uint8(bytes1(_blob)));
   }
 
   /**
-   * @notice Get h.
+   * @notice Get encodingFormat.
    */
-  function _getH(bytes32 key) internal view returns (int32 h) {
+  function _getEncodingFormat(bytes32 key) internal view returns (AudioEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (int32(uint32(bytes4(_blob))));
+    return AudioEncodingFormat(uint8(bytes1(_blob)));
   }
 
   /**
-   * @notice Get h (using the specified store).
+   * @notice Get encodingFormat (using the specified store).
    */
-  function getH(IStore _store, bytes32 key) internal view returns (int32 h) {
+  function getEncodingFormat(IStore _store, bytes32 key) internal view returns (AudioEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return (int32(uint32(bytes4(_blob))));
+    return AudioEncodingFormat(uint8(bytes1(_blob)));
   }
 
   /**
-   * @notice Set h.
+   * @notice Set encodingFormat.
    */
-  function setH(bytes32 key, int32 h) internal {
+  function setEncodingFormat(bytes32 key, AudioEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((h)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked(uint8(encodingFormat)), _fieldLayout);
   }
 
   /**
-   * @notice Set h.
+   * @notice Set encodingFormat.
    */
-  function _setH(bytes32 key, int32 h) internal {
+  function _setEncodingFormat(bytes32 key, AudioEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((h)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked(uint8(encodingFormat)), _fieldLayout);
   }
 
   /**
-   * @notice Set h (using the specified store).
+   * @notice Set encodingFormat (using the specified store).
    */
-  function setH(IStore _store, bytes32 key, int32 h) internal {
+  function setEncodingFormat(IStore _store, bytes32 key, AudioEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((h)), _fieldLayout);
+    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked(uint8(encodingFormat)), _fieldLayout);
   }
 
   /**
-   * @notice Get geohash.
+   * @notice Get contentHash.
    */
-  function getGeohash(bytes32 key) internal view returns (bytes memory geohash) {
+  function getContentHash(bytes32 key) internal view returns (bytes memory contentHash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -181,9 +184,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Get geohash.
+   * @notice Get contentHash.
    */
-  function _getGeohash(bytes32 key) internal view returns (bytes memory geohash) {
+  function _getContentHash(bytes32 key) internal view returns (bytes memory contentHash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -192,9 +195,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Get geohash (using the specified store).
+   * @notice Get contentHash (using the specified store).
    */
-  function getGeohash(IStore _store, bytes32 key) internal view returns (bytes memory geohash) {
+  function getContentHash(IStore _store, bytes32 key) internal view returns (bytes memory contentHash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -203,39 +206,39 @@ library PositionComponent {
   }
 
   /**
-   * @notice Set geohash.
+   * @notice Set contentHash.
    */
-  function setGeohash(bytes32 key, bytes memory geohash) internal {
+  function setContentHash(bytes32 key, bytes memory contentHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((geohash)));
+    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((contentHash)));
   }
 
   /**
-   * @notice Set geohash.
+   * @notice Set contentHash.
    */
-  function _setGeohash(bytes32 key, bytes memory geohash) internal {
+  function _setContentHash(bytes32 key, bytes memory contentHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((geohash)));
+    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((contentHash)));
   }
 
   /**
-   * @notice Set geohash (using the specified store).
+   * @notice Set contentHash (using the specified store).
    */
-  function setGeohash(IStore _store, bytes32 key, bytes memory geohash) internal {
+  function setContentHash(IStore _store, bytes32 key, bytes memory contentHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((geohash)));
+    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((contentHash)));
   }
 
   /**
-   * @notice Get the length of geohash.
+   * @notice Get the length of contentHash.
    */
-  function lengthGeohash(bytes32 key) internal view returns (uint256) {
+  function lengthContentHash(bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -246,9 +249,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Get the length of geohash.
+   * @notice Get the length of contentHash.
    */
-  function _lengthGeohash(bytes32 key) internal view returns (uint256) {
+  function _lengthContentHash(bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -259,9 +262,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Get the length of geohash (using the specified store).
+   * @notice Get the length of contentHash (using the specified store).
    */
-  function lengthGeohash(IStore _store, bytes32 key) internal view returns (uint256) {
+  function lengthContentHash(IStore _store, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -272,10 +275,10 @@ library PositionComponent {
   }
 
   /**
-   * @notice Get an item of geohash.
+   * @notice Get an item of contentHash.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemGeohash(bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemContentHash(bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -286,10 +289,10 @@ library PositionComponent {
   }
 
   /**
-   * @notice Get an item of geohash.
+   * @notice Get an item of contentHash.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function _getItemGeohash(bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function _getItemContentHash(bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -300,10 +303,10 @@ library PositionComponent {
   }
 
   /**
-   * @notice Get an item of geohash (using the specified store).
+   * @notice Get an item of contentHash (using the specified store).
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemGeohash(IStore _store, bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemContentHash(IStore _store, bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -314,9 +317,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Push a slice to geohash.
+   * @notice Push a slice to contentHash.
    */
-  function pushGeohash(bytes32 key, bytes memory _slice) internal {
+  function pushContentHash(bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -324,9 +327,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Push a slice to geohash.
+   * @notice Push a slice to contentHash.
    */
-  function _pushGeohash(bytes32 key, bytes memory _slice) internal {
+  function _pushContentHash(bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -334,9 +337,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Push a slice to geohash (using the specified store).
+   * @notice Push a slice to contentHash (using the specified store).
    */
-  function pushGeohash(IStore _store, bytes32 key, bytes memory _slice) internal {
+  function pushContentHash(IStore _store, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -344,9 +347,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Pop a slice from geohash.
+   * @notice Pop a slice from contentHash.
    */
-  function popGeohash(bytes32 key) internal {
+  function popContentHash(bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -354,9 +357,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Pop a slice from geohash.
+   * @notice Pop a slice from contentHash.
    */
-  function _popGeohash(bytes32 key) internal {
+  function _popContentHash(bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -364,9 +367,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Pop a slice from geohash (using the specified store).
+   * @notice Pop a slice from contentHash (using the specified store).
    */
-  function popGeohash(IStore _store, bytes32 key) internal {
+  function popContentHash(IStore _store, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -374,9 +377,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Update a slice of geohash at `_index`.
+   * @notice Update a slice of contentHash at `_index`.
    */
-  function updateGeohash(bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateContentHash(bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -387,9 +390,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Update a slice of geohash at `_index`.
+   * @notice Update a slice of contentHash at `_index`.
    */
-  function _updateGeohash(bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function _updateContentHash(bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -400,9 +403,9 @@ library PositionComponent {
   }
 
   /**
-   * @notice Update a slice of geohash (using the specified store) at `_index`.
+   * @notice Update a slice of contentHash (using the specified store) at `_index`.
    */
-  function updateGeohash(IStore _store, bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateContentHash(IStore _store, bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -415,7 +418,7 @@ library PositionComponent {
   /**
    * @notice Get the full data.
    */
-  function get(bytes32 key) internal view returns (PositionComponentData memory _table) {
+  function get(bytes32 key) internal view returns (AudioComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -430,7 +433,7 @@ library PositionComponent {
   /**
    * @notice Get the full data.
    */
-  function _get(bytes32 key) internal view returns (PositionComponentData memory _table) {
+  function _get(bytes32 key) internal view returns (AudioComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -445,7 +448,7 @@ library PositionComponent {
   /**
    * @notice Get the full data (using the specified store).
    */
-  function get(IStore _store, bytes32 key) internal view returns (PositionComponentData memory _table) {
+  function get(IStore _store, bytes32 key) internal view returns (AudioComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -460,11 +463,11 @@ library PositionComponent {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(bytes32 key, int32 h, bytes memory geohash) internal {
-    bytes memory _staticData = encodeStatic(h);
+  function set(bytes32 key, AudioEncodingFormat encodingFormat, bytes memory contentHash) internal {
+    bytes memory _staticData = encodeStatic(encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(geohash);
-    bytes memory _dynamicData = encodeDynamic(geohash);
+    PackedCounter _encodedLengths = encodeLengths(contentHash);
+    bytes memory _dynamicData = encodeDynamic(contentHash);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -475,11 +478,11 @@ library PositionComponent {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(bytes32 key, int32 h, bytes memory geohash) internal {
-    bytes memory _staticData = encodeStatic(h);
+  function _set(bytes32 key, AudioEncodingFormat encodingFormat, bytes memory contentHash) internal {
+    bytes memory _staticData = encodeStatic(encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(geohash);
-    bytes memory _dynamicData = encodeDynamic(geohash);
+    PackedCounter _encodedLengths = encodeLengths(contentHash);
+    bytes memory _dynamicData = encodeDynamic(contentHash);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -490,11 +493,11 @@ library PositionComponent {
   /**
    * @notice Set the full data using individual values (using the specified store).
    */
-  function set(IStore _store, bytes32 key, int32 h, bytes memory geohash) internal {
-    bytes memory _staticData = encodeStatic(h);
+  function set(IStore _store, bytes32 key, AudioEncodingFormat encodingFormat, bytes memory contentHash) internal {
+    bytes memory _staticData = encodeStatic(encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(geohash);
-    bytes memory _dynamicData = encodeDynamic(geohash);
+    PackedCounter _encodedLengths = encodeLengths(contentHash);
+    bytes memory _dynamicData = encodeDynamic(contentHash);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -505,11 +508,11 @@ library PositionComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(bytes32 key, PositionComponentData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.h);
+  function set(bytes32 key, AudioComponentData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.geohash);
-    bytes memory _dynamicData = encodeDynamic(_table.geohash);
+    PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
+    bytes memory _dynamicData = encodeDynamic(_table.contentHash);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -520,11 +523,11 @@ library PositionComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(bytes32 key, PositionComponentData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.h);
+  function _set(bytes32 key, AudioComponentData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.geohash);
-    bytes memory _dynamicData = encodeDynamic(_table.geohash);
+    PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
+    bytes memory _dynamicData = encodeDynamic(_table.contentHash);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -535,11 +538,11 @@ library PositionComponent {
   /**
    * @notice Set the full data using the data struct (using the specified store).
    */
-  function set(IStore _store, bytes32 key, PositionComponentData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.h);
+  function set(IStore _store, bytes32 key, AudioComponentData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.geohash);
-    bytes memory _dynamicData = encodeDynamic(_table.geohash);
+    PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
+    bytes memory _dynamicData = encodeDynamic(_table.contentHash);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -550,8 +553,8 @@ library PositionComponent {
   /**
    * @notice Decode the tightly packed blob of static data using this table's field layout.
    */
-  function decodeStatic(bytes memory _blob) internal pure returns (int32 h) {
-    h = (int32(uint32(Bytes.slice4(_blob, 0))));
+  function decodeStatic(bytes memory _blob) internal pure returns (AudioEncodingFormat encodingFormat) {
+    encodingFormat = AudioEncodingFormat(uint8(Bytes.slice1(_blob, 0)));
   }
 
   /**
@@ -560,13 +563,13 @@ library PositionComponent {
   function decodeDynamic(
     PackedCounter _encodedLengths,
     bytes memory _blob
-  ) internal pure returns (bytes memory geohash) {
+  ) internal pure returns (bytes memory contentHash) {
     uint256 _start;
     uint256 _end;
     unchecked {
       _end = _encodedLengths.atIndex(0);
     }
-    geohash = (bytes(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+    contentHash = (bytes(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
   }
 
   /**
@@ -579,10 +582,10 @@ library PositionComponent {
     bytes memory _staticData,
     PackedCounter _encodedLengths,
     bytes memory _dynamicData
-  ) internal pure returns (PositionComponentData memory _table) {
-    (_table.h) = decodeStatic(_staticData);
+  ) internal pure returns (AudioComponentData memory _table) {
+    (_table.encodingFormat) = decodeStatic(_staticData);
 
-    (_table.geohash) = decodeDynamic(_encodedLengths, _dynamicData);
+    (_table.contentHash) = decodeDynamic(_encodedLengths, _dynamicData);
   }
 
   /**
@@ -619,18 +622,18 @@ library PositionComponent {
    * @notice Tightly pack static (fixed length) data using this table's schema.
    * @return The static data, encoded into a sequence of bytes.
    */
-  function encodeStatic(int32 h) internal pure returns (bytes memory) {
-    return abi.encodePacked(h);
+  function encodeStatic(AudioEncodingFormat encodingFormat) internal pure returns (bytes memory) {
+    return abi.encodePacked(encodingFormat);
   }
 
   /**
    * @notice Tightly pack dynamic data lengths using this table's schema.
    * @return _encodedLengths The lengths of the dynamic fields (packed into a single bytes32 value).
    */
-  function encodeLengths(bytes memory geohash) internal pure returns (PackedCounter _encodedLengths) {
+  function encodeLengths(bytes memory contentHash) internal pure returns (PackedCounter _encodedLengths) {
     // Lengths are effectively checked during copy by 2**40 bytes exceeding gas limits
     unchecked {
-      _encodedLengths = PackedCounterLib.pack(bytes(geohash).length);
+      _encodedLengths = PackedCounterLib.pack(bytes(contentHash).length);
     }
   }
 
@@ -638,8 +641,8 @@ library PositionComponent {
    * @notice Tightly pack dynamic (variable length) data using this table's schema.
    * @return The dynamic data, encoded into a sequence of bytes.
    */
-  function encodeDynamic(bytes memory geohash) internal pure returns (bytes memory) {
-    return abi.encodePacked(bytes((geohash)));
+  function encodeDynamic(bytes memory contentHash) internal pure returns (bytes memory) {
+    return abi.encodePacked(bytes((contentHash)));
   }
 
   /**
@@ -648,11 +651,14 @@ library PositionComponent {
    * @return The lengths of the dynamic fields (packed into a single bytes32 value).
    * @return The dyanmic (variable length) data, encoded into a sequence of bytes.
    */
-  function encode(int32 h, bytes memory geohash) internal pure returns (bytes memory, PackedCounter, bytes memory) {
-    bytes memory _staticData = encodeStatic(h);
+  function encode(
+    AudioEncodingFormat encodingFormat,
+    bytes memory contentHash
+  ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
+    bytes memory _staticData = encodeStatic(encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(geohash);
-    bytes memory _dynamicData = encodeDynamic(geohash);
+    PackedCounter _encodedLengths = encodeLengths(contentHash);
+    bytes memory _dynamicData = encodeDynamic(contentHash);
 
     return (_staticData, _encodedLengths, _dynamicData);
   }
