@@ -10,11 +10,19 @@ import {CORE_SYSTEM_ID} from "@latticexyz/world/src/modules/core/constants.sol";
 import {Systems} from "@latticexyz/world/src/codegen/tables/Systems.sol";
 import {WorldRegistrationSystem} from "@latticexyz/world/src/modules/core/implementations/WorldRegistrationSystem.sol";
 import {revertWithBytes} from "@latticexyz/world/src/revertWithBytes.sol";
+import {ResourceAccess} from "@latticexyz/world/src/codegen/tables/ResourceAccess.sol";
+import {NamespaceOwner} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 
 contract PCOOwnershipSystem is System {
-    function registerParcelNamespace(uint256 parcelId) public {
+    function getNamespaceIdForParcel(
+        uint256 parcelId
+    ) public view returns (ResourceId) {
         bytes14 namespace = bytes14(keccak256(abi.encodePacked(parcelId)));
-        ResourceId namespaceId = WorldResourceIdLib.encodeNamespace(namespace);
+        return WorldResourceIdLib.encodeNamespace(namespace);
+    }
+
+    function registerParcelNamespace(uint256 parcelId) public {
+        ResourceId namespaceId = getNamespaceIdForParcel(parcelId);
 
         PCOOwnership._set(
             TABLE_ID,
@@ -30,5 +38,20 @@ contract PCOOwnershipSystem is System {
             )
         );
         if (!success) revertWithBytes(data);
+    }
+
+    function claimParcelNamespace(uint256 parcelId) public {
+        // Get current namespace owner
+        ResourceId namespaceId = getNamespaceIdForParcel(parcelId);
+        address oldOwner = NamespaceOwner._get(namespaceId);
+
+        // Set namespace new owner
+        NamespaceOwner._set(namespaceId, _msgSender());
+
+        // Revoke access from old owner
+        ResourceAccess._deleteRecord(namespaceId, oldOwner);
+
+        // Grant access to new owner
+        ResourceAccess._set(namespaceId, _msgSender(), true);
     }
 }

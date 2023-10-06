@@ -49,8 +49,7 @@ contract PCOOwnershipTest is MudTest {
         uint256 parcelId = 1;
         mockERC721.mint(address(this), parcelId);
 
-        bytes14 namespace = bytes14(keccak256(abi.encodePacked(parcelId)));
-        ResourceId namespaceId = WorldResourceIdLib.encodeNamespace(namespace);
+        ResourceId namespaceId = world.getNamespaceIdForParcel(parcelId);
 
         world.registerParcelNamespace(parcelId);
 
@@ -63,6 +62,22 @@ contract PCOOwnershipTest is MudTest {
         assertEq(
             NamespaceOwner.get(world, namespaceId),
             address(this),
+            "PCO owner should be namespace owner"
+        );
+    }
+
+    function testClaimParcelNamespace() public {
+        uint256 parcelId = 1;
+        ResourceId namespaceId = registerParcel();
+        mockERC721.transferFrom(address(this), address(0x1), parcelId);
+
+        vm.startPrank(address(0x1));
+        world.claimParcelNamespace(parcelId);
+        vm.stopPrank();
+
+        assertEq(
+            NamespaceOwner.get(world, namespaceId),
+            address(0x1),
             "PCO owner should be namespace owner"
         );
     }
@@ -82,8 +97,7 @@ contract PCOOwnershipTest is MudTest {
         uint256 parcelId = 1;
         mockERC721.mint(address(0x1), parcelId);
 
-        bytes14 namespace = bytes14(keccak256(abi.encodePacked(parcelId)));
-        ResourceId namespaceId = WorldResourceIdLib.encodeNamespace(namespace);
+        ResourceId namespaceId = world.getNamespaceIdForParcel(parcelId);
 
         vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotPCOOwner.selector);
         world.registerParcelNamespace(parcelId);
@@ -93,8 +107,7 @@ contract PCOOwnershipTest is MudTest {
         uint256 parcelId = 1;
         mockERC721.mint(address(0x1), parcelId);
 
-        bytes14 namespace = bytes14(keccak256(abi.encodePacked(parcelId)));
-        ResourceId namespaceId = WorldResourceIdLib.encodeNamespace(namespace);
+        ResourceId namespaceId = world.getNamespaceIdForParcel(parcelId);
 
         vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotFound.selector);
         world.registerNamespace(namespaceId);
@@ -104,8 +117,7 @@ contract PCOOwnershipTest is MudTest {
         uint256 parcelId = 1;
         mockERC721.mint(address(this), parcelId);
 
-        bytes14 namespace = bytes14(keccak256(abi.encodePacked(parcelId)));
-        ResourceId namespaceId = WorldResourceIdLib.encodeNamespace(namespace);
+        ResourceId namespaceId = world.getNamespaceIdForParcel(parcelId);
 
         vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotFound.selector);
         world.registerNamespace(namespaceId);
@@ -115,8 +127,7 @@ contract PCOOwnershipTest is MudTest {
         uint256 parcelId = 1;
         mockERC721.mint(address(0x1), parcelId);
 
-        bytes14 namespace = bytes14(keccak256(abi.encodePacked(parcelId)));
-        ResourceId namespaceId = WorldResourceIdLib.encodeNamespace(namespace);
+        ResourceId namespaceId = world.getNamespaceIdForParcel(parcelId);
 
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
@@ -139,8 +150,7 @@ contract PCOOwnershipTest is MudTest {
         uint256 parcelId = 1;
         mockERC721.mint(address(0x1), parcelId);
 
-        bytes14 namespace = bytes14(keccak256(abi.encodePacked(parcelId)));
-        ResourceId namespaceId = WorldResourceIdLib.encodeNamespace(namespace);
+        ResourceId namespaceId = world.getNamespaceIdForParcel(parcelId);
 
         bytes32[] memory _keyTuple = new bytes32[](1);
         _keyTuple[0] = ResourceId.unwrap(namespaceId);
@@ -187,5 +197,15 @@ contract PCOOwnershipTest is MudTest {
             _dynamicData
         );
         vm.stopBroadcast();
+    }
+
+    function test_CannotClaimParcelNamespace() public {
+        uint256 parcelId = 1;
+        ResourceId namespaceId = registerParcel();
+
+        vm.startPrank(address(0x1));
+        vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotPCOOwner.selector);
+        world.claimParcelNamespace(parcelId);
+        vm.stopPrank();
     }
 }
