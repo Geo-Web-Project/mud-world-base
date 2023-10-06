@@ -20,11 +20,6 @@ import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCou
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/storeResourceTypes.sol";
 
-ResourceId constant _tableId = ResourceId.wrap(
-  bytes32(abi.encodePacked(RESOURCE_TABLE, bytes14("geoweb"), bytes16("OrientationQuate")))
-);
-ResourceId constant OrientationQuaternionComponentTableId = _tableId;
-
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
   0x0008040002020202000000000000000000000000000000000000000000000000
 );
@@ -94,28 +89,28 @@ library OrientationQuaternionComponent {
   /**
    * @notice Register the table with its config.
    */
-  function register() internal {
+  function register(ResourceId _tableId) internal {
     StoreSwitch.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Register the table with its config.
    */
-  function _register() internal {
+  function _register(ResourceId _tableId) internal {
     StoreCore.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Register the table with its config (using the specified store).
    */
-  function register(IStore _store) internal {
+  function register(IStore _store, ResourceId _tableId) internal {
     _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Get x.
    */
-  function getX(bytes32 key) internal view returns (int16 x) {
+  function getX(ResourceId _tableId, bytes32 key) internal view returns (int16 x) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -126,7 +121,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get x.
    */
-  function _getX(bytes32 key) internal view returns (int16 x) {
+  function _getX(ResourceId _tableId, bytes32 key) internal view returns (int16 x) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -137,7 +132,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get x (using the specified store).
    */
-  function getX(IStore _store, bytes32 key) internal view returns (int16 x) {
+  function getX(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (int16 x) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -148,7 +143,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set x.
    */
-  function setX(bytes32 key, int16 x) internal {
+  function setX(ResourceId _tableId, bytes32 key, int16 x) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -158,7 +153,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set x.
    */
-  function _setX(bytes32 key, int16 x) internal {
+  function _setX(ResourceId _tableId, bytes32 key, int16 x) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -168,7 +163,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set x (using the specified store).
    */
-  function setX(IStore _store, bytes32 key, int16 x) internal {
+  function setX(IStore _store, ResourceId _tableId, bytes32 key, int16 x) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -178,7 +173,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get y.
    */
-  function getY(bytes32 key) internal view returns (int16 y) {
+  function getY(ResourceId _tableId, bytes32 key) internal view returns (int16 y) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -189,7 +184,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get y.
    */
-  function _getY(bytes32 key) internal view returns (int16 y) {
+  function _getY(ResourceId _tableId, bytes32 key) internal view returns (int16 y) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -200,7 +195,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get y (using the specified store).
    */
-  function getY(IStore _store, bytes32 key) internal view returns (int16 y) {
+  function getY(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (int16 y) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -211,7 +206,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set y.
    */
-  function setY(bytes32 key, int16 y) internal {
+  function setY(ResourceId _tableId, bytes32 key, int16 y) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -221,7 +216,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set y.
    */
-  function _setY(bytes32 key, int16 y) internal {
+  function _setY(ResourceId _tableId, bytes32 key, int16 y) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -231,7 +226,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set y (using the specified store).
    */
-  function setY(IStore _store, bytes32 key, int16 y) internal {
+  function setY(IStore _store, ResourceId _tableId, bytes32 key, int16 y) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -241,7 +236,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get z.
    */
-  function getZ(bytes32 key) internal view returns (int16 z) {
+  function getZ(ResourceId _tableId, bytes32 key) internal view returns (int16 z) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -252,7 +247,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get z.
    */
-  function _getZ(bytes32 key) internal view returns (int16 z) {
+  function _getZ(ResourceId _tableId, bytes32 key) internal view returns (int16 z) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -263,7 +258,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get z (using the specified store).
    */
-  function getZ(IStore _store, bytes32 key) internal view returns (int16 z) {
+  function getZ(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (int16 z) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -274,7 +269,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set z.
    */
-  function setZ(bytes32 key, int16 z) internal {
+  function setZ(ResourceId _tableId, bytes32 key, int16 z) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -284,7 +279,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set z.
    */
-  function _setZ(bytes32 key, int16 z) internal {
+  function _setZ(ResourceId _tableId, bytes32 key, int16 z) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -294,7 +289,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set z (using the specified store).
    */
-  function setZ(IStore _store, bytes32 key, int16 z) internal {
+  function setZ(IStore _store, ResourceId _tableId, bytes32 key, int16 z) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -304,7 +299,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get w.
    */
-  function getW(bytes32 key) internal view returns (int16 w) {
+  function getW(ResourceId _tableId, bytes32 key) internal view returns (int16 w) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -315,7 +310,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get w.
    */
-  function _getW(bytes32 key) internal view returns (int16 w) {
+  function _getW(ResourceId _tableId, bytes32 key) internal view returns (int16 w) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -326,7 +321,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get w (using the specified store).
    */
-  function getW(IStore _store, bytes32 key) internal view returns (int16 w) {
+  function getW(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (int16 w) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -337,7 +332,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set w.
    */
-  function setW(bytes32 key, int16 w) internal {
+  function setW(ResourceId _tableId, bytes32 key, int16 w) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -347,7 +342,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set w.
    */
-  function _setW(bytes32 key, int16 w) internal {
+  function _setW(ResourceId _tableId, bytes32 key, int16 w) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -357,7 +352,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set w (using the specified store).
    */
-  function setW(IStore _store, bytes32 key, int16 w) internal {
+  function setW(IStore _store, ResourceId _tableId, bytes32 key, int16 w) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -367,7 +362,10 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get the full data.
    */
-  function get(bytes32 key) internal view returns (OrientationQuaternionComponentData memory _table) {
+  function get(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (OrientationQuaternionComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -382,7 +380,10 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get the full data.
    */
-  function _get(bytes32 key) internal view returns (OrientationQuaternionComponentData memory _table) {
+  function _get(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (OrientationQuaternionComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -397,7 +398,11 @@ library OrientationQuaternionComponent {
   /**
    * @notice Get the full data (using the specified store).
    */
-  function get(IStore _store, bytes32 key) internal view returns (OrientationQuaternionComponentData memory _table) {
+  function get(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (OrientationQuaternionComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -412,7 +417,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(bytes32 key, int16 x, int16 y, int16 z, int16 w) internal {
+  function set(ResourceId _tableId, bytes32 key, int16 x, int16 y, int16 z, int16 w) internal {
     bytes memory _staticData = encodeStatic(x, y, z, w);
 
     PackedCounter _encodedLengths;
@@ -427,7 +432,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(bytes32 key, int16 x, int16 y, int16 z, int16 w) internal {
+  function _set(ResourceId _tableId, bytes32 key, int16 x, int16 y, int16 z, int16 w) internal {
     bytes memory _staticData = encodeStatic(x, y, z, w);
 
     PackedCounter _encodedLengths;
@@ -442,7 +447,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set the full data using individual values (using the specified store).
    */
-  function set(IStore _store, bytes32 key, int16 x, int16 y, int16 z, int16 w) internal {
+  function set(IStore _store, ResourceId _tableId, bytes32 key, int16 x, int16 y, int16 z, int16 w) internal {
     bytes memory _staticData = encodeStatic(x, y, z, w);
 
     PackedCounter _encodedLengths;
@@ -457,7 +462,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(bytes32 key, OrientationQuaternionComponentData memory _table) internal {
+  function set(ResourceId _tableId, bytes32 key, OrientationQuaternionComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.x, _table.y, _table.z, _table.w);
 
     PackedCounter _encodedLengths;
@@ -472,7 +477,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(bytes32 key, OrientationQuaternionComponentData memory _table) internal {
+  function _set(ResourceId _tableId, bytes32 key, OrientationQuaternionComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.x, _table.y, _table.z, _table.w);
 
     PackedCounter _encodedLengths;
@@ -487,7 +492,12 @@ library OrientationQuaternionComponent {
   /**
    * @notice Set the full data using the data struct (using the specified store).
    */
-  function set(IStore _store, bytes32 key, OrientationQuaternionComponentData memory _table) internal {
+  function set(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    OrientationQuaternionComponentData memory _table
+  ) internal {
     bytes memory _staticData = encodeStatic(_table.x, _table.y, _table.z, _table.w);
 
     PackedCounter _encodedLengths;
@@ -529,7 +539,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Delete all data for given keys.
    */
-  function deleteRecord(bytes32 key) internal {
+  function deleteRecord(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -539,7 +549,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Delete all data for given keys.
    */
-  function _deleteRecord(bytes32 key) internal {
+  function _deleteRecord(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -549,7 +559,7 @@ library OrientationQuaternionComponent {
   /**
    * @notice Delete all data for given keys (using the specified store).
    */
-  function deleteRecord(IStore _store, bytes32 key) internal {
+  function deleteRecord(IStore _store, ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 

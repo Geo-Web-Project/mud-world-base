@@ -23,11 +23,6 @@ import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/s
 // Import user types
 import { ModelEncodingFormat } from "./../common.sol";
 
-ResourceId constant _tableId = ResourceId.wrap(
-  bytes32(abi.encodePacked(RESOURCE_TABLE, bytes14("geoweb"), bytes16("ModelComponent")))
-);
-ResourceId constant ModelComponentTableId = _tableId;
-
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
   0x0001010101000000000000000000000000000000000000000000000000000000
 );
@@ -91,28 +86,31 @@ library ModelComponent {
   /**
    * @notice Register the table with its config.
    */
-  function register() internal {
+  function register(ResourceId _tableId) internal {
     StoreSwitch.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Register the table with its config.
    */
-  function _register() internal {
+  function _register(ResourceId _tableId) internal {
     StoreCore.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Register the table with its config (using the specified store).
    */
-  function register(IStore _store) internal {
+  function register(IStore _store, ResourceId _tableId) internal {
     _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Get encodingFormat.
    */
-  function getEncodingFormat(bytes32 key) internal view returns (ModelEncodingFormat encodingFormat) {
+  function getEncodingFormat(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (ModelEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -123,7 +121,10 @@ library ModelComponent {
   /**
    * @notice Get encodingFormat.
    */
-  function _getEncodingFormat(bytes32 key) internal view returns (ModelEncodingFormat encodingFormat) {
+  function _getEncodingFormat(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (ModelEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -134,7 +135,11 @@ library ModelComponent {
   /**
    * @notice Get encodingFormat (using the specified store).
    */
-  function getEncodingFormat(IStore _store, bytes32 key) internal view returns (ModelEncodingFormat encodingFormat) {
+  function getEncodingFormat(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (ModelEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -145,7 +150,7 @@ library ModelComponent {
   /**
    * @notice Set encodingFormat.
    */
-  function setEncodingFormat(bytes32 key, ModelEncodingFormat encodingFormat) internal {
+  function setEncodingFormat(ResourceId _tableId, bytes32 key, ModelEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -155,7 +160,7 @@ library ModelComponent {
   /**
    * @notice Set encodingFormat.
    */
-  function _setEncodingFormat(bytes32 key, ModelEncodingFormat encodingFormat) internal {
+  function _setEncodingFormat(ResourceId _tableId, bytes32 key, ModelEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -165,7 +170,12 @@ library ModelComponent {
   /**
    * @notice Set encodingFormat (using the specified store).
    */
-  function setEncodingFormat(IStore _store, bytes32 key, ModelEncodingFormat encodingFormat) internal {
+  function setEncodingFormat(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    ModelEncodingFormat encodingFormat
+  ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -175,7 +185,7 @@ library ModelComponent {
   /**
    * @notice Get contentHash.
    */
-  function getContentHash(bytes32 key) internal view returns (bytes memory contentHash) {
+  function getContentHash(ResourceId _tableId, bytes32 key) internal view returns (bytes memory contentHash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -186,7 +196,7 @@ library ModelComponent {
   /**
    * @notice Get contentHash.
    */
-  function _getContentHash(bytes32 key) internal view returns (bytes memory contentHash) {
+  function _getContentHash(ResourceId _tableId, bytes32 key) internal view returns (bytes memory contentHash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -197,7 +207,11 @@ library ModelComponent {
   /**
    * @notice Get contentHash (using the specified store).
    */
-  function getContentHash(IStore _store, bytes32 key) internal view returns (bytes memory contentHash) {
+  function getContentHash(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (bytes memory contentHash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -208,7 +222,7 @@ library ModelComponent {
   /**
    * @notice Set contentHash.
    */
-  function setContentHash(bytes32 key, bytes memory contentHash) internal {
+  function setContentHash(ResourceId _tableId, bytes32 key, bytes memory contentHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -218,7 +232,7 @@ library ModelComponent {
   /**
    * @notice Set contentHash.
    */
-  function _setContentHash(bytes32 key, bytes memory contentHash) internal {
+  function _setContentHash(ResourceId _tableId, bytes32 key, bytes memory contentHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -228,7 +242,7 @@ library ModelComponent {
   /**
    * @notice Set contentHash (using the specified store).
    */
-  function setContentHash(IStore _store, bytes32 key, bytes memory contentHash) internal {
+  function setContentHash(IStore _store, ResourceId _tableId, bytes32 key, bytes memory contentHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -238,7 +252,7 @@ library ModelComponent {
   /**
    * @notice Get the length of contentHash.
    */
-  function lengthContentHash(bytes32 key) internal view returns (uint256) {
+  function lengthContentHash(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -251,7 +265,7 @@ library ModelComponent {
   /**
    * @notice Get the length of contentHash.
    */
-  function _lengthContentHash(bytes32 key) internal view returns (uint256) {
+  function _lengthContentHash(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -264,7 +278,7 @@ library ModelComponent {
   /**
    * @notice Get the length of contentHash (using the specified store).
    */
-  function lengthContentHash(IStore _store, bytes32 key) internal view returns (uint256) {
+  function lengthContentHash(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -278,7 +292,7 @@ library ModelComponent {
    * @notice Get an item of contentHash.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemContentHash(bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemContentHash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -292,7 +306,7 @@ library ModelComponent {
    * @notice Get an item of contentHash.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function _getItemContentHash(bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function _getItemContentHash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -306,7 +320,12 @@ library ModelComponent {
    * @notice Get an item of contentHash (using the specified store).
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemContentHash(IStore _store, bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemContentHash(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    uint256 _index
+  ) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -319,7 +338,7 @@ library ModelComponent {
   /**
    * @notice Push a slice to contentHash.
    */
-  function pushContentHash(bytes32 key, bytes memory _slice) internal {
+  function pushContentHash(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -329,7 +348,7 @@ library ModelComponent {
   /**
    * @notice Push a slice to contentHash.
    */
-  function _pushContentHash(bytes32 key, bytes memory _slice) internal {
+  function _pushContentHash(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -339,7 +358,7 @@ library ModelComponent {
   /**
    * @notice Push a slice to contentHash (using the specified store).
    */
-  function pushContentHash(IStore _store, bytes32 key, bytes memory _slice) internal {
+  function pushContentHash(IStore _store, ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -349,7 +368,7 @@ library ModelComponent {
   /**
    * @notice Pop a slice from contentHash.
    */
-  function popContentHash(bytes32 key) internal {
+  function popContentHash(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -359,7 +378,7 @@ library ModelComponent {
   /**
    * @notice Pop a slice from contentHash.
    */
-  function _popContentHash(bytes32 key) internal {
+  function _popContentHash(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -369,7 +388,7 @@ library ModelComponent {
   /**
    * @notice Pop a slice from contentHash (using the specified store).
    */
-  function popContentHash(IStore _store, bytes32 key) internal {
+  function popContentHash(IStore _store, ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -379,7 +398,7 @@ library ModelComponent {
   /**
    * @notice Update a slice of contentHash at `_index`.
    */
-  function updateContentHash(bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateContentHash(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -392,7 +411,7 @@ library ModelComponent {
   /**
    * @notice Update a slice of contentHash at `_index`.
    */
-  function _updateContentHash(bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function _updateContentHash(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -405,7 +424,13 @@ library ModelComponent {
   /**
    * @notice Update a slice of contentHash (using the specified store) at `_index`.
    */
-  function updateContentHash(IStore _store, bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateContentHash(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    uint256 _index,
+    bytes memory _slice
+  ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -418,7 +443,7 @@ library ModelComponent {
   /**
    * @notice Get the full data.
    */
-  function get(bytes32 key) internal view returns (ModelComponentData memory _table) {
+  function get(ResourceId _tableId, bytes32 key) internal view returns (ModelComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -433,7 +458,7 @@ library ModelComponent {
   /**
    * @notice Get the full data.
    */
-  function _get(bytes32 key) internal view returns (ModelComponentData memory _table) {
+  function _get(ResourceId _tableId, bytes32 key) internal view returns (ModelComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -448,7 +473,11 @@ library ModelComponent {
   /**
    * @notice Get the full data (using the specified store).
    */
-  function get(IStore _store, bytes32 key) internal view returns (ModelComponentData memory _table) {
+  function get(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (ModelComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -463,7 +492,12 @@ library ModelComponent {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(bytes32 key, ModelEncodingFormat encodingFormat, bytes memory contentHash) internal {
+  function set(
+    ResourceId _tableId,
+    bytes32 key,
+    ModelEncodingFormat encodingFormat,
+    bytes memory contentHash
+  ) internal {
     bytes memory _staticData = encodeStatic(encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(contentHash);
@@ -478,7 +512,12 @@ library ModelComponent {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(bytes32 key, ModelEncodingFormat encodingFormat, bytes memory contentHash) internal {
+  function _set(
+    ResourceId _tableId,
+    bytes32 key,
+    ModelEncodingFormat encodingFormat,
+    bytes memory contentHash
+  ) internal {
     bytes memory _staticData = encodeStatic(encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(contentHash);
@@ -493,7 +532,13 @@ library ModelComponent {
   /**
    * @notice Set the full data using individual values (using the specified store).
    */
-  function set(IStore _store, bytes32 key, ModelEncodingFormat encodingFormat, bytes memory contentHash) internal {
+  function set(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    ModelEncodingFormat encodingFormat,
+    bytes memory contentHash
+  ) internal {
     bytes memory _staticData = encodeStatic(encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(contentHash);
@@ -508,7 +553,7 @@ library ModelComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(bytes32 key, ModelComponentData memory _table) internal {
+  function set(ResourceId _tableId, bytes32 key, ModelComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
@@ -523,7 +568,7 @@ library ModelComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(bytes32 key, ModelComponentData memory _table) internal {
+  function _set(ResourceId _tableId, bytes32 key, ModelComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
@@ -538,7 +583,7 @@ library ModelComponent {
   /**
    * @notice Set the full data using the data struct (using the specified store).
    */
-  function set(IStore _store, bytes32 key, ModelComponentData memory _table) internal {
+  function set(IStore _store, ResourceId _tableId, bytes32 key, ModelComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
@@ -591,7 +636,7 @@ library ModelComponent {
   /**
    * @notice Delete all data for given keys.
    */
-  function deleteRecord(bytes32 key) internal {
+  function deleteRecord(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -601,7 +646,7 @@ library ModelComponent {
   /**
    * @notice Delete all data for given keys.
    */
-  function _deleteRecord(bytes32 key) internal {
+  function _deleteRecord(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -611,7 +656,7 @@ library ModelComponent {
   /**
    * @notice Delete all data for given keys (using the specified store).
    */
-  function deleteRecord(IStore _store, bytes32 key) internal {
+  function deleteRecord(IStore _store, ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 

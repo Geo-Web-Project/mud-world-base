@@ -20,11 +20,6 @@ import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCou
 import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/storeResourceTypes.sol";
 
-ResourceId constant _tableId = ResourceId.wrap(
-  bytes32(abi.encodePacked(RESOURCE_TABLE, bytes14("geoweb"), bytes16("PositionComponen")))
-);
-ResourceId constant PositionComponentTableId = _tableId;
-
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
   0x0004010104000000000000000000000000000000000000000000000000000000
 );
@@ -88,28 +83,28 @@ library PositionComponent {
   /**
    * @notice Register the table with its config.
    */
-  function register() internal {
+  function register(ResourceId _tableId) internal {
     StoreSwitch.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Register the table with its config.
    */
-  function _register() internal {
+  function _register(ResourceId _tableId) internal {
     StoreCore.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Register the table with its config (using the specified store).
    */
-  function register(IStore _store) internal {
+  function register(IStore _store, ResourceId _tableId) internal {
     _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Get h.
    */
-  function getH(bytes32 key) internal view returns (int32 h) {
+  function getH(ResourceId _tableId, bytes32 key) internal view returns (int32 h) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -120,7 +115,7 @@ library PositionComponent {
   /**
    * @notice Get h.
    */
-  function _getH(bytes32 key) internal view returns (int32 h) {
+  function _getH(ResourceId _tableId, bytes32 key) internal view returns (int32 h) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -131,7 +126,7 @@ library PositionComponent {
   /**
    * @notice Get h (using the specified store).
    */
-  function getH(IStore _store, bytes32 key) internal view returns (int32 h) {
+  function getH(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (int32 h) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -142,7 +137,7 @@ library PositionComponent {
   /**
    * @notice Set h.
    */
-  function setH(bytes32 key, int32 h) internal {
+  function setH(ResourceId _tableId, bytes32 key, int32 h) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -152,7 +147,7 @@ library PositionComponent {
   /**
    * @notice Set h.
    */
-  function _setH(bytes32 key, int32 h) internal {
+  function _setH(ResourceId _tableId, bytes32 key, int32 h) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -162,7 +157,7 @@ library PositionComponent {
   /**
    * @notice Set h (using the specified store).
    */
-  function setH(IStore _store, bytes32 key, int32 h) internal {
+  function setH(IStore _store, ResourceId _tableId, bytes32 key, int32 h) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -172,7 +167,7 @@ library PositionComponent {
   /**
    * @notice Get geohash.
    */
-  function getGeohash(bytes32 key) internal view returns (bytes memory geohash) {
+  function getGeohash(ResourceId _tableId, bytes32 key) internal view returns (bytes memory geohash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -183,7 +178,7 @@ library PositionComponent {
   /**
    * @notice Get geohash.
    */
-  function _getGeohash(bytes32 key) internal view returns (bytes memory geohash) {
+  function _getGeohash(ResourceId _tableId, bytes32 key) internal view returns (bytes memory geohash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -194,7 +189,7 @@ library PositionComponent {
   /**
    * @notice Get geohash (using the specified store).
    */
-  function getGeohash(IStore _store, bytes32 key) internal view returns (bytes memory geohash) {
+  function getGeohash(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (bytes memory geohash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -205,7 +200,7 @@ library PositionComponent {
   /**
    * @notice Set geohash.
    */
-  function setGeohash(bytes32 key, bytes memory geohash) internal {
+  function setGeohash(ResourceId _tableId, bytes32 key, bytes memory geohash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -215,7 +210,7 @@ library PositionComponent {
   /**
    * @notice Set geohash.
    */
-  function _setGeohash(bytes32 key, bytes memory geohash) internal {
+  function _setGeohash(ResourceId _tableId, bytes32 key, bytes memory geohash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -225,7 +220,7 @@ library PositionComponent {
   /**
    * @notice Set geohash (using the specified store).
    */
-  function setGeohash(IStore _store, bytes32 key, bytes memory geohash) internal {
+  function setGeohash(IStore _store, ResourceId _tableId, bytes32 key, bytes memory geohash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -235,7 +230,7 @@ library PositionComponent {
   /**
    * @notice Get the length of geohash.
    */
-  function lengthGeohash(bytes32 key) internal view returns (uint256) {
+  function lengthGeohash(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -248,7 +243,7 @@ library PositionComponent {
   /**
    * @notice Get the length of geohash.
    */
-  function _lengthGeohash(bytes32 key) internal view returns (uint256) {
+  function _lengthGeohash(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -261,7 +256,7 @@ library PositionComponent {
   /**
    * @notice Get the length of geohash (using the specified store).
    */
-  function lengthGeohash(IStore _store, bytes32 key) internal view returns (uint256) {
+  function lengthGeohash(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -275,7 +270,7 @@ library PositionComponent {
    * @notice Get an item of geohash.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemGeohash(bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemGeohash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -289,7 +284,7 @@ library PositionComponent {
    * @notice Get an item of geohash.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function _getItemGeohash(bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function _getItemGeohash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -303,7 +298,12 @@ library PositionComponent {
    * @notice Get an item of geohash (using the specified store).
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemGeohash(IStore _store, bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemGeohash(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    uint256 _index
+  ) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -316,7 +316,7 @@ library PositionComponent {
   /**
    * @notice Push a slice to geohash.
    */
-  function pushGeohash(bytes32 key, bytes memory _slice) internal {
+  function pushGeohash(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -326,7 +326,7 @@ library PositionComponent {
   /**
    * @notice Push a slice to geohash.
    */
-  function _pushGeohash(bytes32 key, bytes memory _slice) internal {
+  function _pushGeohash(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -336,7 +336,7 @@ library PositionComponent {
   /**
    * @notice Push a slice to geohash (using the specified store).
    */
-  function pushGeohash(IStore _store, bytes32 key, bytes memory _slice) internal {
+  function pushGeohash(IStore _store, ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -346,7 +346,7 @@ library PositionComponent {
   /**
    * @notice Pop a slice from geohash.
    */
-  function popGeohash(bytes32 key) internal {
+  function popGeohash(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -356,7 +356,7 @@ library PositionComponent {
   /**
    * @notice Pop a slice from geohash.
    */
-  function _popGeohash(bytes32 key) internal {
+  function _popGeohash(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -366,7 +366,7 @@ library PositionComponent {
   /**
    * @notice Pop a slice from geohash (using the specified store).
    */
-  function popGeohash(IStore _store, bytes32 key) internal {
+  function popGeohash(IStore _store, ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -376,7 +376,7 @@ library PositionComponent {
   /**
    * @notice Update a slice of geohash at `_index`.
    */
-  function updateGeohash(bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateGeohash(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -389,7 +389,7 @@ library PositionComponent {
   /**
    * @notice Update a slice of geohash at `_index`.
    */
-  function _updateGeohash(bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function _updateGeohash(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -402,7 +402,13 @@ library PositionComponent {
   /**
    * @notice Update a slice of geohash (using the specified store) at `_index`.
    */
-  function updateGeohash(IStore _store, bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateGeohash(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    uint256 _index,
+    bytes memory _slice
+  ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -415,7 +421,7 @@ library PositionComponent {
   /**
    * @notice Get the full data.
    */
-  function get(bytes32 key) internal view returns (PositionComponentData memory _table) {
+  function get(ResourceId _tableId, bytes32 key) internal view returns (PositionComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -430,7 +436,7 @@ library PositionComponent {
   /**
    * @notice Get the full data.
    */
-  function _get(bytes32 key) internal view returns (PositionComponentData memory _table) {
+  function _get(ResourceId _tableId, bytes32 key) internal view returns (PositionComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -445,7 +451,11 @@ library PositionComponent {
   /**
    * @notice Get the full data (using the specified store).
    */
-  function get(IStore _store, bytes32 key) internal view returns (PositionComponentData memory _table) {
+  function get(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (PositionComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -460,7 +470,7 @@ library PositionComponent {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(bytes32 key, int32 h, bytes memory geohash) internal {
+  function set(ResourceId _tableId, bytes32 key, int32 h, bytes memory geohash) internal {
     bytes memory _staticData = encodeStatic(h);
 
     PackedCounter _encodedLengths = encodeLengths(geohash);
@@ -475,7 +485,7 @@ library PositionComponent {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(bytes32 key, int32 h, bytes memory geohash) internal {
+  function _set(ResourceId _tableId, bytes32 key, int32 h, bytes memory geohash) internal {
     bytes memory _staticData = encodeStatic(h);
 
     PackedCounter _encodedLengths = encodeLengths(geohash);
@@ -490,7 +500,7 @@ library PositionComponent {
   /**
    * @notice Set the full data using individual values (using the specified store).
    */
-  function set(IStore _store, bytes32 key, int32 h, bytes memory geohash) internal {
+  function set(IStore _store, ResourceId _tableId, bytes32 key, int32 h, bytes memory geohash) internal {
     bytes memory _staticData = encodeStatic(h);
 
     PackedCounter _encodedLengths = encodeLengths(geohash);
@@ -505,7 +515,7 @@ library PositionComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(bytes32 key, PositionComponentData memory _table) internal {
+  function set(ResourceId _tableId, bytes32 key, PositionComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.h);
 
     PackedCounter _encodedLengths = encodeLengths(_table.geohash);
@@ -520,7 +530,7 @@ library PositionComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(bytes32 key, PositionComponentData memory _table) internal {
+  function _set(ResourceId _tableId, bytes32 key, PositionComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.h);
 
     PackedCounter _encodedLengths = encodeLengths(_table.geohash);
@@ -535,7 +545,7 @@ library PositionComponent {
   /**
    * @notice Set the full data using the data struct (using the specified store).
    */
-  function set(IStore _store, bytes32 key, PositionComponentData memory _table) internal {
+  function set(IStore _store, ResourceId _tableId, bytes32 key, PositionComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.h);
 
     PackedCounter _encodedLengths = encodeLengths(_table.geohash);
@@ -588,7 +598,7 @@ library PositionComponent {
   /**
    * @notice Delete all data for given keys.
    */
-  function deleteRecord(bytes32 key) internal {
+  function deleteRecord(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -598,7 +608,7 @@ library PositionComponent {
   /**
    * @notice Delete all data for given keys.
    */
-  function _deleteRecord(bytes32 key) internal {
+  function _deleteRecord(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -608,7 +618,7 @@ library PositionComponent {
   /**
    * @notice Delete all data for given keys (using the specified store).
    */
-  function deleteRecord(IStore _store, bytes32 key) internal {
+  function deleteRecord(IStore _store, ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 

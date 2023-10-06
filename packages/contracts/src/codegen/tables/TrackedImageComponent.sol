@@ -23,11 +23,6 @@ import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/s
 // Import user types
 import { ImageEncodingFormat } from "./../common.sol";
 
-ResourceId constant _tableId = ResourceId.wrap(
-  bytes32(abi.encodePacked(RESOURCE_TABLE, bytes14("geoweb"), bytes16("TrackedImageComp")))
-);
-ResourceId constant TrackedImageComponentTableId = _tableId;
-
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
   0x0003020102010000000000000000000000000000000000000000000000000000
 );
@@ -94,28 +89,31 @@ library TrackedImageComponent {
   /**
    * @notice Register the table with its config.
    */
-  function register() internal {
+  function register(ResourceId _tableId) internal {
     StoreSwitch.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Register the table with its config.
    */
-  function _register() internal {
+  function _register(ResourceId _tableId) internal {
     StoreCore.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Register the table with its config (using the specified store).
    */
-  function register(IStore _store) internal {
+  function register(IStore _store, ResourceId _tableId) internal {
     _store.registerTable(_tableId, _fieldLayout, getKeySchema(), getValueSchema(), getKeyNames(), getFieldNames());
   }
 
   /**
    * @notice Get physicalWidthInMillimeters.
    */
-  function getPhysicalWidthInMillimeters(bytes32 key) internal view returns (uint16 physicalWidthInMillimeters) {
+  function getPhysicalWidthInMillimeters(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (uint16 physicalWidthInMillimeters) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -126,7 +124,10 @@ library TrackedImageComponent {
   /**
    * @notice Get physicalWidthInMillimeters.
    */
-  function _getPhysicalWidthInMillimeters(bytes32 key) internal view returns (uint16 physicalWidthInMillimeters) {
+  function _getPhysicalWidthInMillimeters(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (uint16 physicalWidthInMillimeters) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -139,6 +140,7 @@ library TrackedImageComponent {
    */
   function getPhysicalWidthInMillimeters(
     IStore _store,
+    ResourceId _tableId,
     bytes32 key
   ) internal view returns (uint16 physicalWidthInMillimeters) {
     bytes32[] memory _keyTuple = new bytes32[](1);
@@ -151,7 +153,7 @@ library TrackedImageComponent {
   /**
    * @notice Set physicalWidthInMillimeters.
    */
-  function setPhysicalWidthInMillimeters(bytes32 key, uint16 physicalWidthInMillimeters) internal {
+  function setPhysicalWidthInMillimeters(ResourceId _tableId, bytes32 key, uint16 physicalWidthInMillimeters) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -161,7 +163,11 @@ library TrackedImageComponent {
   /**
    * @notice Set physicalWidthInMillimeters.
    */
-  function _setPhysicalWidthInMillimeters(bytes32 key, uint16 physicalWidthInMillimeters) internal {
+  function _setPhysicalWidthInMillimeters(
+    ResourceId _tableId,
+    bytes32 key,
+    uint16 physicalWidthInMillimeters
+  ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -171,7 +177,12 @@ library TrackedImageComponent {
   /**
    * @notice Set physicalWidthInMillimeters (using the specified store).
    */
-  function setPhysicalWidthInMillimeters(IStore _store, bytes32 key, uint16 physicalWidthInMillimeters) internal {
+  function setPhysicalWidthInMillimeters(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    uint16 physicalWidthInMillimeters
+  ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -181,7 +192,10 @@ library TrackedImageComponent {
   /**
    * @notice Get encodingFormat.
    */
-  function getEncodingFormat(bytes32 key) internal view returns (ImageEncodingFormat encodingFormat) {
+  function getEncodingFormat(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (ImageEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -192,7 +206,10 @@ library TrackedImageComponent {
   /**
    * @notice Get encodingFormat.
    */
-  function _getEncodingFormat(bytes32 key) internal view returns (ImageEncodingFormat encodingFormat) {
+  function _getEncodingFormat(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (ImageEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -203,7 +220,11 @@ library TrackedImageComponent {
   /**
    * @notice Get encodingFormat (using the specified store).
    */
-  function getEncodingFormat(IStore _store, bytes32 key) internal view returns (ImageEncodingFormat encodingFormat) {
+  function getEncodingFormat(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (ImageEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -214,7 +235,7 @@ library TrackedImageComponent {
   /**
    * @notice Set encodingFormat.
    */
-  function setEncodingFormat(bytes32 key, ImageEncodingFormat encodingFormat) internal {
+  function setEncodingFormat(ResourceId _tableId, bytes32 key, ImageEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -224,7 +245,7 @@ library TrackedImageComponent {
   /**
    * @notice Set encodingFormat.
    */
-  function _setEncodingFormat(bytes32 key, ImageEncodingFormat encodingFormat) internal {
+  function _setEncodingFormat(ResourceId _tableId, bytes32 key, ImageEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -234,7 +255,12 @@ library TrackedImageComponent {
   /**
    * @notice Set encodingFormat (using the specified store).
    */
-  function setEncodingFormat(IStore _store, bytes32 key, ImageEncodingFormat encodingFormat) internal {
+  function setEncodingFormat(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    ImageEncodingFormat encodingFormat
+  ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -244,7 +270,7 @@ library TrackedImageComponent {
   /**
    * @notice Get imageAsset.
    */
-  function getImageAsset(bytes32 key) internal view returns (bytes memory imageAsset) {
+  function getImageAsset(ResourceId _tableId, bytes32 key) internal view returns (bytes memory imageAsset) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -255,7 +281,7 @@ library TrackedImageComponent {
   /**
    * @notice Get imageAsset.
    */
-  function _getImageAsset(bytes32 key) internal view returns (bytes memory imageAsset) {
+  function _getImageAsset(ResourceId _tableId, bytes32 key) internal view returns (bytes memory imageAsset) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -266,7 +292,11 @@ library TrackedImageComponent {
   /**
    * @notice Get imageAsset (using the specified store).
    */
-  function getImageAsset(IStore _store, bytes32 key) internal view returns (bytes memory imageAsset) {
+  function getImageAsset(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (bytes memory imageAsset) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -277,7 +307,7 @@ library TrackedImageComponent {
   /**
    * @notice Set imageAsset.
    */
-  function setImageAsset(bytes32 key, bytes memory imageAsset) internal {
+  function setImageAsset(ResourceId _tableId, bytes32 key, bytes memory imageAsset) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -287,7 +317,7 @@ library TrackedImageComponent {
   /**
    * @notice Set imageAsset.
    */
-  function _setImageAsset(bytes32 key, bytes memory imageAsset) internal {
+  function _setImageAsset(ResourceId _tableId, bytes32 key, bytes memory imageAsset) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -297,7 +327,7 @@ library TrackedImageComponent {
   /**
    * @notice Set imageAsset (using the specified store).
    */
-  function setImageAsset(IStore _store, bytes32 key, bytes memory imageAsset) internal {
+  function setImageAsset(IStore _store, ResourceId _tableId, bytes32 key, bytes memory imageAsset) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -307,7 +337,7 @@ library TrackedImageComponent {
   /**
    * @notice Get the length of imageAsset.
    */
-  function lengthImageAsset(bytes32 key) internal view returns (uint256) {
+  function lengthImageAsset(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -320,7 +350,7 @@ library TrackedImageComponent {
   /**
    * @notice Get the length of imageAsset.
    */
-  function _lengthImageAsset(bytes32 key) internal view returns (uint256) {
+  function _lengthImageAsset(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -333,7 +363,7 @@ library TrackedImageComponent {
   /**
    * @notice Get the length of imageAsset (using the specified store).
    */
-  function lengthImageAsset(IStore _store, bytes32 key) internal view returns (uint256) {
+  function lengthImageAsset(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -347,7 +377,7 @@ library TrackedImageComponent {
    * @notice Get an item of imageAsset.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemImageAsset(bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemImageAsset(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -361,7 +391,7 @@ library TrackedImageComponent {
    * @notice Get an item of imageAsset.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function _getItemImageAsset(bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function _getItemImageAsset(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -375,7 +405,12 @@ library TrackedImageComponent {
    * @notice Get an item of imageAsset (using the specified store).
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemImageAsset(IStore _store, bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemImageAsset(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    uint256 _index
+  ) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -388,7 +423,7 @@ library TrackedImageComponent {
   /**
    * @notice Push a slice to imageAsset.
    */
-  function pushImageAsset(bytes32 key, bytes memory _slice) internal {
+  function pushImageAsset(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -398,7 +433,7 @@ library TrackedImageComponent {
   /**
    * @notice Push a slice to imageAsset.
    */
-  function _pushImageAsset(bytes32 key, bytes memory _slice) internal {
+  function _pushImageAsset(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -408,7 +443,7 @@ library TrackedImageComponent {
   /**
    * @notice Push a slice to imageAsset (using the specified store).
    */
-  function pushImageAsset(IStore _store, bytes32 key, bytes memory _slice) internal {
+  function pushImageAsset(IStore _store, ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -418,7 +453,7 @@ library TrackedImageComponent {
   /**
    * @notice Pop a slice from imageAsset.
    */
-  function popImageAsset(bytes32 key) internal {
+  function popImageAsset(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -428,7 +463,7 @@ library TrackedImageComponent {
   /**
    * @notice Pop a slice from imageAsset.
    */
-  function _popImageAsset(bytes32 key) internal {
+  function _popImageAsset(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -438,7 +473,7 @@ library TrackedImageComponent {
   /**
    * @notice Pop a slice from imageAsset (using the specified store).
    */
-  function popImageAsset(IStore _store, bytes32 key) internal {
+  function popImageAsset(IStore _store, ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -448,7 +483,7 @@ library TrackedImageComponent {
   /**
    * @notice Update a slice of imageAsset at `_index`.
    */
-  function updateImageAsset(bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateImageAsset(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -461,7 +496,7 @@ library TrackedImageComponent {
   /**
    * @notice Update a slice of imageAsset at `_index`.
    */
-  function _updateImageAsset(bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function _updateImageAsset(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -474,7 +509,13 @@ library TrackedImageComponent {
   /**
    * @notice Update a slice of imageAsset (using the specified store) at `_index`.
    */
-  function updateImageAsset(IStore _store, bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateImageAsset(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    uint256 _index,
+    bytes memory _slice
+  ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -487,7 +528,7 @@ library TrackedImageComponent {
   /**
    * @notice Get the full data.
    */
-  function get(bytes32 key) internal view returns (TrackedImageComponentData memory _table) {
+  function get(ResourceId _tableId, bytes32 key) internal view returns (TrackedImageComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -502,7 +543,7 @@ library TrackedImageComponent {
   /**
    * @notice Get the full data.
    */
-  function _get(bytes32 key) internal view returns (TrackedImageComponentData memory _table) {
+  function _get(ResourceId _tableId, bytes32 key) internal view returns (TrackedImageComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -517,7 +558,11 @@ library TrackedImageComponent {
   /**
    * @notice Get the full data (using the specified store).
    */
-  function get(IStore _store, bytes32 key) internal view returns (TrackedImageComponentData memory _table) {
+  function get(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (TrackedImageComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -533,6 +578,7 @@ library TrackedImageComponent {
    * @notice Set the full data using individual values.
    */
   function set(
+    ResourceId _tableId,
     bytes32 key,
     uint16 physicalWidthInMillimeters,
     ImageEncodingFormat encodingFormat,
@@ -553,6 +599,7 @@ library TrackedImageComponent {
    * @notice Set the full data using individual values.
    */
   function _set(
+    ResourceId _tableId,
     bytes32 key,
     uint16 physicalWidthInMillimeters,
     ImageEncodingFormat encodingFormat,
@@ -574,6 +621,7 @@ library TrackedImageComponent {
    */
   function set(
     IStore _store,
+    ResourceId _tableId,
     bytes32 key,
     uint16 physicalWidthInMillimeters,
     ImageEncodingFormat encodingFormat,
@@ -593,7 +641,7 @@ library TrackedImageComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(bytes32 key, TrackedImageComponentData memory _table) internal {
+  function set(ResourceId _tableId, bytes32 key, TrackedImageComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.physicalWidthInMillimeters, _table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.imageAsset);
@@ -608,7 +656,7 @@ library TrackedImageComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(bytes32 key, TrackedImageComponentData memory _table) internal {
+  function _set(ResourceId _tableId, bytes32 key, TrackedImageComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.physicalWidthInMillimeters, _table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.imageAsset);
@@ -623,7 +671,7 @@ library TrackedImageComponent {
   /**
    * @notice Set the full data using the data struct (using the specified store).
    */
-  function set(IStore _store, bytes32 key, TrackedImageComponentData memory _table) internal {
+  function set(IStore _store, ResourceId _tableId, bytes32 key, TrackedImageComponentData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.physicalWidthInMillimeters, _table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.imageAsset);
@@ -680,7 +728,7 @@ library TrackedImageComponent {
   /**
    * @notice Delete all data for given keys.
    */
-  function deleteRecord(bytes32 key) internal {
+  function deleteRecord(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -690,7 +738,7 @@ library TrackedImageComponent {
   /**
    * @notice Delete all data for given keys.
    */
-  function _deleteRecord(bytes32 key) internal {
+  function _deleteRecord(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -700,7 +748,7 @@ library TrackedImageComponent {
   /**
    * @notice Delete all data for given keys (using the specified store).
    */
-  function deleteRecord(IStore _store, bytes32 key) internal {
+  function deleteRecord(IStore _store, ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 

@@ -4,12 +4,19 @@ pragma solidity >=0.8.19;
 import {Module} from "@latticexyz/world/src/Module.sol";
 import {ResourceId} from "@latticexyz/world/src/WorldResourceId.sol";
 import {BEFORE_SET_RECORD, BEFORE_DELETE_RECORD, BEFORE_SPLICE_STATIC_DATA} from "@latticexyz/store/src/storeHookTypes.sol";
-import {RESOURCE_TABLE} from "@latticexyz/store/src/storeResourceTypes.sol";
+import {RESOURCE_TABLE, RESOURCE_SYSTEM} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {PCOOwnershipHook} from "./PCOOwnershipHook.sol";
 import {IBaseWorld} from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import {IStoreHook} from "@latticexyz/store/src/IStoreHook.sol";
+import {PCOOwnership} from "./tables/PCOOwnership.sol";
+import {PCOOwnershipSystem} from "./PCOOwnershipSystem.sol";
+import {revertWithBytes} from "@latticexyz/world/src/revertWithBytes.sol";
+import {MODULE_NAME, TABLE_ID, SYSTEM_ID} from "./constants.sol";
 
 contract PCOOwnershipModule is Module {
+    PCOOwnershipSystem private immutable pcoOwnershipSystem =
+        new PCOOwnershipSystem();
+
     ResourceId constant _namespaceOwnerTableId =
         ResourceId.wrap(
             bytes32(
@@ -22,7 +29,7 @@ contract PCOOwnershipModule is Module {
         );
 
     function getName() public pure returns (bytes16) {
-        return bytes16("pcoOwnership");
+        return MODULE_NAME;
     }
 
     function installRoot(bytes memory args) public override {
@@ -32,9 +39,26 @@ contract PCOOwnershipModule is Module {
 
         IBaseWorld world = IBaseWorld(_world());
 
-        // Initialize variable to reuse in low level calls
-        bool success;
-        bytes memory returnData;
+        // Register table
+        PCOOwnership._register(TABLE_ID);
+
+        // Register system
+        (bool success, bytes memory returnData) = address(world).delegatecall(
+            abi.encodeCall(
+                world.registerSystem,
+                (SYSTEM_ID, pcoOwnershipSystem, true)
+            )
+        );
+        if (!success) revertWithBytes(returnData);
+
+        // Register system's functions
+        (success, returnData) = address(world).delegatecall(
+            abi.encodeCall(
+                world.registerFunctionSelector,
+                (SYSTEM_ID, "registerParcelNamespace()")
+            )
+        );
+        if (!success) revertWithBytes(returnData);
 
         // Register a hook that is called when a value is set in the source table
         (success, returnData) = address(world).delegatecall(
@@ -49,6 +73,7 @@ contract PCOOwnershipModule is Module {
                 )
             )
         );
+        if (!success) revertWithBytes(returnData);
     }
 
     function install(bytes memory) public pure {
