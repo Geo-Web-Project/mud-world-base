@@ -12,6 +12,8 @@ import {WorldRegistrationSystem} from "@latticexyz/world/src/modules/core/implem
 import {revertWithBytes} from "@latticexyz/world/src/revertWithBytes.sol";
 import {ResourceAccess} from "@latticexyz/world/src/codegen/tables/ResourceAccess.sol";
 import {NamespaceOwner} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
+import {AugmentInstallationLib} from "../augmentinstallation/AugmentInstallationSystem.sol";
+import {InstalledAugments} from "../augmentinstallation/tables/InstalledAugments.sol";
 
 contract PCOOwnershipSystem is System {
     function getNamespaceIdForParcel(
@@ -24,12 +26,14 @@ contract PCOOwnershipSystem is System {
     function registerParcelNamespace(uint256 parcelId) public {
         ResourceId namespaceId = getNamespaceIdForParcel(parcelId);
 
+        // Set PCOOwnership hash
         PCOOwnership._set(
             TABLE_ID,
             namespaceId,
             PCOOwnershipData({exists: true, parcelId: parcelId})
         );
 
+        // Register namespace
         (address coreSystemAddress, ) = Systems._get(CORE_SYSTEM_ID);
         (bool success, bytes memory data) = coreSystemAddress.delegatecall(
             abi.encodeCall(
@@ -38,6 +42,11 @@ contract PCOOwnershipSystem is System {
             )
         );
         if (!success) revertWithBytes(data);
+
+        // Register InstalledAugments table
+        ResourceId installedAugmentsTableId = AugmentInstallationLib
+            .getInstalledAugmentsTableId(namespaceId);
+        InstalledAugments._register(installedAugmentsTableId);
     }
 
     function claimParcelNamespace(uint256 parcelId) public {

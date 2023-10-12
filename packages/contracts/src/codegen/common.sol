@@ -21,6 +21,5 @@ enum AudioEncodingFormat {
 
 enum VideoEncodingFormat {
   Mpeg,
-  Mp4,
-  Mp3
+  Mp4
 }

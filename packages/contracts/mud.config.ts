@@ -5,7 +5,7 @@ export default mudConfig({
     ImageEncodingFormat: ["Jpeg", "Png", "Svg"],
     ModelEncodingFormat: ["Glb", "Usdz"],
     AudioEncodingFormat: ["Mpeg", "Mp4", "Mp3"],
-    VideoEncodingFormat: ["Mpeg", "Mp4", "Mp3"],
+    VideoEncodingFormat: ["Mpeg", "Mp4"],
   },
   userTypes: {
     ResourceId: {
@@ -38,6 +38,17 @@ export default mudConfig({
       valueSchema: {
         exists: "bool",
         parcelId: "uint256",
+      },
+      tableIdArgument: true,
+    },
+    InstalledAugments: {
+      directory: "../modules/augmentinstallation/tables",
+      keySchema: {
+        augmentAddress: "address",
+        argumentsHash: "bytes32", // Hash of the params passed to the `install` function
+      },
+      valueSchema: {
+        augmentName: "bytes16",
       },
       tableIdArgument: true,
     },
