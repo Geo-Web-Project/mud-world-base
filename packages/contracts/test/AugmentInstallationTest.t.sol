@@ -7,9 +7,11 @@ import {IWorld} from "../src/codegen/world/IWorld.sol";
 import {IAugment, Augment} from "../src/modules/augmentinstallation/Augment.sol";
 import {ScaleComponent} from "../src/codegen/tables/ScaleComponent.sol";
 import {PackedCounter} from "@latticexyz/store/src/PackedCounter.sol";
-import {ResourceId} from "@latticexyz/world/src/WorldResourceId.sol";
+import {ResourceId, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
 import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {getUniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
+import {InstalledAugments} from "../src/modules/augmentinstallation/tables/InstalledAugments.sol";
+import {AugmentInstallationLib} from "../src/modules/augmentinstallation/AugmentInstallationSystem.sol";
 
 contract MockAugment is Augment {
     bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleComponent"))]];
@@ -92,6 +94,18 @@ contract AugmentInstallationTest is MudTest {
             ScaleComponent.getZ(world, _tableId, bytes32(entityId)),
             3,
             "Scale Z should be set"
+        );
+        assertEq(
+            InstalledAugments.get(
+                world,
+                AugmentInstallationLib.getInstalledAugmentsTableId(
+                    WorldResourceIdLib.encodeNamespace(bytes14("world"))
+                ),
+                address(mockAugment),
+                keccak256(abi.encode(componentValues))
+            ),
+            bytes16("MockAugment"),
+            "Augment should be installed"
         );
     }
 }
