@@ -10,6 +10,14 @@ import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {ResourceId, WorldResourceIdInstance, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
 import {getUniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import {StoreCore} from "@latticexyz/store/src/StoreCore.sol";
+import {PackedCounter} from "@latticexyz/store/src/PackedCounter.sol";
+import {AccessControl} from "@latticexyz/world/src/AccessControl.sol";
+
+struct AugmentComponentValue {
+    bytes staticData;
+    PackedCounter encodedLengths;
+    bytes dynamicData;
+}
 
 /**
  * @title Augment Installation System
@@ -29,14 +37,20 @@ contract AugmentInstallationSystem is System {
         bytes14 namespace,
         bytes calldata args
     ) public {
+        // Require namespace access
+        AccessControl.requireAccess(
+            WorldResourceIdLib.encodeNamespace(namespace),
+            _msgSender()
+        );
+
         // Require the provided address to implement the IAugment interface
         requireInterface(address(augment), AUGMENT_INTERFACE_ID);
 
         // Parse args and set records
-        bytes16[][] memory augmentTypes = augment.getTypes();
-        IAugment.ComponentValue[][] memory componentValues = abi.decode(
+        bytes16[][] memory augmentTypes = augment.getComponentTypes();
+        AugmentComponentValue[][] memory componentValues = abi.decode(
             args,
-            (IAugment.ComponentValue[][])
+            (AugmentComponentValue[][])
         );
 
         bytes32[] memory newEntities = new bytes32[](componentValues.length);
@@ -83,7 +97,7 @@ contract AugmentInstallationSystem is System {
             ),
             address(augment),
             keccak256(args),
-            augment.getName()
+            augment.getMetadataURI()
         );
     }
 }

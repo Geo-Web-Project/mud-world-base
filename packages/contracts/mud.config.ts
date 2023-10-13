@@ -48,8 +48,12 @@ export default mudConfig({
         argumentsHash: "bytes32", // Hash of the params passed to the `install` function
       },
       valueSchema: {
-        augmentName: "bytes16",
+        augmentMetadata: "bytes",
       },
+      tableIdArgument: true,
+    },
+    NameComponent: {
+      valueSchema: "string",
       tableIdArgument: true,
     },
     ModelComponent: {

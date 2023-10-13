@@ -5,6 +5,7 @@ pragma solidity >=0.8.21;
 
 import { PCOOwnership, PCOOwnershipData } from "./../modules/pcoownership/tables/PCOOwnership.sol";
 import { InstalledAugments } from "./../modules/augmentinstallation/tables/InstalledAugments.sol";
+import { NameComponent } from "./tables/NameComponent.sol";
 import { ModelComponent, ModelComponentData } from "./tables/ModelComponent.sol";
 import { ImageComponent, ImageComponentData } from "./tables/ImageComponent.sol";
 import { AudioComponent, AudioComponentData } from "./tables/AudioComponent.sol";
