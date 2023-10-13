@@ -20,10 +20,8 @@ const worlds = worldsJson as Partial<
 >;
 const supportedChains: MUDChain[] = [latticeTestnet, mudFoundry];
 
-console.log(supportedChains);
-
 // TODO: figure out if we actually want this to be async or if we should render something else in the meantime
-setup({ chainId, worlds, supportedChains }).then(async (result) => {
+setup({ chainId, worlds, supportedChains }).then(async (result: any) => {
   root.render(
     <MUDProvider value={result}>
       <App />
@@ -38,7 +36,7 @@ setup({ chainId, worlds, supportedChains }).then(async (result) => {
       publicClient: result.network.publicClient,
       walletClient: result.network.walletClient,
       latestBlock$: result.network.latestBlock$,
-      blockStorageOperations$: result.network.blockStorageOperations$,
+      storedBlockLogs$: result.network.storedBlockLogs$,
       worldAddress: result.network.worldContract.address,
       worldAbi: result.network.worldContract.abi,
       write$: result.network.write$,

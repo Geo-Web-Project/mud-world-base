@@ -21,16 +21,17 @@ import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/storeResourceTypes.sol";
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x0006030002020200000000000000000000000000000000000000000000000000
+  0x0008040002020202000000000000000000000000000000000000000000000000
 );
 
-struct ScaleComponentData {
+struct OrientationQuaternionComponentData {
   int16 x;
   int16 y;
   int16 z;
+  int16 w;
 }
 
-library ScaleComponent {
+library OrientationQuaternionComponent {
   /**
    * @notice Get the table values' field layout.
    * @return _fieldLayout The field layout for the table.
@@ -55,10 +56,11 @@ library ScaleComponent {
    * @return _valueSchema The value schema for the table.
    */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _valueSchema = new SchemaType[](3);
+    SchemaType[] memory _valueSchema = new SchemaType[](4);
     _valueSchema[0] = SchemaType.INT16;
     _valueSchema[1] = SchemaType.INT16;
     _valueSchema[2] = SchemaType.INT16;
+    _valueSchema[3] = SchemaType.INT16;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -77,10 +79,11 @@ library ScaleComponent {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](3);
+    fieldNames = new string[](4);
     fieldNames[0] = "x";
     fieldNames[1] = "y";
     fieldNames[2] = "z";
+    fieldNames[3] = "w";
   }
 
   /**
@@ -294,9 +297,75 @@ library ScaleComponent {
   }
 
   /**
+   * @notice Get w.
+   */
+  function getW(ResourceId _tableId, bytes32 key) internal view returns (int16 w) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
+    return (int16(uint16(bytes2(_blob))));
+  }
+
+  /**
+   * @notice Get w.
+   */
+  function _getW(ResourceId _tableId, bytes32 key) internal view returns (int16 w) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
+    return (int16(uint16(bytes2(_blob))));
+  }
+
+  /**
+   * @notice Get w (using the specified store).
+   */
+  function getW(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (int16 w) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 3, _fieldLayout);
+    return (int16(uint16(bytes2(_blob))));
+  }
+
+  /**
+   * @notice Set w.
+   */
+  function setW(ResourceId _tableId, bytes32 key, int16 w) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((w)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set w.
+   */
+  function _setW(ResourceId _tableId, bytes32 key, int16 w) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((w)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set w (using the specified store).
+   */
+  function setW(IStore _store, ResourceId _tableId, bytes32 key, int16 w) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.setStaticField(_tableId, _keyTuple, 3, abi.encodePacked((w)), _fieldLayout);
+  }
+
+  /**
    * @notice Get the full data.
    */
-  function get(ResourceId _tableId, bytes32 key) internal view returns (ScaleComponentData memory _table) {
+  function get(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (OrientationQuaternionComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -311,7 +380,10 @@ library ScaleComponent {
   /**
    * @notice Get the full data.
    */
-  function _get(ResourceId _tableId, bytes32 key) internal view returns (ScaleComponentData memory _table) {
+  function _get(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (OrientationQuaternionComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -330,7 +402,7 @@ library ScaleComponent {
     IStore _store,
     ResourceId _tableId,
     bytes32 key
-  ) internal view returns (ScaleComponentData memory _table) {
+  ) internal view returns (OrientationQuaternionComponentData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -345,8 +417,8 @@ library ScaleComponent {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(ResourceId _tableId, bytes32 key, int16 x, int16 y, int16 z) internal {
-    bytes memory _staticData = encodeStatic(x, y, z);
+  function set(ResourceId _tableId, bytes32 key, int16 x, int16 y, int16 z, int16 w) internal {
+    bytes memory _staticData = encodeStatic(x, y, z, w);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -360,8 +432,8 @@ library ScaleComponent {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(ResourceId _tableId, bytes32 key, int16 x, int16 y, int16 z) internal {
-    bytes memory _staticData = encodeStatic(x, y, z);
+  function _set(ResourceId _tableId, bytes32 key, int16 x, int16 y, int16 z, int16 w) internal {
+    bytes memory _staticData = encodeStatic(x, y, z, w);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -375,8 +447,8 @@ library ScaleComponent {
   /**
    * @notice Set the full data using individual values (using the specified store).
    */
-  function set(IStore _store, ResourceId _tableId, bytes32 key, int16 x, int16 y, int16 z) internal {
-    bytes memory _staticData = encodeStatic(x, y, z);
+  function set(IStore _store, ResourceId _tableId, bytes32 key, int16 x, int16 y, int16 z, int16 w) internal {
+    bytes memory _staticData = encodeStatic(x, y, z, w);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -390,8 +462,8 @@ library ScaleComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(ResourceId _tableId, bytes32 key, ScaleComponentData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.x, _table.y, _table.z);
+  function set(ResourceId _tableId, bytes32 key, OrientationQuaternionComponentData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.x, _table.y, _table.z, _table.w);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -405,8 +477,8 @@ library ScaleComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(ResourceId _tableId, bytes32 key, ScaleComponentData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.x, _table.y, _table.z);
+  function _set(ResourceId _tableId, bytes32 key, OrientationQuaternionComponentData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.x, _table.y, _table.z, _table.w);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -420,8 +492,13 @@ library ScaleComponent {
   /**
    * @notice Set the full data using the data struct (using the specified store).
    */
-  function set(IStore _store, ResourceId _tableId, bytes32 key, ScaleComponentData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.x, _table.y, _table.z);
+  function set(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    OrientationQuaternionComponentData memory _table
+  ) internal {
+    bytes memory _staticData = encodeStatic(_table.x, _table.y, _table.z, _table.w);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;
@@ -435,12 +512,14 @@ library ScaleComponent {
   /**
    * @notice Decode the tightly packed blob of static data using this table's field layout.
    */
-  function decodeStatic(bytes memory _blob) internal pure returns (int16 x, int16 y, int16 z) {
+  function decodeStatic(bytes memory _blob) internal pure returns (int16 x, int16 y, int16 z, int16 w) {
     x = (int16(uint16(Bytes.slice2(_blob, 0))));
 
     y = (int16(uint16(Bytes.slice2(_blob, 2))));
 
     z = (int16(uint16(Bytes.slice2(_blob, 4))));
+
+    w = (int16(uint16(Bytes.slice2(_blob, 6))));
   }
 
   /**
@@ -453,8 +532,8 @@ library ScaleComponent {
     bytes memory _staticData,
     PackedCounter,
     bytes memory
-  ) internal pure returns (ScaleComponentData memory _table) {
-    (_table.x, _table.y, _table.z) = decodeStatic(_staticData);
+  ) internal pure returns (OrientationQuaternionComponentData memory _table) {
+    (_table.x, _table.y, _table.z, _table.w) = decodeStatic(_staticData);
   }
 
   /**
@@ -491,8 +570,8 @@ library ScaleComponent {
    * @notice Tightly pack static (fixed length) data using this table's schema.
    * @return The static data, encoded into a sequence of bytes.
    */
-  function encodeStatic(int16 x, int16 y, int16 z) internal pure returns (bytes memory) {
-    return abi.encodePacked(x, y, z);
+  function encodeStatic(int16 x, int16 y, int16 z, int16 w) internal pure returns (bytes memory) {
+    return abi.encodePacked(x, y, z, w);
   }
 
   /**
@@ -501,8 +580,13 @@ library ScaleComponent {
    * @return The lengths of the dynamic fields (packed into a single bytes32 value).
    * @return The dyanmic (variable length) data, encoded into a sequence of bytes.
    */
-  function encode(int16 x, int16 y, int16 z) internal pure returns (bytes memory, PackedCounter, bytes memory) {
-    bytes memory _staticData = encodeStatic(x, y, z);
+  function encode(
+    int16 x,
+    int16 y,
+    int16 z,
+    int16 w
+  ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
+    bytes memory _staticData = encodeStatic(x, y, z, w);
 
     PackedCounter _encodedLengths;
     bytes memory _dynamicData;

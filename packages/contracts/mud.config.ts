@@ -1,78 +1,108 @@
 import { mudConfig } from "@latticexyz/world/register";
-import { resolveTableId } from "@latticexyz/config";
 
 export default mudConfig({
-  namespace: "geoweb",
   enums: {
-    MediaObjectType: ["Image", "Audio", "Video", "Model"],
-    MediaObjectEncodingFormat: [
-      "Glb",
-      "Usdz",
-      "Gif",
-      "Jpeg",
-      "Png",
-      "Svg",
-      "Mpeg",
-      "Mp4",
-      "Mp3",
-    ],
     ImageEncodingFormat: ["Jpeg", "Png", "Svg"],
     ModelEncodingFormat: ["Glb", "Usdz"],
+    AudioEncodingFormat: ["Mpeg", "Mp4", "Mp3"],
+    VideoEncodingFormat: ["Mpeg", "Mp4"],
+  },
+  userTypes: {
+    ResourceId: {
+      filePath: "@latticexyz/store/src/ResourceId.sol",
+      internalType: "bytes32",
+    },
   },
   modules: [
     {
       name: "UniqueEntityModule",
       root: true,
     },
-    {
-      name: "KeysInTableModule",
-      root: true,
-      args: [resolveTableId("MediaObject")],
-    },
+    // {
+    //   name: "PCOOwnershipModule",
+    //   root: true,
+    //   args: [
+    //     {
+    //       type: "address",
+    //       value: "0xBA1231785A7b4AC0E8dC9a0403938C2182cE4A4e",
+    //     },
+    //   ],
+    // },
   ],
   tables: {
-    Name: {
-      keySchema: {},
-      schema: "string",
-    },
-    Url: {
-      keySchema: {},
-      schema: "string",
-    },
-    MediaObject: {
-      schema: {
-        contentSize: "uint64",
-        mediaType: "MediaObjectType",
-        encodingFormat: "MediaObjectEncodingFormat",
-        name: "string",
-        contentHash: "bytes",
+    PCOOwnership: {
+      directory: "../modules/pcoownership/tables",
+      keySchema: {
+        namespaceId: "ResourceId",
       },
+      valueSchema: {
+        exists: "bool",
+        parcelId: "uint256",
+      },
+      tableIdArgument: true,
     },
-    PositionComponent: {
-      schema: { x: "int16", y: "int16", z: "int16" },
+    InstalledAugments: {
+      directory: "../modules/augmentinstallation/tables",
+      keySchema: {
+        augmentAddress: "address",
+        argumentsHash: "bytes32", // Hash of the params passed to the `install` function
+      },
+      valueSchema: {
+        augmentMetadata: "bytes",
+      },
+      tableIdArgument: true,
     },
-    ScaleComponent: {
-      schema: { x: "int16", y: "int16", z: "int16" },
-    },
-    OrientationComponent: {
-      schema: { x: "int16", y: "int16", z: "int16", w: "int16" },
+    NameComponent: {
+      valueSchema: "string",
+      tableIdArgument: true,
     },
     ModelComponent: {
-      schema: { encodingFormat: "ModelEncodingFormat", contentHash: "bytes" },
+      valueSchema: {
+        encodingFormat: "ModelEncodingFormat",
+        contentHash: "bytes",
+      },
+      tableIdArgument: true,
+    },
+    ImageComponent: {
+      valueSchema: {
+        encodingFormat: "ImageEncodingFormat",
+        contentHash: "bytes",
+      },
+      tableIdArgument: true,
+    },
+    AudioComponent: {
+      valueSchema: {
+        encodingFormat: "AudioEncodingFormat",
+        contentHash: "bytes",
+      },
+      tableIdArgument: true,
+    },
+    VideoComponent: {
+      valueSchema: {
+        encodingFormat: "VideoEncodingFormat",
+        contentHash: "bytes",
+      },
+      tableIdArgument: true,
+    },
+    PositionComponent: {
+      valueSchema: { h: "int32", geohash: "bytes" },
+      tableIdArgument: true,
+    },
+    OrientationQuaternionComponent: {
+      valueSchema: { x: "int16", y: "int16", z: "int16", w: "int16" },
+      tableIdArgument: true,
+    },
+    ScaleComponent: {
+      valueSchema: { x: "int16", y: "int16", z: "int16" },
+      tableIdArgument: true,
     },
     TrackedImageComponent: {
-      schema: {
+      valueSchema: {
         physicalWidthInMillimeters: "uint16",
         encodingFormat: "ImageEncodingFormat",
         imageAsset: "bytes",
       },
-    },
-    AnchorComponent: {
-      schema: {
-        anchor: "bytes32",
-        position: "bytes",
-        orientation: "bytes",
-      },
+      tableIdArgument: true,
     },
   },
 });

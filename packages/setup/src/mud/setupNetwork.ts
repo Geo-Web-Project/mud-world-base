@@ -41,7 +41,7 @@ export async function setupNetwork(networkParams: {
     onWrite: (write) => write$.next(write),
   });
 
-  const { components, latestBlock$, blockStorageOperations$, waitForTransaction } = await syncToRecs({
+  const { components, latestBlock$, storedBlockLogs$, waitForTransaction } = await syncToRecs({
     world,
     config: mudConfig,
     address: networkConfig.worldAddress as Hex,
@@ -80,7 +80,7 @@ export async function setupNetwork(networkParams: {
     publicClient,
     walletClient: burnerWalletClient,
     latestBlock$,
-    blockStorageOperations$,
+    storedBlockLogs$,
     waitForTransaction,
     worldContract,
     write$: write$.asObservable().pipe(share()),
