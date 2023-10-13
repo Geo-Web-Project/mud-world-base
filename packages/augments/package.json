@@ -1,0 +1,22 @@
+{
+  "name": "@geo-web/mud-world-base-augments",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@geo-web/mud-world-base-contracts": "workspace:*",
+    "@latticexyz/world": "2.0.0-next.11",
+    "@latticexyz/schema-type": "2.0.0-next.11",
+    "@latticexyz/store": "2.0.0-next.11"
+  },
+  "devDependencies": {
+    "ds-test": "https://github.com/dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0",
+    "forge-std": "https://github.com/foundry-rs/forge-std.git#74cfb77e308dd188d2f58864aaf44963ae6b88b1"
+  }
+}
