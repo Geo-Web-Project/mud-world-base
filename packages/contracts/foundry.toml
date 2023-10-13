@@ -26,3 +26,5 @@ fs_permissions = [{ access = "read", path = "./"}]
 eth_rpc_url = "https://follower.testnet-chain.linfra.xyz"
 [profile.op-goerli]
 eth_rpc_url = "https://optimism-goerli.publicnode.com"
+[profile.sepolia]
+eth_rpc_url = "https://ethereum-sepolia.publicnode.com"
