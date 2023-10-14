@@ -12,6 +12,7 @@
   "dependencies": {
     "@geo-web/mud-world-base-contracts": "workspace:*",
     "@latticexyz/world": "2.0.0-next.11",
+    "@latticexyz/world-modules": "2.0.0-next.11",
     "@latticexyz/schema-type": "2.0.0-next.11",
     "@latticexyz/store": "2.0.0-next.11"
   },

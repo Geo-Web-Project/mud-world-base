@@ -44,6 +44,9 @@ importers:
       '@latticexyz/world':
         specifier: 2.0.0-next.11
         version: 2.0.0-next.11(typescript@5.1.6)
+      '@latticexyz/world-modules':
+        specifier: 2.0.0-next.11
+        version: 2.0.0-next.11(typescript@5.1.6)
     devDependencies:
       ds-test:
         specifier: https://github.com/dapphub/ds-test.git#e282159d5170298eb2455a6c05280ab5a73a4ef0
