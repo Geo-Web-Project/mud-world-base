@@ -18,7 +18,20 @@ const chainId = import.meta.env.VITE_CHAIN_ID || 31337;
 const worlds = worldsJson as Partial<
   Record<string, { address: string; blockNumber?: number }>
 >;
-const supportedChains: MUDChain[] = [latticeTestnet, mudFoundry];
+const supportedChains: MUDChain[] = [
+  latticeTestnet,
+  mudFoundry,
+  {
+    ...optimismGoerli,
+    rpcUrls: {
+      ...optimismGoerli.rpcUrls,
+      default: {
+        http: optimismGoerli.rpcUrls.default.http,
+        webSocket: [import.meta.env.VITE_PUBLIC_WS_RPC_URL],
+      },
+    },
+  } as MUDChain,
+];
 
 // TODO: figure out if we actually want this to be async or if we should render something else in the meantime
 setup({ chainId, worlds, supportedChains }).then(async (result: any) => {
@@ -29,18 +42,18 @@ setup({ chainId, worlds, supportedChains }).then(async (result: any) => {
   );
 
   // https://vitejs.dev/guide/env-and-mode.html
-  if (import.meta.env.DEV) {
-    const { mount: mountDevTools } = await import("@latticexyz/dev-tools");
-    mountDevTools({
-      config: mudConfig,
-      publicClient: result.network.publicClient,
-      walletClient: result.network.walletClient,
-      latestBlock$: result.network.latestBlock$,
-      storedBlockLogs$: result.network.storedBlockLogs$,
-      worldAddress: result.network.worldContract.address,
-      worldAbi: result.network.worldContract.abi,
-      write$: result.network.write$,
-      recsWorld: result.network.world,
-    });
-  }
+  // if (import.meta.env.DEV) {
+  //   const { mount: mountDevTools } = await import("@latticexyz/dev-tools");
+  //   mountDevTools({
+  //     config: mudConfig,
+  //     publicClient: result.network.publicClient,
+  //     walletClient: result.network.walletClient,
+  //     latestBlock$: result.network.latestBlock$,
+  //     storedBlockLogs$: result.network.storedBlockLogs$,
+  //     worldAddress: result.network.worldContract.address,
+  //     worldAbi: result.network.worldContract.abi,
+  //     write$: result.network.write$,
+  //     recsWorld: result.network.world,
+  //   });
+  // }
 });

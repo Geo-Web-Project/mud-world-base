@@ -4,9 +4,9 @@ import { singletonEntity } from "@latticexyz/store-sync/recs";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
 
 export const App = () => {
-  // const {
-  //   components: { Name, MediaObject },
-  // } = useMUD();
+  const {
+    components: { NameComponent },
+  } = useMUD();
 
-  return <></>;
+  return <>Hello World</>;
 };

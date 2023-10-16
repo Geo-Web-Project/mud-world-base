@@ -1,10 +1,10 @@
-import { createPublicClient, fallback, webSocket, http, createWalletClient, Hex, parseEther, ClientConfig } from "viem";
+import { createPublicClient, fallback, webSocket, http, createWalletClient, Hex, parseEther, ClientConfig, Chain } from "viem";
 import { createFaucetService } from "@latticexyz/services/faucet";
 import { encodeEntity, syncToRecs } from "@latticexyz/store-sync/recs";
 import { getNetworkConfig } from "./getNetworkConfig";
 import { world } from "./world";
 import { IWorld__factory } from "@geo-web/mud-world-base-contracts";
-import { createBurnerAccount, createContract, transportObserver, ContractWrite } from "@latticexyz/common";
+import { createBurnerAccount, getContract, transportObserver, ContractWrite } from "@latticexyz/common";
 import { Subject, share } from "rxjs";
 import mudConfig from "@geo-web/mud-world-base-contracts/mud.config";
 import { MUDChain } from "@latticexyz/common/chains";
@@ -19,7 +19,7 @@ export async function setupNetwork(networkParams: {
   const networkConfig = await getNetworkConfig(networkParams);
 
   const clientOptions = {
-    chain: networkConfig.chain,
+    chain: networkConfig.chain as Chain,
     transport: transportObserver(fallback([webSocket(), http()])),
     pollingInterval: 1000,
   } as const satisfies ClientConfig;
@@ -33,7 +33,7 @@ export async function setupNetwork(networkParams: {
   });
 
   const write$ = new Subject<ContractWrite>();
-  const worldContract = createContract({
+  const worldContract = getContract({
     address: networkConfig.worldAddress as Hex,
     abi: IWorld__factory.abi,
     publicClient,
@@ -49,29 +49,21 @@ export async function setupNetwork(networkParams: {
     startBlock: BigInt(networkConfig.initialBlockNumber),
   });
 
-  // Request drip from faucet
-  if (networkConfig.faucetServiceUrl) {
-    const address = burnerAccount.address;
-    console.info("[Dev Faucet]: Player address -> ", address);
+  // try {
+  //   console.log("creating faucet client");
+  //   const faucet = createFaucetClient({ url: "http://localhost:3002/trpc" });
 
-    const faucet = createFaucetService(networkConfig.faucetServiceUrl);
+  //   const drip = async () => {
+  //     console.log("dripping");
+  //     const tx = await faucet.drip.mutate({ address: burnerAccount.address });
+  //     console.log("got drip", tx);
+  //   };
 
-    const requestDrip = async () => {
-      const balance = await publicClient.getBalance({ address });
-      console.info(`[Dev Faucet]: Player balance -> ${balance}`);
-      const lowBalance = balance < parseEther("1");
-      if (lowBalance) {
-        console.info("[Dev Faucet]: Balance is low, dripping funds to player");
-        // Double drip
-        await faucet.dripDev({ address });
-        await faucet.dripDev({ address });
-      }
-    };
-
-    requestDrip();
-    // Request a drip every 20 seconds
-    setInterval(requestDrip, 20000);
-  }
+  //   drip();
+  //   setInterval(drip, 20_000);
+  // } catch (e) {
+  //   console.error(e);
+  // }
 
   return {
     world,
