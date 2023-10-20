@@ -6,8 +6,8 @@ import {MudTest} from "@latticexyz/world/test/MudTest.t.sol";
 import {IWorld} from "../src/codegen/world/IWorld.sol";
 import {IWorldErrors} from "@latticexyz/world/src/IWorldErrors.sol";
 import {IAugment, Augment} from "../src/modules/augmentinstallation/Augment.sol";
-import {ScaleComponent} from "../src/codegen/tables/ScaleComponent.sol";
-import {NameComponent} from "../src/codegen/tables/NameComponent.sol";
+import {ScaleCom} from "../src/codegen/tables/ScaleCom.sol";
+import {NameCom} from "../src/codegen/tables/NameCom.sol";
 import {PackedCounter} from "@latticexyz/store/src/PackedCounter.sol";
 import {ResourceId, WorldResourceIdLib, WorldResourceIdInstance} from "@latticexyz/world/src/WorldResourceId.sol";
 import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
@@ -30,26 +30,26 @@ contract AugmentInstallationTest is MudTest {
         world.registerNamespace(
             WorldResourceIdLib.encodeNamespace(testNamespace)
         );
-        ScaleComponent.register(
+        ScaleCom.register(
             world,
             ResourceId.wrap(
                 bytes32(
                     abi.encodePacked(
                         RESOURCE_TABLE,
                         testNamespace,
-                        bytes16(bytes32("ScaleComponent"))
+                        bytes16(bytes32("ScaleCom"))
                     )
                 )
             )
         );
-        NameComponent.register(
+        NameCom.register(
             world,
             ResourceId.wrap(
                 bytes32(
                     abi.encodePacked(
                         RESOURCE_TABLE,
                         testNamespace,
-                        bytes16(bytes32("NameComponent"))
+                        bytes16(bytes32("NameCom"))
                     )
                 )
             )
@@ -64,7 +64,7 @@ contract AugmentInstallationTest is MudTest {
             bytes memory staticData,
             PackedCounter encodedLengths,
             bytes memory dynamicData
-        ) = ScaleComponent.encode(1, 2, 3);
+        ) = ScaleCom.encode(1, 2, 3);
 
         AugmentComponentValue memory componentValue = AugmentComponentValue({
             staticData: staticData,
@@ -89,24 +89,24 @@ contract AugmentInstallationTest is MudTest {
                 abi.encodePacked(
                     RESOURCE_TABLE,
                     testNamespace,
-                    bytes16(bytes32("ScaleComponent"))
+                    bytes16(bytes32("ScaleCom"))
                 )
             )
         );
         uint256 entityId = uint256(getUniqueEntity(world)) - 1;
 
         assertEq(
-            ScaleComponent.getX(world, _tableId, bytes32(entityId)),
+            ScaleCom.getX(world, _tableId, bytes32(entityId)),
             1,
             "Scale X should be set"
         );
         assertEq(
-            ScaleComponent.getY(world, _tableId, bytes32(entityId)),
+            ScaleCom.getY(world, _tableId, bytes32(entityId)),
             2,
             "Scale Y should be set"
         );
         assertEq(
-            ScaleComponent.getZ(world, _tableId, bytes32(entityId)),
+            ScaleCom.getZ(world, _tableId, bytes32(entityId)),
             3,
             "Scale Z should be set"
         );
@@ -136,7 +136,7 @@ contract AugmentInstallationTest is MudTest {
                 bytes memory staticData,
                 PackedCounter encodedLengths,
                 bytes memory dynamicData
-            ) = ScaleComponent.encode(1, 2, 3);
+            ) = ScaleCom.encode(1, 2, 3);
             componentValues[0][0] = AugmentComponentValue(
                 staticData,
                 encodedLengths,
@@ -149,7 +149,7 @@ contract AugmentInstallationTest is MudTest {
                 bytes memory staticData,
                 PackedCounter encodedLengths,
                 bytes memory dynamicData
-            ) = NameComponent.encode("test");
+            ) = NameCom.encode("test");
             componentValues[0][1] = AugmentComponentValue(
                 staticData,
                 encodedLengths,
@@ -170,7 +170,7 @@ contract AugmentInstallationTest is MudTest {
                 abi.encodePacked(
                     RESOURCE_TABLE,
                     testNamespace,
-                    bytes16(bytes32("ScaleComponent"))
+                    bytes16(bytes32("ScaleCom"))
                 )
             )
         );
@@ -179,29 +179,29 @@ contract AugmentInstallationTest is MudTest {
                 abi.encodePacked(
                     RESOURCE_TABLE,
                     testNamespace,
-                    bytes16(bytes32("NameComponent"))
+                    bytes16(bytes32("NameCom"))
                 )
             )
         );
         uint256 entityId = uint256(getUniqueEntity(world)) - 1;
 
         assertEq(
-            ScaleComponent.getX(world, _scaleTableId, bytes32(entityId)),
+            ScaleCom.getX(world, _scaleTableId, bytes32(entityId)),
             1,
             "Scale X should be set"
         );
         assertEq(
-            ScaleComponent.getY(world, _scaleTableId, bytes32(entityId)),
+            ScaleCom.getY(world, _scaleTableId, bytes32(entityId)),
             2,
             "Scale Y should be set"
         );
         assertEq(
-            ScaleComponent.getZ(world, _scaleTableId, bytes32(entityId)),
+            ScaleCom.getZ(world, _scaleTableId, bytes32(entityId)),
             3,
             "Scale Z should be set"
         );
         assertEq(
-            NameComponent.get(world, _nameTableId, bytes32(entityId)),
+            NameCom.get(world, _nameTableId, bytes32(entityId)),
             "test",
             "Name should be set"
         );
@@ -230,7 +230,7 @@ contract AugmentInstallationTest is MudTest {
                 bytes memory staticData,
                 PackedCounter encodedLengths,
                 bytes memory dynamicData
-            ) = ScaleComponent.encode(1, 2, 3);
+            ) = ScaleCom.encode(1, 2, 3);
             componentValues[0] = new AugmentComponentValue[](1);
             componentValues[0][0] = AugmentComponentValue(
                 staticData,
@@ -244,7 +244,7 @@ contract AugmentInstallationTest is MudTest {
                 bytes memory staticData,
                 PackedCounter encodedLengths,
                 bytes memory dynamicData
-            ) = NameComponent.encode("test");
+            ) = NameCom.encode("test");
             componentValues[1] = new AugmentComponentValue[](1);
             componentValues[1][0] = AugmentComponentValue(
                 staticData,
@@ -266,7 +266,7 @@ contract AugmentInstallationTest is MudTest {
                 abi.encodePacked(
                     RESOURCE_TABLE,
                     testNamespace,
-                    bytes16(bytes32("ScaleComponent"))
+                    bytes16(bytes32("ScaleCom"))
                 )
             )
         );
@@ -275,7 +275,7 @@ contract AugmentInstallationTest is MudTest {
                 abi.encodePacked(
                     RESOURCE_TABLE,
                     testNamespace,
-                    bytes16(bytes32("NameComponent"))
+                    bytes16(bytes32("NameCom"))
                 )
             )
         );
@@ -283,22 +283,22 @@ contract AugmentInstallationTest is MudTest {
         uint256 entityId2 = entityId1 + 1;
 
         assertEq(
-            ScaleComponent.getX(world, _scaleTableId, bytes32(entityId1)),
+            ScaleCom.getX(world, _scaleTableId, bytes32(entityId1)),
             1,
             "Scale X should be set"
         );
         assertEq(
-            ScaleComponent.getY(world, _scaleTableId, bytes32(entityId1)),
+            ScaleCom.getY(world, _scaleTableId, bytes32(entityId1)),
             2,
             "Scale Y should be set"
         );
         assertEq(
-            ScaleComponent.getZ(world, _scaleTableId, bytes32(entityId1)),
+            ScaleCom.getZ(world, _scaleTableId, bytes32(entityId1)),
             3,
             "Scale Z should be set"
         );
         assertEq(
-            NameComponent.get(world, _nameTableId, bytes32(entityId2)),
+            NameCom.get(world, _nameTableId, bytes32(entityId2)),
             "test",
             "Name should be set"
         );
@@ -326,7 +326,7 @@ contract AugmentInstallationTest is MudTest {
             bytes memory staticData,
             PackedCounter encodedLengths,
             bytes memory dynamicData
-        ) = ScaleComponent.encode(1, 2, 3);
+        ) = ScaleCom.encode(1, 2, 3);
         componentValues[0] = new AugmentComponentValue[](1);
         componentValues[0][0] = AugmentComponentValue(
             staticData,
@@ -355,7 +355,7 @@ contract AugmentInstallationTest is MudTest {
                 abi.encodePacked(
                     RESOURCE_TABLE,
                     testNamespace,
-                    bytes16(bytes32("ScaleComponent"))
+                    bytes16(bytes32("ScaleCom"))
                 )
             )
         );
@@ -364,7 +364,7 @@ contract AugmentInstallationTest is MudTest {
                 abi.encodePacked(
                     RESOURCE_TABLE,
                     testNamespace,
-                    bytes16(bytes32("NameComponent"))
+                    bytes16(bytes32("NameCom"))
                 )
             )
         );
@@ -372,22 +372,22 @@ contract AugmentInstallationTest is MudTest {
         uint256 entityId2 = entityId1 + 1;
 
         assertEq(
-            ScaleComponent.getX(world, _scaleTableId, bytes32(entityId1)),
+            ScaleCom.getX(world, _scaleTableId, bytes32(entityId1)),
             1,
             "Scale X should be set"
         );
         assertEq(
-            ScaleComponent.getY(world, _scaleTableId, bytes32(entityId1)),
+            ScaleCom.getY(world, _scaleTableId, bytes32(entityId1)),
             2,
             "Scale Y should be set"
         );
         assertEq(
-            ScaleComponent.getZ(world, _scaleTableId, bytes32(entityId1)),
+            ScaleCom.getZ(world, _scaleTableId, bytes32(entityId1)),
             3,
             "Scale Z should be set"
         );
         assertEq(
-            NameComponent.get(world, _nameTableId, bytes32(entityId2)),
+            NameCom.get(world, _nameTableId, bytes32(entityId2)),
             "test1",
             "Name should be set"
         );
@@ -415,7 +415,7 @@ contract AugmentInstallationTest is MudTest {
             bytes memory staticData,
             PackedCounter encodedLengths,
             bytes memory dynamicData
-        ) = ScaleComponent.encode(1, 2, 3);
+        ) = ScaleCom.encode(1, 2, 3);
         componentValues[0] = new AugmentComponentValue[](1);
         componentValues[0][0] = AugmentComponentValue(
             staticData,
@@ -444,7 +444,7 @@ contract AugmentInstallationTest is MudTest {
                 abi.encodePacked(
                     RESOURCE_TABLE,
                     testNamespace,
-                    bytes16(bytes32("ScaleComponent"))
+                    bytes16(bytes32("ScaleCom"))
                 )
             )
         );
@@ -452,17 +452,17 @@ contract AugmentInstallationTest is MudTest {
         uint256 entityId1 = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
 
         assertEq(
-            ScaleComponent.getX(world, _scaleTableId, bytes32(entityId1)),
+            ScaleCom.getX(world, _scaleTableId, bytes32(entityId1)),
             10,
             "Scale X should be set"
         );
         assertEq(
-            ScaleComponent.getY(world, _scaleTableId, bytes32(entityId1)),
+            ScaleCom.getY(world, _scaleTableId, bytes32(entityId1)),
             2,
             "Scale Y should be set"
         );
         assertEq(
-            ScaleComponent.getZ(world, _scaleTableId, bytes32(entityId1)),
+            ScaleCom.getZ(world, _scaleTableId, bytes32(entityId1)),
             3,
             "Scale Z should be set"
         );
@@ -487,7 +487,7 @@ contract AugmentInstallationTest is MudTest {
             bytes memory staticData,
             PackedCounter encodedLengths,
             bytes memory dynamicData
-        ) = ScaleComponent.encode(1, 2, 3);
+        ) = ScaleCom.encode(1, 2, 3);
 
         AugmentComponentValue memory componentValue = AugmentComponentValue({
             staticData: staticData,
@@ -519,7 +519,7 @@ contract AugmentInstallationTest is MudTest {
 }
 
 contract MockAugmentSingle is Augment {
-    bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleComponent"))]];
+    bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleCom"))]];
 
     function getMetadataURI() external view returns (bytes memory) {
         return new bytes(0);
@@ -534,7 +534,7 @@ contract MockAugmentSingle is Augment {
 
 contract MockAugmentMultipleComponents is Augment {
     bytes16[][] private componentTypes = [
-        [bytes16(bytes32("ScaleComponent")), bytes16(bytes32("NameComponent"))]
+        [bytes16(bytes32("ScaleCom")), bytes16(bytes32("NameCom"))]
     ];
 
     function getMetadataURI() external view returns (bytes memory) {
@@ -550,8 +550,8 @@ contract MockAugmentMultipleComponents is Augment {
 
 contract MockAugmentMultipleEntities is Augment {
     bytes16[][] private componentTypes = [
-        [bytes16(bytes32("ScaleComponent"))],
-        [bytes16(bytes32("NameComponent"))]
+        [bytes16(bytes32("ScaleCom"))],
+        [bytes16(bytes32("NameCom"))]
     ];
 
     function getMetadataURI() external view returns (bytes memory) {
@@ -566,7 +566,7 @@ contract MockAugmentMultipleEntities is Augment {
 }
 
 contract MockAugmentSetOverride is Augment {
-    bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleComponent"))]];
+    bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleCom"))]];
 
     function getMetadataURI() external view returns (bytes memory) {
         return new bytes(0);
@@ -584,16 +584,16 @@ contract MockAugmentSetOverride is Augment {
                 abi.encodePacked(
                     RESOURCE_TABLE,
                     namespace,
-                    bytes16(bytes32("NameComponent"))
+                    bytes16(bytes32("NameCom"))
                 )
             )
         );
-        NameComponent.set(IWorld(_world()), _nameTableId, key, "test1");
+        NameCom.set(IWorld(_world()), _nameTableId, key, "test1");
     }
 }
 
 contract MockAugmentSpliceOverride is Augment {
-    bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleComponent"))]];
+    bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleCom"))]];
 
     function getMetadataURI() external view returns (bytes memory) {
         return new bytes(0);
@@ -614,10 +614,10 @@ contract MockAugmentSpliceOverride is Augment {
                 abi.encodePacked(
                     RESOURCE_TABLE,
                     namespace,
-                    bytes16(bytes32("ScaleComponent"))
+                    bytes16(bytes32("ScaleCom"))
                 )
             )
         );
-        ScaleComponent.setX(IWorld(_world()), _nameTableId, key1, 10);
+        ScaleCom.setX(IWorld(_world()), _nameTableId, key1, 10);
     }
 }

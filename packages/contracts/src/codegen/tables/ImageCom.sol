@@ -27,12 +27,12 @@ FieldLayout constant _fieldLayout = FieldLayout.wrap(
   0x0001010101000000000000000000000000000000000000000000000000000000
 );
 
-struct ImageComponentData {
+struct ImageComData {
   ImageEncodingFormat encodingFormat;
   bytes contentHash;
 }
 
-library ImageComponent {
+library ImageCom {
   /**
    * @notice Get the table values' field layout.
    * @return _fieldLayout The field layout for the table.
@@ -443,7 +443,7 @@ library ImageComponent {
   /**
    * @notice Get the full data.
    */
-  function get(ResourceId _tableId, bytes32 key) internal view returns (ImageComponentData memory _table) {
+  function get(ResourceId _tableId, bytes32 key) internal view returns (ImageComData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -458,7 +458,7 @@ library ImageComponent {
   /**
    * @notice Get the full data.
    */
-  function _get(ResourceId _tableId, bytes32 key) internal view returns (ImageComponentData memory _table) {
+  function _get(ResourceId _tableId, bytes32 key) internal view returns (ImageComData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -473,11 +473,7 @@ library ImageComponent {
   /**
    * @notice Get the full data (using the specified store).
    */
-  function get(
-    IStore _store,
-    ResourceId _tableId,
-    bytes32 key
-  ) internal view returns (ImageComponentData memory _table) {
+  function get(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (ImageComData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -553,7 +549,7 @@ library ImageComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(ResourceId _tableId, bytes32 key, ImageComponentData memory _table) internal {
+  function set(ResourceId _tableId, bytes32 key, ImageComData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
@@ -568,7 +564,7 @@ library ImageComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(ResourceId _tableId, bytes32 key, ImageComponentData memory _table) internal {
+  function _set(ResourceId _tableId, bytes32 key, ImageComData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
@@ -583,7 +579,7 @@ library ImageComponent {
   /**
    * @notice Set the full data using the data struct (using the specified store).
    */
-  function set(IStore _store, ResourceId _tableId, bytes32 key, ImageComponentData memory _table) internal {
+  function set(IStore _store, ResourceId _tableId, bytes32 key, ImageComData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
@@ -627,7 +623,7 @@ library ImageComponent {
     bytes memory _staticData,
     PackedCounter _encodedLengths,
     bytes memory _dynamicData
-  ) internal pure returns (ImageComponentData memory _table) {
+  ) internal pure returns (ImageComData memory _table) {
     (_table.encodingFormat) = decodeStatic(_staticData);
 
     (_table.contentHash) = decodeDynamic(_encodedLengths, _dynamicData);

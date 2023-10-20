@@ -21,18 +21,18 @@ import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/storeResourceTypes.sol";
 
 // Import user types
-import { ModelEncodingFormat } from "./../common.sol";
+import { VideoEncodingFormat } from "./../common.sol";
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
   0x0001010101000000000000000000000000000000000000000000000000000000
 );
 
-struct ModelComponentData {
-  ModelEncodingFormat encodingFormat;
+struct VideoComData {
+  VideoEncodingFormat encodingFormat;
   bytes contentHash;
 }
 
-library ModelComponent {
+library VideoCom {
   /**
    * @notice Get the table values' field layout.
    * @return _fieldLayout The field layout for the table.
@@ -110,12 +110,12 @@ library ModelComponent {
   function getEncodingFormat(
     ResourceId _tableId,
     bytes32 key
-  ) internal view returns (ModelEncodingFormat encodingFormat) {
+  ) internal view returns (VideoEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return ModelEncodingFormat(uint8(bytes1(_blob)));
+    return VideoEncodingFormat(uint8(bytes1(_blob)));
   }
 
   /**
@@ -124,12 +124,12 @@ library ModelComponent {
   function _getEncodingFormat(
     ResourceId _tableId,
     bytes32 key
-  ) internal view returns (ModelEncodingFormat encodingFormat) {
+  ) internal view returns (VideoEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return ModelEncodingFormat(uint8(bytes1(_blob)));
+    return VideoEncodingFormat(uint8(bytes1(_blob)));
   }
 
   /**
@@ -139,18 +139,18 @@ library ModelComponent {
     IStore _store,
     ResourceId _tableId,
     bytes32 key
-  ) internal view returns (ModelEncodingFormat encodingFormat) {
+  ) internal view returns (VideoEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return ModelEncodingFormat(uint8(bytes1(_blob)));
+    return VideoEncodingFormat(uint8(bytes1(_blob)));
   }
 
   /**
    * @notice Set encodingFormat.
    */
-  function setEncodingFormat(ResourceId _tableId, bytes32 key, ModelEncodingFormat encodingFormat) internal {
+  function setEncodingFormat(ResourceId _tableId, bytes32 key, VideoEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -160,7 +160,7 @@ library ModelComponent {
   /**
    * @notice Set encodingFormat.
    */
-  function _setEncodingFormat(ResourceId _tableId, bytes32 key, ModelEncodingFormat encodingFormat) internal {
+  function _setEncodingFormat(ResourceId _tableId, bytes32 key, VideoEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -174,7 +174,7 @@ library ModelComponent {
     IStore _store,
     ResourceId _tableId,
     bytes32 key,
-    ModelEncodingFormat encodingFormat
+    VideoEncodingFormat encodingFormat
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -443,7 +443,7 @@ library ModelComponent {
   /**
    * @notice Get the full data.
    */
-  function get(ResourceId _tableId, bytes32 key) internal view returns (ModelComponentData memory _table) {
+  function get(ResourceId _tableId, bytes32 key) internal view returns (VideoComData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -458,7 +458,7 @@ library ModelComponent {
   /**
    * @notice Get the full data.
    */
-  function _get(ResourceId _tableId, bytes32 key) internal view returns (ModelComponentData memory _table) {
+  function _get(ResourceId _tableId, bytes32 key) internal view returns (VideoComData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -473,11 +473,7 @@ library ModelComponent {
   /**
    * @notice Get the full data (using the specified store).
    */
-  function get(
-    IStore _store,
-    ResourceId _tableId,
-    bytes32 key
-  ) internal view returns (ModelComponentData memory _table) {
+  function get(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (VideoComData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -495,7 +491,7 @@ library ModelComponent {
   function set(
     ResourceId _tableId,
     bytes32 key,
-    ModelEncodingFormat encodingFormat,
+    VideoEncodingFormat encodingFormat,
     bytes memory contentHash
   ) internal {
     bytes memory _staticData = encodeStatic(encodingFormat);
@@ -515,7 +511,7 @@ library ModelComponent {
   function _set(
     ResourceId _tableId,
     bytes32 key,
-    ModelEncodingFormat encodingFormat,
+    VideoEncodingFormat encodingFormat,
     bytes memory contentHash
   ) internal {
     bytes memory _staticData = encodeStatic(encodingFormat);
@@ -536,7 +532,7 @@ library ModelComponent {
     IStore _store,
     ResourceId _tableId,
     bytes32 key,
-    ModelEncodingFormat encodingFormat,
+    VideoEncodingFormat encodingFormat,
     bytes memory contentHash
   ) internal {
     bytes memory _staticData = encodeStatic(encodingFormat);
@@ -553,7 +549,7 @@ library ModelComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(ResourceId _tableId, bytes32 key, ModelComponentData memory _table) internal {
+  function set(ResourceId _tableId, bytes32 key, VideoComData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
@@ -568,7 +564,7 @@ library ModelComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(ResourceId _tableId, bytes32 key, ModelComponentData memory _table) internal {
+  function _set(ResourceId _tableId, bytes32 key, VideoComData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
@@ -583,7 +579,7 @@ library ModelComponent {
   /**
    * @notice Set the full data using the data struct (using the specified store).
    */
-  function set(IStore _store, ResourceId _tableId, bytes32 key, ModelComponentData memory _table) internal {
+  function set(IStore _store, ResourceId _tableId, bytes32 key, VideoComData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
@@ -598,8 +594,8 @@ library ModelComponent {
   /**
    * @notice Decode the tightly packed blob of static data using this table's field layout.
    */
-  function decodeStatic(bytes memory _blob) internal pure returns (ModelEncodingFormat encodingFormat) {
-    encodingFormat = ModelEncodingFormat(uint8(Bytes.slice1(_blob, 0)));
+  function decodeStatic(bytes memory _blob) internal pure returns (VideoEncodingFormat encodingFormat) {
+    encodingFormat = VideoEncodingFormat(uint8(Bytes.slice1(_blob, 0)));
   }
 
   /**
@@ -627,7 +623,7 @@ library ModelComponent {
     bytes memory _staticData,
     PackedCounter _encodedLengths,
     bytes memory _dynamicData
-  ) internal pure returns (ModelComponentData memory _table) {
+  ) internal pure returns (VideoComData memory _table) {
     (_table.encodingFormat) = decodeStatic(_staticData);
 
     (_table.contentHash) = decodeDynamic(_encodedLengths, _dynamicData);
@@ -667,7 +663,7 @@ library ModelComponent {
    * @notice Tightly pack static (fixed length) data using this table's schema.
    * @return The static data, encoded into a sequence of bytes.
    */
-  function encodeStatic(ModelEncodingFormat encodingFormat) internal pure returns (bytes memory) {
+  function encodeStatic(VideoEncodingFormat encodingFormat) internal pure returns (bytes memory) {
     return abi.encodePacked(encodingFormat);
   }
 
@@ -697,7 +693,7 @@ library ModelComponent {
    * @return The dyanmic (variable length) data, encoded into a sequence of bytes.
    */
   function encode(
-    ModelEncodingFormat encodingFormat,
+    VideoEncodingFormat encodingFormat,
     bytes memory contentHash
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
     bytes memory _staticData = encodeStatic(encodingFormat);

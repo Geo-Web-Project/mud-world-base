@@ -52,51 +52,51 @@ export default mudConfig({
       },
       tableIdArgument: true,
     },
-    NameComponent: {
+    NameCom: {
       valueSchema: "string",
       tableIdArgument: true,
     },
-    ModelComponent: {
+    ModelCom: {
       valueSchema: {
         encodingFormat: "ModelEncodingFormat",
         contentHash: "bytes",
       },
       tableIdArgument: true,
     },
-    ImageComponent: {
+    ImageCom: {
       valueSchema: {
         encodingFormat: "ImageEncodingFormat",
         contentHash: "bytes",
       },
       tableIdArgument: true,
     },
-    AudioComponent: {
+    AudioCom: {
       valueSchema: {
         encodingFormat: "AudioEncodingFormat",
         contentHash: "bytes",
       },
       tableIdArgument: true,
     },
-    VideoComponent: {
+    VideoCom: {
       valueSchema: {
         encodingFormat: "VideoEncodingFormat",
         contentHash: "bytes",
       },
       tableIdArgument: true,
     },
-    PositionComponent: {
+    PositionCom: {
       valueSchema: { h: "int32", geohash: "bytes" },
       tableIdArgument: true,
     },
-    OrientationQuaternionComponent: {
+    OrientationCom: {
       valueSchema: { x: "int16", y: "int16", z: "int16", w: "int16" },
       tableIdArgument: true,
     },
-    ScaleComponent: {
+    ScaleCom: {
       valueSchema: { x: "int16", y: "int16", z: "int16" },
       tableIdArgument: true,
     },
-    TrackedImageComponent: {
+    TrackedImageCom: {
       valueSchema: {
         physicalWidthInMillimeters: "uint16",
         encodingFormat: "ImageEncodingFormat",

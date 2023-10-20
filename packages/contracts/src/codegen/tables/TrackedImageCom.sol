@@ -21,18 +21,19 @@ import { ResourceId } from "@latticexyz/store/src/ResourceId.sol";
 import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/storeResourceTypes.sol";
 
 // Import user types
-import { AudioEncodingFormat } from "./../common.sol";
+import { ImageEncodingFormat } from "./../common.sol";
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x0001010101000000000000000000000000000000000000000000000000000000
+  0x0003020102010000000000000000000000000000000000000000000000000000
 );
 
-struct AudioComponentData {
-  AudioEncodingFormat encodingFormat;
-  bytes contentHash;
+struct TrackedImageComData {
+  uint16 physicalWidthInMillimeters;
+  ImageEncodingFormat encodingFormat;
+  bytes imageAsset;
 }
 
-library AudioComponent {
+library TrackedImageCom {
   /**
    * @notice Get the table values' field layout.
    * @return _fieldLayout The field layout for the table.
@@ -57,9 +58,10 @@ library AudioComponent {
    * @return _valueSchema The value schema for the table.
    */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _valueSchema = new SchemaType[](2);
-    _valueSchema[0] = SchemaType.UINT8;
-    _valueSchema[1] = SchemaType.BYTES;
+    SchemaType[] memory _valueSchema = new SchemaType[](3);
+    _valueSchema[0] = SchemaType.UINT16;
+    _valueSchema[1] = SchemaType.UINT8;
+    _valueSchema[2] = SchemaType.BYTES;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -78,9 +80,10 @@ library AudioComponent {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](2);
-    fieldNames[0] = "encodingFormat";
-    fieldNames[1] = "contentHash";
+    fieldNames = new string[](3);
+    fieldNames[0] = "physicalWidthInMillimeters";
+    fieldNames[1] = "encodingFormat";
+    fieldNames[2] = "imageAsset";
   }
 
   /**
@@ -105,17 +108,99 @@ library AudioComponent {
   }
 
   /**
+   * @notice Get physicalWidthInMillimeters.
+   */
+  function getPhysicalWidthInMillimeters(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (uint16 physicalWidthInMillimeters) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
+    return (uint16(bytes2(_blob)));
+  }
+
+  /**
+   * @notice Get physicalWidthInMillimeters.
+   */
+  function _getPhysicalWidthInMillimeters(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (uint16 physicalWidthInMillimeters) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
+    return (uint16(bytes2(_blob)));
+  }
+
+  /**
+   * @notice Get physicalWidthInMillimeters (using the specified store).
+   */
+  function getPhysicalWidthInMillimeters(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (uint16 physicalWidthInMillimeters) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
+    return (uint16(bytes2(_blob)));
+  }
+
+  /**
+   * @notice Set physicalWidthInMillimeters.
+   */
+  function setPhysicalWidthInMillimeters(ResourceId _tableId, bytes32 key, uint16 physicalWidthInMillimeters) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((physicalWidthInMillimeters)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set physicalWidthInMillimeters.
+   */
+  function _setPhysicalWidthInMillimeters(
+    ResourceId _tableId,
+    bytes32 key,
+    uint16 physicalWidthInMillimeters
+  ) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((physicalWidthInMillimeters)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set physicalWidthInMillimeters (using the specified store).
+   */
+  function setPhysicalWidthInMillimeters(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    uint16 physicalWidthInMillimeters
+  ) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked((physicalWidthInMillimeters)), _fieldLayout);
+  }
+
+  /**
    * @notice Get encodingFormat.
    */
   function getEncodingFormat(
     ResourceId _tableId,
     bytes32 key
-  ) internal view returns (AudioEncodingFormat encodingFormat) {
+  ) internal view returns (ImageEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return AudioEncodingFormat(uint8(bytes1(_blob)));
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
+    return ImageEncodingFormat(uint8(bytes1(_blob)));
   }
 
   /**
@@ -124,12 +209,12 @@ library AudioComponent {
   function _getEncodingFormat(
     ResourceId _tableId,
     bytes32 key
-  ) internal view returns (AudioEncodingFormat encodingFormat) {
+  ) internal view returns (ImageEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return AudioEncodingFormat(uint8(bytes1(_blob)));
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
+    return ImageEncodingFormat(uint8(bytes1(_blob)));
   }
 
   /**
@@ -139,32 +224,32 @@ library AudioComponent {
     IStore _store,
     ResourceId _tableId,
     bytes32 key
-  ) internal view returns (AudioEncodingFormat encodingFormat) {
+  ) internal view returns (ImageEncodingFormat encodingFormat) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 0, _fieldLayout);
-    return AudioEncodingFormat(uint8(bytes1(_blob)));
+    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
+    return ImageEncodingFormat(uint8(bytes1(_blob)));
   }
 
   /**
    * @notice Set encodingFormat.
    */
-  function setEncodingFormat(ResourceId _tableId, bytes32 key, AudioEncodingFormat encodingFormat) internal {
+  function setEncodingFormat(ResourceId _tableId, bytes32 key, ImageEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked(uint8(encodingFormat)), _fieldLayout);
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked(uint8(encodingFormat)), _fieldLayout);
   }
 
   /**
    * @notice Set encodingFormat.
    */
-  function _setEncodingFormat(ResourceId _tableId, bytes32 key, AudioEncodingFormat encodingFormat) internal {
+  function _setEncodingFormat(ResourceId _tableId, bytes32 key, ImageEncodingFormat encodingFormat) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreCore.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked(uint8(encodingFormat)), _fieldLayout);
+    StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked(uint8(encodingFormat)), _fieldLayout);
   }
 
   /**
@@ -174,18 +259,18 @@ library AudioComponent {
     IStore _store,
     ResourceId _tableId,
     bytes32 key,
-    AudioEncodingFormat encodingFormat
+    ImageEncodingFormat encodingFormat
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked(uint8(encodingFormat)), _fieldLayout);
+    _store.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked(uint8(encodingFormat)), _fieldLayout);
   }
 
   /**
-   * @notice Get contentHash.
+   * @notice Get imageAsset.
    */
-  function getContentHash(ResourceId _tableId, bytes32 key) internal view returns (bytes memory contentHash) {
+  function getImageAsset(ResourceId _tableId, bytes32 key) internal view returns (bytes memory imageAsset) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -194,9 +279,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Get contentHash.
+   * @notice Get imageAsset.
    */
-  function _getContentHash(ResourceId _tableId, bytes32 key) internal view returns (bytes memory contentHash) {
+  function _getImageAsset(ResourceId _tableId, bytes32 key) internal view returns (bytes memory imageAsset) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -205,13 +290,13 @@ library AudioComponent {
   }
 
   /**
-   * @notice Get contentHash (using the specified store).
+   * @notice Get imageAsset (using the specified store).
    */
-  function getContentHash(
+  function getImageAsset(
     IStore _store,
     ResourceId _tableId,
     bytes32 key
-  ) internal view returns (bytes memory contentHash) {
+  ) internal view returns (bytes memory imageAsset) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -220,39 +305,39 @@ library AudioComponent {
   }
 
   /**
-   * @notice Set contentHash.
+   * @notice Set imageAsset.
    */
-  function setContentHash(ResourceId _tableId, bytes32 key, bytes memory contentHash) internal {
+  function setImageAsset(ResourceId _tableId, bytes32 key, bytes memory imageAsset) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((contentHash)));
+    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((imageAsset)));
   }
 
   /**
-   * @notice Set contentHash.
+   * @notice Set imageAsset.
    */
-  function _setContentHash(ResourceId _tableId, bytes32 key, bytes memory contentHash) internal {
+  function _setImageAsset(ResourceId _tableId, bytes32 key, bytes memory imageAsset) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((contentHash)));
+    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((imageAsset)));
   }
 
   /**
-   * @notice Set contentHash (using the specified store).
+   * @notice Set imageAsset (using the specified store).
    */
-  function setContentHash(IStore _store, ResourceId _tableId, bytes32 key, bytes memory contentHash) internal {
+  function setImageAsset(IStore _store, ResourceId _tableId, bytes32 key, bytes memory imageAsset) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((contentHash)));
+    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((imageAsset)));
   }
 
   /**
-   * @notice Get the length of contentHash.
+   * @notice Get the length of imageAsset.
    */
-  function lengthContentHash(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
+  function lengthImageAsset(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -263,9 +348,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Get the length of contentHash.
+   * @notice Get the length of imageAsset.
    */
-  function _lengthContentHash(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
+  function _lengthImageAsset(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -276,9 +361,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Get the length of contentHash (using the specified store).
+   * @notice Get the length of imageAsset (using the specified store).
    */
-  function lengthContentHash(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (uint256) {
+  function lengthImageAsset(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -289,10 +374,10 @@ library AudioComponent {
   }
 
   /**
-   * @notice Get an item of contentHash.
+   * @notice Get an item of imageAsset.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemContentHash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemImageAsset(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -303,10 +388,10 @@ library AudioComponent {
   }
 
   /**
-   * @notice Get an item of contentHash.
+   * @notice Get an item of imageAsset.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function _getItemContentHash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function _getItemImageAsset(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -317,10 +402,10 @@ library AudioComponent {
   }
 
   /**
-   * @notice Get an item of contentHash (using the specified store).
+   * @notice Get an item of imageAsset (using the specified store).
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemContentHash(
+  function getItemImageAsset(
     IStore _store,
     ResourceId _tableId,
     bytes32 key,
@@ -336,9 +421,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Push a slice to contentHash.
+   * @notice Push a slice to imageAsset.
    */
-  function pushContentHash(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
+  function pushImageAsset(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -346,9 +431,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Push a slice to contentHash.
+   * @notice Push a slice to imageAsset.
    */
-  function _pushContentHash(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
+  function _pushImageAsset(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -356,9 +441,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Push a slice to contentHash (using the specified store).
+   * @notice Push a slice to imageAsset (using the specified store).
    */
-  function pushContentHash(IStore _store, ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
+  function pushImageAsset(IStore _store, ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -366,9 +451,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Pop a slice from contentHash.
+   * @notice Pop a slice from imageAsset.
    */
-  function popContentHash(ResourceId _tableId, bytes32 key) internal {
+  function popImageAsset(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -376,9 +461,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Pop a slice from contentHash.
+   * @notice Pop a slice from imageAsset.
    */
-  function _popContentHash(ResourceId _tableId, bytes32 key) internal {
+  function _popImageAsset(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -386,9 +471,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Pop a slice from contentHash (using the specified store).
+   * @notice Pop a slice from imageAsset (using the specified store).
    */
-  function popContentHash(IStore _store, ResourceId _tableId, bytes32 key) internal {
+  function popImageAsset(IStore _store, ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -396,9 +481,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Update a slice of contentHash at `_index`.
+   * @notice Update a slice of imageAsset at `_index`.
    */
-  function updateContentHash(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateImageAsset(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -409,9 +494,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Update a slice of contentHash at `_index`.
+   * @notice Update a slice of imageAsset at `_index`.
    */
-  function _updateContentHash(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function _updateImageAsset(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -422,9 +507,9 @@ library AudioComponent {
   }
 
   /**
-   * @notice Update a slice of contentHash (using the specified store) at `_index`.
+   * @notice Update a slice of imageAsset (using the specified store) at `_index`.
    */
-  function updateContentHash(
+  function updateImageAsset(
     IStore _store,
     ResourceId _tableId,
     bytes32 key,
@@ -443,7 +528,7 @@ library AudioComponent {
   /**
    * @notice Get the full data.
    */
-  function get(ResourceId _tableId, bytes32 key) internal view returns (AudioComponentData memory _table) {
+  function get(ResourceId _tableId, bytes32 key) internal view returns (TrackedImageComData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -458,7 +543,7 @@ library AudioComponent {
   /**
    * @notice Get the full data.
    */
-  function _get(ResourceId _tableId, bytes32 key) internal view returns (AudioComponentData memory _table) {
+  function _get(ResourceId _tableId, bytes32 key) internal view returns (TrackedImageComData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -477,7 +562,7 @@ library AudioComponent {
     IStore _store,
     ResourceId _tableId,
     bytes32 key
-  ) internal view returns (AudioComponentData memory _table) {
+  ) internal view returns (TrackedImageComData memory _table) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -495,13 +580,14 @@ library AudioComponent {
   function set(
     ResourceId _tableId,
     bytes32 key,
-    AudioEncodingFormat encodingFormat,
-    bytes memory contentHash
+    uint16 physicalWidthInMillimeters,
+    ImageEncodingFormat encodingFormat,
+    bytes memory imageAsset
   ) internal {
-    bytes memory _staticData = encodeStatic(encodingFormat);
+    bytes memory _staticData = encodeStatic(physicalWidthInMillimeters, encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(contentHash);
-    bytes memory _dynamicData = encodeDynamic(contentHash);
+    PackedCounter _encodedLengths = encodeLengths(imageAsset);
+    bytes memory _dynamicData = encodeDynamic(imageAsset);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -515,13 +601,14 @@ library AudioComponent {
   function _set(
     ResourceId _tableId,
     bytes32 key,
-    AudioEncodingFormat encodingFormat,
-    bytes memory contentHash
+    uint16 physicalWidthInMillimeters,
+    ImageEncodingFormat encodingFormat,
+    bytes memory imageAsset
   ) internal {
-    bytes memory _staticData = encodeStatic(encodingFormat);
+    bytes memory _staticData = encodeStatic(physicalWidthInMillimeters, encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(contentHash);
-    bytes memory _dynamicData = encodeDynamic(contentHash);
+    PackedCounter _encodedLengths = encodeLengths(imageAsset);
+    bytes memory _dynamicData = encodeDynamic(imageAsset);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -536,13 +623,14 @@ library AudioComponent {
     IStore _store,
     ResourceId _tableId,
     bytes32 key,
-    AudioEncodingFormat encodingFormat,
-    bytes memory contentHash
+    uint16 physicalWidthInMillimeters,
+    ImageEncodingFormat encodingFormat,
+    bytes memory imageAsset
   ) internal {
-    bytes memory _staticData = encodeStatic(encodingFormat);
+    bytes memory _staticData = encodeStatic(physicalWidthInMillimeters, encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(contentHash);
-    bytes memory _dynamicData = encodeDynamic(contentHash);
+    PackedCounter _encodedLengths = encodeLengths(imageAsset);
+    bytes memory _dynamicData = encodeDynamic(imageAsset);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -553,11 +641,11 @@ library AudioComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function set(ResourceId _tableId, bytes32 key, AudioComponentData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.encodingFormat);
+  function set(ResourceId _tableId, bytes32 key, TrackedImageComData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.physicalWidthInMillimeters, _table.encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
-    bytes memory _dynamicData = encodeDynamic(_table.contentHash);
+    PackedCounter _encodedLengths = encodeLengths(_table.imageAsset);
+    bytes memory _dynamicData = encodeDynamic(_table.imageAsset);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -568,11 +656,11 @@ library AudioComponent {
   /**
    * @notice Set the full data using the data struct.
    */
-  function _set(ResourceId _tableId, bytes32 key, AudioComponentData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.encodingFormat);
+  function _set(ResourceId _tableId, bytes32 key, TrackedImageComData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.physicalWidthInMillimeters, _table.encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
-    bytes memory _dynamicData = encodeDynamic(_table.contentHash);
+    PackedCounter _encodedLengths = encodeLengths(_table.imageAsset);
+    bytes memory _dynamicData = encodeDynamic(_table.imageAsset);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -583,11 +671,11 @@ library AudioComponent {
   /**
    * @notice Set the full data using the data struct (using the specified store).
    */
-  function set(IStore _store, ResourceId _tableId, bytes32 key, AudioComponentData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.encodingFormat);
+  function set(IStore _store, ResourceId _tableId, bytes32 key, TrackedImageComData memory _table) internal {
+    bytes memory _staticData = encodeStatic(_table.physicalWidthInMillimeters, _table.encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
-    bytes memory _dynamicData = encodeDynamic(_table.contentHash);
+    PackedCounter _encodedLengths = encodeLengths(_table.imageAsset);
+    bytes memory _dynamicData = encodeDynamic(_table.imageAsset);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -598,8 +686,12 @@ library AudioComponent {
   /**
    * @notice Decode the tightly packed blob of static data using this table's field layout.
    */
-  function decodeStatic(bytes memory _blob) internal pure returns (AudioEncodingFormat encodingFormat) {
-    encodingFormat = AudioEncodingFormat(uint8(Bytes.slice1(_blob, 0)));
+  function decodeStatic(
+    bytes memory _blob
+  ) internal pure returns (uint16 physicalWidthInMillimeters, ImageEncodingFormat encodingFormat) {
+    physicalWidthInMillimeters = (uint16(Bytes.slice2(_blob, 0)));
+
+    encodingFormat = ImageEncodingFormat(uint8(Bytes.slice1(_blob, 2)));
   }
 
   /**
@@ -608,13 +700,13 @@ library AudioComponent {
   function decodeDynamic(
     PackedCounter _encodedLengths,
     bytes memory _blob
-  ) internal pure returns (bytes memory contentHash) {
+  ) internal pure returns (bytes memory imageAsset) {
     uint256 _start;
     uint256 _end;
     unchecked {
       _end = _encodedLengths.atIndex(0);
     }
-    contentHash = (bytes(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+    imageAsset = (bytes(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
   }
 
   /**
@@ -627,10 +719,10 @@ library AudioComponent {
     bytes memory _staticData,
     PackedCounter _encodedLengths,
     bytes memory _dynamicData
-  ) internal pure returns (AudioComponentData memory _table) {
-    (_table.encodingFormat) = decodeStatic(_staticData);
+  ) internal pure returns (TrackedImageComData memory _table) {
+    (_table.physicalWidthInMillimeters, _table.encodingFormat) = decodeStatic(_staticData);
 
-    (_table.contentHash) = decodeDynamic(_encodedLengths, _dynamicData);
+    (_table.imageAsset) = decodeDynamic(_encodedLengths, _dynamicData);
   }
 
   /**
@@ -667,18 +759,21 @@ library AudioComponent {
    * @notice Tightly pack static (fixed length) data using this table's schema.
    * @return The static data, encoded into a sequence of bytes.
    */
-  function encodeStatic(AudioEncodingFormat encodingFormat) internal pure returns (bytes memory) {
-    return abi.encodePacked(encodingFormat);
+  function encodeStatic(
+    uint16 physicalWidthInMillimeters,
+    ImageEncodingFormat encodingFormat
+  ) internal pure returns (bytes memory) {
+    return abi.encodePacked(physicalWidthInMillimeters, encodingFormat);
   }
 
   /**
    * @notice Tightly pack dynamic data lengths using this table's schema.
    * @return _encodedLengths The lengths of the dynamic fields (packed into a single bytes32 value).
    */
-  function encodeLengths(bytes memory contentHash) internal pure returns (PackedCounter _encodedLengths) {
+  function encodeLengths(bytes memory imageAsset) internal pure returns (PackedCounter _encodedLengths) {
     // Lengths are effectively checked during copy by 2**40 bytes exceeding gas limits
     unchecked {
-      _encodedLengths = PackedCounterLib.pack(bytes(contentHash).length);
+      _encodedLengths = PackedCounterLib.pack(bytes(imageAsset).length);
     }
   }
 
@@ -686,8 +781,8 @@ library AudioComponent {
    * @notice Tightly pack dynamic (variable length) data using this table's schema.
    * @return The dynamic data, encoded into a sequence of bytes.
    */
-  function encodeDynamic(bytes memory contentHash) internal pure returns (bytes memory) {
-    return abi.encodePacked(bytes((contentHash)));
+  function encodeDynamic(bytes memory imageAsset) internal pure returns (bytes memory) {
+    return abi.encodePacked(bytes((imageAsset)));
   }
 
   /**
@@ -697,13 +792,14 @@ library AudioComponent {
    * @return The dyanmic (variable length) data, encoded into a sequence of bytes.
    */
   function encode(
-    AudioEncodingFormat encodingFormat,
-    bytes memory contentHash
+    uint16 physicalWidthInMillimeters,
+    ImageEncodingFormat encodingFormat,
+    bytes memory imageAsset
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
-    bytes memory _staticData = encodeStatic(encodingFormat);
+    bytes memory _staticData = encodeStatic(physicalWidthInMillimeters, encodingFormat);
 
-    PackedCounter _encodedLengths = encodeLengths(contentHash);
-    bytes memory _dynamicData = encodeDynamic(contentHash);
+    PackedCounter _encodedLengths = encodeLengths(imageAsset);
+    bytes memory _dynamicData = encodeDynamic(imageAsset);
 
     return (_staticData, _encodedLengths, _dynamicData);
   }
