@@ -41,7 +41,7 @@ export default mudConfig({
       },
       tableIdArgument: true,
     },
-    InstalledAugments: {
+    Augments: {
       directory: "../modules/augmentinstallation/tables",
       keySchema: {
         augmentAddress: "address",

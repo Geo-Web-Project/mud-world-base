@@ -6,10 +6,10 @@ import mudConfig from "@geo-web/mud-world-base-contracts/mud.config";
 
 export const App = () => {
   const {
-    components: { NameComponent },
+    components: { NameCom },
   } = useMUD();
 
-  const nameComponent = getComponentForParcel(NameComponent, 320);
+  const nameComponent = getComponentForParcel(NameCom, 320);
   const nameComponents = useEntityQuery([Has(nameComponent)]);
 
   console.log(nameComponents);

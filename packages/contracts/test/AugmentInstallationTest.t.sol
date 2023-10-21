@@ -14,7 +14,7 @@ import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {TABLE_ID as UNIQUE_ENTITY_TABLE_ID} from "@latticexyz/world-modules/src/modules/uniqueentity/constants.sol";
 import {UniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentity/tables/UniqueEntity.sol";
 import {getUniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
-import {InstalledAugments} from "../src/modules/augmentinstallation/tables/InstalledAugments.sol";
+import {Augments} from "../src/modules/augmentinstallation/tables/Augments.sol";
 import {AugmentInstallationLib, AugmentComponentValue} from "../src/modules/augmentinstallation/AugmentInstallationSystem.sol";
 import {ResourceIds} from "@latticexyz/store/src/StoreCore.sol";
 
@@ -111,9 +111,9 @@ contract AugmentInstallationTest is MudTest {
             "Scale Z should be set"
         );
         assertEq(
-            InstalledAugments.get(
+            Augments.get(
                 world,
-                AugmentInstallationLib.getInstalledAugmentsTableId(
+                AugmentInstallationLib.getAugmentsTableId(
                     WorldResourceIdLib.encodeNamespace(bytes14("world"))
                 ),
                 address(mockAugment),
@@ -206,9 +206,9 @@ contract AugmentInstallationTest is MudTest {
             "Name should be set"
         );
         assertEq(
-            InstalledAugments.get(
+            Augments.get(
                 world,
-                AugmentInstallationLib.getInstalledAugmentsTableId(
+                AugmentInstallationLib.getAugmentsTableId(
                     WorldResourceIdLib.encodeNamespace(bytes14("world"))
                 ),
                 address(mockAugment),
@@ -303,9 +303,9 @@ contract AugmentInstallationTest is MudTest {
             "Name should be set"
         );
         assertEq(
-            InstalledAugments.get(
+            Augments.get(
                 world,
-                AugmentInstallationLib.getInstalledAugmentsTableId(
+                AugmentInstallationLib.getAugmentsTableId(
                     WorldResourceIdLib.encodeNamespace(bytes14("world"))
                 ),
                 address(mockAugment),
@@ -392,9 +392,9 @@ contract AugmentInstallationTest is MudTest {
             "Name should be set"
         );
         assertEq(
-            InstalledAugments.get(
+            Augments.get(
                 world,
-                AugmentInstallationLib.getInstalledAugmentsTableId(
+                AugmentInstallationLib.getAugmentsTableId(
                     WorldResourceIdLib.encodeNamespace(bytes14("world"))
                 ),
                 address(mockAugment),
@@ -467,9 +467,9 @@ contract AugmentInstallationTest is MudTest {
             "Scale Z should be set"
         );
         assertEq(
-            InstalledAugments.get(
+            Augments.get(
                 world,
-                AugmentInstallationLib.getInstalledAugmentsTableId(
+                AugmentInstallationLib.getAugmentsTableId(
                     WorldResourceIdLib.encodeNamespace(bytes14("world"))
                 ),
                 address(mockAugment),

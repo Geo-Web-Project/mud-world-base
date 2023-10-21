@@ -13,7 +13,7 @@ contract InstallAugment is Script {
     ModelAugment modelAugment =
         ModelAugment(0x091FCc7eD8c5457321cb44848E2E0950d717c0be);
 
-    IWorld world = IWorld(0x3F4C6aAe96be19AD74695a64955dE2Ef392e50B2);
+    IWorld world = IWorld(0xF794E6e465749150aDEC12F23667171C045Aa1e2);
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");

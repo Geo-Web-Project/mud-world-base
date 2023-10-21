@@ -4,7 +4,7 @@ pragma solidity >=0.8.21;
 import {IAugment, AUGMENT_INTERFACE_ID} from "./IAugment.sol";
 import {System} from "@latticexyz/world/src/System.sol";
 import {WorldContextProviderLib} from "@latticexyz/world/src/WorldContext.sol";
-import {InstalledAugments} from "./tables/InstalledAugments.sol";
+import {Augments} from "./tables/Augments.sol";
 import {requireInterface} from "@latticexyz/world/src/requireInterface.sol";
 import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {ResourceId, WorldResourceIdInstance, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
@@ -90,9 +90,9 @@ contract AugmentInstallationSystem is System {
             callData: abi.encodeCall(IAugment.performOverrides, (namespace))
         });
 
-        // Register the augment in the InstalledAugments table
-        InstalledAugments._set(
-            AugmentInstallationLib.getInstalledAugmentsTableId(
+        // Register the augment in the Augments table
+        Augments._set(
+            AugmentInstallationLib.getAugmentsTableId(
                 WorldResourceIdLib.encodeNamespace(namespace)
             ),
             address(augment),
@@ -104,9 +104,9 @@ contract AugmentInstallationSystem is System {
 
 library AugmentInstallationLib {
     /**
-     * @notice Get table Id for InstalledAugments in a particular namespace
+     * @notice Get table Id for Augments in a particular namespace
      */
-    function getInstalledAugmentsTableId(
+    function getAugmentsTableId(
         ResourceId namespaceId
     ) internal pure returns (ResourceId) {
         return
@@ -115,7 +115,7 @@ library AugmentInstallationLib {
                     abi.encodePacked(
                         RESOURCE_TABLE,
                         WorldResourceIdInstance.getNamespace(namespaceId),
-                        bytes16(bytes32("InstalledAugments"))
+                        bytes16("Augments")
                     )
                 )
             );

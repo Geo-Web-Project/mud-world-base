@@ -13,7 +13,7 @@ import {revertWithBytes} from "@latticexyz/world/src/revertWithBytes.sol";
 import {ResourceAccess} from "@latticexyz/world/src/codegen/tables/ResourceAccess.sol";
 import {NamespaceOwner} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 import {AugmentInstallationLib} from "../augmentinstallation/AugmentInstallationSystem.sol";
-import {InstalledAugments} from "../augmentinstallation/tables/InstalledAugments.sol";
+import {Augments} from "../augmentinstallation/tables/Augments.sol";
 
 contract PCOOwnershipSystem is System {
     function getNamespaceIdForParcel(
@@ -43,10 +43,11 @@ contract PCOOwnershipSystem is System {
         );
         if (!success) revertWithBytes(data);
 
-        // Register InstalledAugments table
-        ResourceId installedAugmentsTableId = AugmentInstallationLib
-            .getInstalledAugmentsTableId(namespaceId);
-        InstalledAugments._register(installedAugmentsTableId);
+        // Register Augments table
+        ResourceId augmentsTableId = AugmentInstallationLib.getAugmentsTableId(
+            namespaceId
+        );
+        Augments._register(augmentsTableId);
     }
 
     function claimParcelNamespace(uint256 parcelId) public {
