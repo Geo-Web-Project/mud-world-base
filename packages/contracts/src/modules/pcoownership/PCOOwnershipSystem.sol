@@ -14,13 +14,14 @@ import {ResourceAccess} from "@latticexyz/world/src/codegen/tables/ResourceAcces
 import {NamespaceOwner} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 import {AugmentInstallationLib} from "../augmentinstallation/AugmentInstallationSystem.sol";
 import {Augments} from "../augmentinstallation/tables/Augments.sol";
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 
 contract PCOOwnershipSystem is System {
     function getNamespaceIdForParcel(
         uint256 parcelId
     ) public view returns (ResourceId) {
-        bytes14 namespace = bytes14(keccak256(abi.encodePacked(parcelId)));
-        return WorldResourceIdLib.encodeNamespace(namespace);
+        string memory parcelHex = Strings.toHexString(parcelId);
+        return WorldResourceIdLib.encodeNamespace(bytes14(bytes(parcelHex)));
     }
 
     function registerParcelNamespace(uint256 parcelId) public {

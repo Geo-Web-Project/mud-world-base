@@ -5,6 +5,19 @@ import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
 import {IWorld} from "../src/codegen/world/IWorld.sol";
 import {PCOOwnershipModule} from "../src/modules/pcoownership/PCOOwnershipModule.sol";
+import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
+contract MockERC721 is ERC721 {
+    constructor() ERC721("name", "symbol") {}
+
+    function mint(uint256 tokenId) external {
+        _mint(msg.sender, tokenId);
+    }
+
+    function burn(uint256 tokenId) external {
+        _burn(tokenId);
+    }
+}
 
 contract PostDeploy is Script {
     function run(address worldAddress) external {
@@ -17,6 +30,11 @@ contract PostDeploy is Script {
 
         // Start broadcasting transactions from the deployer account
         vm.startBroadcast(deployerPrivateKey);
+
+        // MockERC721 mockERC721 = new MockERC721();
+
+        // uint256 parcelId = 320;
+        // mockERC721.mint(parcelId);
 
         // Install PCOOwnershipModule
         PCOOwnershipModule module = new PCOOwnershipModule();

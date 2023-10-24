@@ -8,12 +8,15 @@ import {AugmentComponentValue} from "@geo-web/mud-world-base-contracts/src/modul
 import {NameCom, ModelCom} from "@geo-web/mud-world-base-contracts/src/codegen/index.sol";
 import {ModelEncodingFormat} from "@geo-web/mud-world-base-contracts/src/codegen/tables/ModelCom.sol";
 import {PackedCounter} from "@latticexyz/store/src/PackedCounter.sol";
+import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
+import {ResourceId} from "@latticexyz/world/src/WorldResourceId.sol";
+import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 
 contract InstallAugment is Script {
     ModelAugment modelAugment =
         ModelAugment(0x091FCc7eD8c5457321cb44848E2E0950d717c0be);
 
-    IWorld world = IWorld(0xF794E6e465749150aDEC12F23667171C045Aa1e2);
+    IWorld world = IWorld(0x103ace57c6CDFe15734BA32491A1D8370BcEf464);
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
@@ -54,9 +57,8 @@ contract InstallAugment is Script {
             });
         }
 
-        bytes14 parcelNamespace = bytes14(
-            keccak256(abi.encodePacked(uint256(320)))
-        );
+        string memory parcelHex = Strings.toHexString(320);
+        bytes14 parcelNamespace = bytes14(bytes(parcelHex));
 
         world.installAugment(
             modelAugment,

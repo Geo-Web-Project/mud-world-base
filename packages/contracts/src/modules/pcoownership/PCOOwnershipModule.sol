@@ -55,7 +55,7 @@ contract PCOOwnershipModule is Module {
         (success, returnData) = address(world).delegatecall(
             abi.encodeCall(
                 world.registerFunctionSelector,
-                (SYSTEM_ID, "registerParcelNamespace()")
+                (SYSTEM_ID, "registerParcelNamespace(uint256)")
             )
         );
         if (!success) revertWithBytes(returnData);
