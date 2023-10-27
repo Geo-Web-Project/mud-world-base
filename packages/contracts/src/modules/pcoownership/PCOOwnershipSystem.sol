@@ -20,8 +20,8 @@ contract PCOOwnershipSystem is System {
     function getNamespaceIdForParcel(
         uint256 parcelId
     ) public view returns (ResourceId) {
-        string memory parcelHex = Strings.toHexString(parcelId);
-        return WorldResourceIdLib.encodeNamespace(bytes14(bytes(parcelHex)));
+        string memory parcelStr = Strings.toString(parcelId);
+        return WorldResourceIdLib.encodeNamespace(bytes14(bytes(parcelStr)));
     }
 
     function registerParcelNamespace(uint256 parcelId) public {

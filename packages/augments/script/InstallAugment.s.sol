@@ -16,7 +16,7 @@ contract InstallAugment is Script {
     ModelAugment modelAugment =
         ModelAugment(0x091FCc7eD8c5457321cb44848E2E0950d717c0be);
 
-    IWorld world = IWorld(0x103ace57c6CDFe15734BA32491A1D8370BcEf464);
+    IWorld world = IWorld(0x000a18F809049257BfE86009de80990375475f4c);
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
@@ -57,8 +57,8 @@ contract InstallAugment is Script {
             });
         }
 
-        string memory parcelHex = Strings.toHexString(320);
-        bytes14 parcelNamespace = bytes14(bytes(parcelHex));
+        string memory parcelStr = Strings.toString(uint256(320));
+        bytes14 parcelNamespace = bytes14(bytes(parcelStr));
 
         world.installAugment(
             modelAugment,

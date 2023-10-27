@@ -18,10 +18,9 @@
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
     "@geo-web/mud-world-base-contracts": "workspace:*",
-    "@latticexyz/common": "2.0.0-next.11",
-    "@latticexyz/recs": "2.0.0-next.11",
-    "@latticexyz/services": "2.0.0-next.11",
-    "@latticexyz/store-sync": "2.0.0-next.11",
+    "@latticexyz/common": "2.0.0-main-f6d214e3",
+    "@latticexyz/recs": "2.0.0-main-f6d214e3",
+    "@latticexyz/store-sync": "2.0.0-main-f6d214e3",
     "ethers": "^5.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -1,18 +1,68 @@
-import { useComponentValue, useEntityQuery } from "@latticexyz/react";
-import { useMUD, getComponentForParcel } from "@geo-web/mud-world-base-setup";
-import { singletonEntity } from "@latticexyz/store-sync/recs";
-import { Has, getComponentValueStrict } from "@latticexyz/recs";
-import mudConfig from "@geo-web/mud-world-base-contracts/mud.config";
+import React from "react";
+import {
+  getComponentForParcel,
+  getTableIdForParcel,
+  getTableIdsForParcel,
+  syncWorld,
+  SyncWorldResult,
+} from "@geo-web/mud-world-base-setup";
+import {
+  Has,
+  runQuery,
+  getComponentValue,
+  defineSystem,
+} from "@latticexyz/recs";
+import { MUDChain } from "@latticexyz/common/chains";
+import { optimismGoerli } from "viem/chains";
+
+const chainId = import.meta.env.VITE_CHAIN_ID || 31337;
+const world = {
+  address: "0x000a18F809049257BfE86009de80990375475f4c",
+  blockNumber: 16469636,
+};
+const mudChain = {
+  ...optimismGoerli,
+  rpcUrls: {
+    ...optimismGoerli.rpcUrls,
+    default: {
+      http: optimismGoerli.rpcUrls.default.http,
+      webSocket: [import.meta.env.VITE_PUBLIC_WS_RPC_URL],
+    },
+  },
+} as MUDChain;
 
 export const App = () => {
-  const {
-    components: { NameCom },
-  } = useMUD();
+  const [worldConfig, setWorldConfig] = React.useState<
+    SyncWorldResult | undefined
+  >(undefined);
 
-  const nameComponent = getComponentForParcel(NameCom, 320);
-  const nameComponents = useEntityQuery([Has(nameComponent)]);
+  React.useEffect(() => {
+    (async () => {
+      const _worldConfig = await syncWorld({
+        chainId,
+        world,
+        mudChain,
+        namespaces: ["320"],
+      });
+      setWorldConfig(_worldConfig);
+    })();
+  }, []);
 
-  console.log(nameComponents);
+  React.useEffect(() => {
+    if (!worldConfig) return;
 
-  return <>Hello World</>;
+    const { components } = worldConfig;
+
+    console.log(components);
+
+    //   setInterval(() => {
+    //     const matchingEntities = runQuery([Has(Augments)]);
+    //     const entities = Array.from(matchingEntities.values()).map((entity) =>
+    //       getComponentValue(Augments, entity)
+    //     );
+    //     console.log(entities);
+    //   }, 1000);
+  }, [worldConfig]);
+
+  return <></>;
 };

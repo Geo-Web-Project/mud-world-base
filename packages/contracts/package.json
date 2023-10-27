@@ -32,7 +32,7 @@
     "@latticexyz/config": "2.0.0-next.11",
     "@latticexyz/schema-type": "2.0.0-next.11",
     "@latticexyz/store": "2.0.0-next.11",
-    "@latticexyz/world": "2.0.0-next.11",
+    "@latticexyz/world": "2.0.0-main-f6d214e3",
     "@latticexyz/world-modules": "2.0.0-next.11",
     "@openzeppelin/contracts": "^4.9.3",
     "ethers": "^5.7.2"
