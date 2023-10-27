@@ -14,3 +14,4 @@ import { PositionCom, PositionComData } from "./tables/PositionCom.sol";
 import { OrientationCom, OrientationComData } from "./tables/OrientationCom.sol";
 import { ScaleCom, ScaleComData } from "./tables/ScaleCom.sol";
 import { TrackedImageCom, TrackedImageComData } from "./tables/TrackedImageCom.sol";
+import { NFTCom, NFTComData } from "./tables/NFTCom.sol";

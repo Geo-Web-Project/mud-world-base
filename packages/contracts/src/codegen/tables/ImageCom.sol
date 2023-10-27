@@ -24,11 +24,12 @@ import { RESOURCE_TABLE, RESOURCE_OFFCHAIN_TABLE } from "@latticexyz/store/src/s
 import { ImageEncodingFormat } from "./../common.sol";
 
 FieldLayout constant _fieldLayout = FieldLayout.wrap(
-  0x0001010101000000000000000000000000000000000000000000000000000000
+  0x0003020101020000000000000000000000000000000000000000000000000000
 );
 
 struct ImageComData {
   ImageEncodingFormat encodingFormat;
+  uint16 physicalWidthInMillimeters;
   bytes contentHash;
 }
 
@@ -57,9 +58,10 @@ library ImageCom {
    * @return _valueSchema The value schema for the table.
    */
   function getValueSchema() internal pure returns (Schema) {
-    SchemaType[] memory _valueSchema = new SchemaType[](2);
+    SchemaType[] memory _valueSchema = new SchemaType[](3);
     _valueSchema[0] = SchemaType.UINT8;
-    _valueSchema[1] = SchemaType.BYTES;
+    _valueSchema[1] = SchemaType.UINT16;
+    _valueSchema[2] = SchemaType.BYTES;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -78,9 +80,10 @@ library ImageCom {
    * @return fieldNames An array of strings with the names of value fields.
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
-    fieldNames = new string[](2);
+    fieldNames = new string[](3);
     fieldNames[0] = "encodingFormat";
-    fieldNames[1] = "contentHash";
+    fieldNames[1] = "physicalWidthInMillimeters";
+    fieldNames[2] = "contentHash";
   }
 
   /**
@@ -180,6 +183,88 @@ library ImageCom {
     _keyTuple[0] = key;
 
     _store.setStaticField(_tableId, _keyTuple, 0, abi.encodePacked(uint8(encodingFormat)), _fieldLayout);
+  }
+
+  /**
+   * @notice Get physicalWidthInMillimeters.
+   */
+  function getPhysicalWidthInMillimeters(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (uint16 physicalWidthInMillimeters) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes32 _blob = StoreSwitch.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
+    return (uint16(bytes2(_blob)));
+  }
+
+  /**
+   * @notice Get physicalWidthInMillimeters.
+   */
+  function _getPhysicalWidthInMillimeters(
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (uint16 physicalWidthInMillimeters) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes32 _blob = StoreCore.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
+    return (uint16(bytes2(_blob)));
+  }
+
+  /**
+   * @notice Get physicalWidthInMillimeters (using the specified store).
+   */
+  function getPhysicalWidthInMillimeters(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key
+  ) internal view returns (uint16 physicalWidthInMillimeters) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    bytes32 _blob = _store.getStaticField(_tableId, _keyTuple, 1, _fieldLayout);
+    return (uint16(bytes2(_blob)));
+  }
+
+  /**
+   * @notice Set physicalWidthInMillimeters.
+   */
+  function setPhysicalWidthInMillimeters(ResourceId _tableId, bytes32 key, uint16 physicalWidthInMillimeters) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreSwitch.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((physicalWidthInMillimeters)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set physicalWidthInMillimeters.
+   */
+  function _setPhysicalWidthInMillimeters(
+    ResourceId _tableId,
+    bytes32 key,
+    uint16 physicalWidthInMillimeters
+  ) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    StoreCore.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((physicalWidthInMillimeters)), _fieldLayout);
+  }
+
+  /**
+   * @notice Set physicalWidthInMillimeters (using the specified store).
+   */
+  function setPhysicalWidthInMillimeters(
+    IStore _store,
+    ResourceId _tableId,
+    bytes32 key,
+    uint16 physicalWidthInMillimeters
+  ) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = key;
+
+    _store.setStaticField(_tableId, _keyTuple, 1, abi.encodePacked((physicalWidthInMillimeters)), _fieldLayout);
   }
 
   /**
@@ -492,9 +577,10 @@ library ImageCom {
     ResourceId _tableId,
     bytes32 key,
     ImageEncodingFormat encodingFormat,
+    uint16 physicalWidthInMillimeters,
     bytes memory contentHash
   ) internal {
-    bytes memory _staticData = encodeStatic(encodingFormat);
+    bytes memory _staticData = encodeStatic(encodingFormat, physicalWidthInMillimeters);
 
     PackedCounter _encodedLengths = encodeLengths(contentHash);
     bytes memory _dynamicData = encodeDynamic(contentHash);
@@ -512,9 +598,10 @@ library ImageCom {
     ResourceId _tableId,
     bytes32 key,
     ImageEncodingFormat encodingFormat,
+    uint16 physicalWidthInMillimeters,
     bytes memory contentHash
   ) internal {
-    bytes memory _staticData = encodeStatic(encodingFormat);
+    bytes memory _staticData = encodeStatic(encodingFormat, physicalWidthInMillimeters);
 
     PackedCounter _encodedLengths = encodeLengths(contentHash);
     bytes memory _dynamicData = encodeDynamic(contentHash);
@@ -533,9 +620,10 @@ library ImageCom {
     ResourceId _tableId,
     bytes32 key,
     ImageEncodingFormat encodingFormat,
+    uint16 physicalWidthInMillimeters,
     bytes memory contentHash
   ) internal {
-    bytes memory _staticData = encodeStatic(encodingFormat);
+    bytes memory _staticData = encodeStatic(encodingFormat, physicalWidthInMillimeters);
 
     PackedCounter _encodedLengths = encodeLengths(contentHash);
     bytes memory _dynamicData = encodeDynamic(contentHash);
@@ -550,7 +638,7 @@ library ImageCom {
    * @notice Set the full data using the data struct.
    */
   function set(ResourceId _tableId, bytes32 key, ImageComData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.encodingFormat);
+    bytes memory _staticData = encodeStatic(_table.encodingFormat, _table.physicalWidthInMillimeters);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
     bytes memory _dynamicData = encodeDynamic(_table.contentHash);
@@ -565,7 +653,7 @@ library ImageCom {
    * @notice Set the full data using the data struct.
    */
   function _set(ResourceId _tableId, bytes32 key, ImageComData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.encodingFormat);
+    bytes memory _staticData = encodeStatic(_table.encodingFormat, _table.physicalWidthInMillimeters);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
     bytes memory _dynamicData = encodeDynamic(_table.contentHash);
@@ -580,7 +668,7 @@ library ImageCom {
    * @notice Set the full data using the data struct (using the specified store).
    */
   function set(IStore _store, ResourceId _tableId, bytes32 key, ImageComData memory _table) internal {
-    bytes memory _staticData = encodeStatic(_table.encodingFormat);
+    bytes memory _staticData = encodeStatic(_table.encodingFormat, _table.physicalWidthInMillimeters);
 
     PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
     bytes memory _dynamicData = encodeDynamic(_table.contentHash);
@@ -594,8 +682,12 @@ library ImageCom {
   /**
    * @notice Decode the tightly packed blob of static data using this table's field layout.
    */
-  function decodeStatic(bytes memory _blob) internal pure returns (ImageEncodingFormat encodingFormat) {
+  function decodeStatic(
+    bytes memory _blob
+  ) internal pure returns (ImageEncodingFormat encodingFormat, uint16 physicalWidthInMillimeters) {
     encodingFormat = ImageEncodingFormat(uint8(Bytes.slice1(_blob, 0)));
+
+    physicalWidthInMillimeters = (uint16(Bytes.slice2(_blob, 1)));
   }
 
   /**
@@ -624,7 +716,7 @@ library ImageCom {
     PackedCounter _encodedLengths,
     bytes memory _dynamicData
   ) internal pure returns (ImageComData memory _table) {
-    (_table.encodingFormat) = decodeStatic(_staticData);
+    (_table.encodingFormat, _table.physicalWidthInMillimeters) = decodeStatic(_staticData);
 
     (_table.contentHash) = decodeDynamic(_encodedLengths, _dynamicData);
   }
@@ -663,8 +755,11 @@ library ImageCom {
    * @notice Tightly pack static (fixed length) data using this table's schema.
    * @return The static data, encoded into a sequence of bytes.
    */
-  function encodeStatic(ImageEncodingFormat encodingFormat) internal pure returns (bytes memory) {
-    return abi.encodePacked(encodingFormat);
+  function encodeStatic(
+    ImageEncodingFormat encodingFormat,
+    uint16 physicalWidthInMillimeters
+  ) internal pure returns (bytes memory) {
+    return abi.encodePacked(encodingFormat, physicalWidthInMillimeters);
   }
 
   /**
@@ -694,9 +789,10 @@ library ImageCom {
    */
   function encode(
     ImageEncodingFormat encodingFormat,
+    uint16 physicalWidthInMillimeters,
     bytes memory contentHash
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
-    bytes memory _staticData = encodeStatic(encodingFormat);
+    bytes memory _staticData = encodeStatic(encodingFormat, physicalWidthInMillimeters);
 
     PackedCounter _encodedLengths = encodeLengths(contentHash);
     bytes memory _dynamicData = encodeDynamic(contentHash);

@@ -18,16 +18,6 @@ export default mudConfig({
       name: "UniqueEntityModule",
       root: true,
     },
-    // {
-    //   name: "PCOOwnershipModule",
-    //   root: true,
-    //   args: [
-    //     {
-    //       type: "address",
-    //       value: "0xBA1231785A7b4AC0E8dC9a0403938C2182cE4A4e",
-    //     },
-    //   ],
-    // },
   ],
   tables: {
     PCOOwnership: {
@@ -66,6 +56,7 @@ export default mudConfig({
     ImageCom: {
       valueSchema: {
         encodingFormat: "ImageEncodingFormat",
+        physicalWidthInMillimeters: "uint16",
         contentHash: "bytes",
       },
       tableIdArgument: true,
@@ -101,6 +92,14 @@ export default mudConfig({
         physicalWidthInMillimeters: "uint16",
         encodingFormat: "ImageEncodingFormat",
         imageAsset: "bytes",
+      },
+      tableIdArgument: true,
+    },
+    NFTCom: {
+      valueSchema: {
+        chainId: "uint64",
+        tokenAddress: "address",
+        tokenId: "uint256",
       },
       tableIdArgument: true,
     },

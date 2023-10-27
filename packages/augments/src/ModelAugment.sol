@@ -8,7 +8,7 @@ contract ModelAugment is Augment {
         [bytes16("NameCom"), bytes16("ModelCom")]
     ];
 
-    function getMetadataURI() external view returns (bytes memory) {
+    function getMetadataURI() external pure returns (bytes memory) {
         return new bytes(0);
     }
 
