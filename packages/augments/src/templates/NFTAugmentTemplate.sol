@@ -3,6 +3,7 @@ pragma solidity ^0.8.13;
 
 import {Augment} from "@geo-web/mud-world-base-contracts/src/modules/augmentinstallation/Augment.sol";
 import {ImageCom, AudioCom, NFTCom, ModelCom} from "@geo-web/mud-world-base-contracts/src/codegen/index.sol";
+import {ImageEncodingFormat} from "@geo-web/mud-world-base-contracts/src/codegen/common.sol";
 import {IWorld} from "@geo-web/mud-world-base-contracts/src/codegen/world/IWorld.sol";
 import {getUniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import {ResourceId} from "@latticexyz/world/src/WorldResourceId.sol";
@@ -21,29 +22,22 @@ contract NFTAugmentTemplate is Augment {
     uint64 immutable chainId;
     address immutable tokenAddress;
     uint256 immutable tokenId;
+    uint16 physicalWidthInMillimeters;
 
     constructor(
         NFTType nftType_,
         uint64 chainId_,
         address tokenAddress_,
-        uint256 tokenId_
+        uint256 tokenId_,
+        uint16 physicalWidthInMillimeters_
     ) {
         nftType = nftType_;
         chainId = chainId_;
         tokenAddress = tokenAddress_;
         tokenId = tokenId_;
+        physicalWidthInMillimeters = physicalWidthInMillimeters_;
 
-        bytes16 contentCom;
-        if (nftType == NFTType.Image) {
-            contentCom = bytes16("ImageCom");
-        } else if (nftType == NFTType.Audio) {
-            contentCom = bytes16("AudioCom");
-        } else {
-            contentCom = bytes16("ModelCom");
-        }
-        componentTypes = [
-            [contentCom, bytes16("PositionCom"), bytes16("OrientationCom")]
-        ];
+        componentTypes = [[bytes16("PositionCom"), bytes16("OrientationCom")]];
     }
 
     function getMetadataURI() external pure returns (bytes memory) {
@@ -87,42 +81,12 @@ contract NFTAugmentTemplate is Augment {
                     )
                 )
             );
-            ImageCom.setContentHash(
+            ImageCom.set(
                 IWorld(_world()),
                 _imageTableId,
                 key,
-                new bytes(0)
-            );
-        } else if (nftType == NFTType.Audio) {
-            ResourceId _audioTableId = ResourceId.wrap(
-                bytes32(
-                    abi.encodePacked(
-                        RESOURCE_TABLE,
-                        namespace,
-                        bytes16(bytes32("AudioCom"))
-                    )
-                )
-            );
-            AudioCom.setContentHash(
-                IWorld(_world()),
-                _audioTableId,
-                key,
-                new bytes(0)
-            );
-        } else {
-            ResourceId _modelTableId = ResourceId.wrap(
-                bytes32(
-                    abi.encodePacked(
-                        RESOURCE_TABLE,
-                        namespace,
-                        bytes16(bytes32("ModelCom"))
-                    )
-                )
-            );
-            ModelCom.setContentHash(
-                IWorld(_world()),
-                _modelTableId,
-                key,
+                ImageEncodingFormat.Jpeg,
+                physicalWidthInMillimeters,
                 new bytes(0)
             );
         }
