@@ -39,11 +39,16 @@ contract NFTImageAugment is Augment {
             )
         );
 
-        // ImageCom contents should be empty
-        ImageCom.setContentHash(
+        ImageCom.set(
             IWorld(_world()),
             _imageTableId,
             key,
+            ImageCom.getEncodingFormat(IWorld(_world()), _imageTableId, key),
+            ImageCom.getPhysicalWidthInMillimeters(
+                IWorld(_world()),
+                _imageTableId,
+                key
+            ),
             new bytes(0)
         );
     }
