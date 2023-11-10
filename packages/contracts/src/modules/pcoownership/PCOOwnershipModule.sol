@@ -2,7 +2,7 @@
 pragma solidity >=0.8.19;
 
 import {Module} from "@latticexyz/world/src/Module.sol";
-import {ResourceId} from "@latticexyz/world/src/WorldResourceId.sol";
+import {ResourceId, WorldResourceIdInstance} from "@latticexyz/world/src/WorldResourceId.sol";
 import {BEFORE_SET_RECORD, BEFORE_DELETE_RECORD, BEFORE_SPLICE_STATIC_DATA} from "@latticexyz/store/src/storeHookTypes.sol";
 import {RESOURCE_TABLE, RESOURCE_SYSTEM} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {PCOOwnershipHook} from "./PCOOwnershipHook.sol";
@@ -12,21 +12,11 @@ import {PCOOwnership} from "./tables/PCOOwnership.sol";
 import {PCOOwnershipSystem} from "./PCOOwnershipSystem.sol";
 import {revertWithBytes} from "@latticexyz/world/src/revertWithBytes.sol";
 import {MODULE_NAME, TABLE_ID, SYSTEM_ID} from "./constants.sol";
+import {NamespaceOwner, NamespaceOwnerTableId} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 
 contract PCOOwnershipModule is Module {
     PCOOwnershipSystem private immutable pcoOwnershipSystem =
         new PCOOwnershipSystem();
-
-    ResourceId constant _namespaceOwnerTableId =
-        ResourceId.wrap(
-            bytes32(
-                abi.encodePacked(
-                    RESOURCE_TABLE,
-                    bytes14("world"),
-                    bytes16("NamespaceOwner")
-                )
-            )
-        );
 
     function getName() public pure returns (bytes16) {
         return MODULE_NAME;
@@ -65,7 +55,7 @@ contract PCOOwnershipModule is Module {
             abi.encodeCall(
                 world.registerStoreHook,
                 (
-                    _namespaceOwnerTableId,
+                    NamespaceOwnerTableId,
                     hook,
                     BEFORE_SET_RECORD |
                         BEFORE_SPLICE_STATIC_DATA |

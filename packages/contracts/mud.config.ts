@@ -30,6 +30,7 @@ export default mudConfig({
         parcelId: "uint256",
       },
       tableIdArgument: true,
+      storeArgument: true,
     },
     Augments: {
       directory: "../modules/augmentinstallation/tables",
@@ -38,70 +39,77 @@ export default mudConfig({
         argumentsHash: "bytes32", // Hash of the params passed to the `install` function
       },
       valueSchema: {
-        augmentMetadata: "bytes",
+        augmentMetadataURI: "string",
       },
       tableIdArgument: true,
+      storeArgument: true,
     },
     NameCom: {
       valueSchema: "string",
       tableIdArgument: true,
+      storeArgument: true,
     },
     ModelCom: {
       valueSchema: {
         encodingFormat: "ModelEncodingFormat",
-        contentHash: "bytes",
+        contentURI: "string",
       },
       tableIdArgument: true,
+      storeArgument: true,
     },
     ImageCom: {
       valueSchema: {
         encodingFormat: "ImageEncodingFormat",
         physicalWidthInMillimeters: "uint16",
-        contentHash: "bytes",
+        contentURI: "string",
       },
       tableIdArgument: true,
-    },
-    AudioCom: {
-      valueSchema: {
-        encodingFormat: "AudioEncodingFormat",
-        contentHash: "bytes",
-      },
-      tableIdArgument: true,
-    },
-    VideoCom: {
-      valueSchema: {
-        encodingFormat: "VideoEncodingFormat",
-        contentHash: "bytes",
-      },
-      tableIdArgument: true,
+      storeArgument: true,
     },
     PositionCom: {
       valueSchema: { h: "int32", geohash: "bytes" },
       tableIdArgument: true,
+      storeArgument: true,
     },
     OrientationCom: {
       valueSchema: { x: "int16", y: "int16", z: "int16", w: "int16" },
       tableIdArgument: true,
+      storeArgument: true,
     },
     ScaleCom: {
       valueSchema: { x: "int16", y: "int16", z: "int16" },
       tableIdArgument: true,
+      storeArgument: true,
     },
-    TrackedImageCom: {
-      valueSchema: {
-        physicalWidthInMillimeters: "uint16",
-        encodingFormat: "ImageEncodingFormat",
-        imageAsset: "bytes",
-      },
-      tableIdArgument: true,
-    },
-    NFTCom: {
-      valueSchema: {
-        chainId: "uint64",
-        tokenAddress: "address",
-        tokenId: "uint256",
-      },
-      tableIdArgument: true,
-    },
+    // AudioCom: {
+    //   valueSchema: {
+    //     encodingFormat: "AudioEncodingFormat",
+    //     contentURI: "string",
+    //   },
+    //   tableIdArgument: true,
+    // },
+    // VideoCom: {
+    //   valueSchema: {
+    //     encodingFormat: "VideoEncodingFormat",
+    //     contentURI: "string",
+    //   },
+    //   tableIdArgument: true,
+    // },
+    // TrackedImageCom: {
+    //   valueSchema: {
+    //     physicalWidthInMillimeters: "uint16",
+    //     encodingFormat: "ImageEncodingFormat",
+    //     imageAsset: "bytes",
+    //   },
+    //   tableIdArgument: true,
+    // },
+    // NFTCom: {
+    //   valueSchema: {
+    //     chainId: "uint64",
+    //     tokenAddress: "address",
+    //     tokenId: "uint256",
+    //   },
+    //   tableIdArgument: true,
+    // },
   },
 });

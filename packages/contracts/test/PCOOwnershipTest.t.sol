@@ -10,6 +10,7 @@ import {PCOOwnershipModule} from "../src/modules/pcoownership/PCOOwnershipModule
 import {NamespaceOwner, NamespaceOwnerTableId} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 import {ResourceId, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
 import {PackedCounter} from "@latticexyz/store/src/PackedCounter.sol";
+import {StoreSwitch} from "@latticexyz/store/src/StoreSwitch.sol";
 
 contract MockERC721 is ERC721 {
     constructor() ERC721("name", "symbol") {}
@@ -37,6 +38,8 @@ contract PCOOwnershipTest is MudTest {
         // Start broadcasting transactions from the deployer account
         vm.startBroadcast(deployerPrivateKey);
 
+        StoreSwitch.setStoreAddress(worldAddress);
+
         // Install PCOOwnershipModule
         PCOOwnershipModule module = new PCOOwnershipModule();
 
@@ -60,7 +63,7 @@ contract PCOOwnershipTest is MudTest {
         ResourceId namespaceId = registerParcel();
 
         assertEq(
-            NamespaceOwner.get(world, namespaceId),
+            NamespaceOwner.get(namespaceId),
             address(this),
             "PCO owner should be namespace owner"
         );
@@ -76,7 +79,7 @@ contract PCOOwnershipTest is MudTest {
         vm.stopPrank();
 
         assertEq(
-            NamespaceOwner.get(world, namespaceId),
+            NamespaceOwner.get(namespaceId),
             address(0x1),
             "PCO owner should be namespace owner"
         );
@@ -89,7 +92,7 @@ contract PCOOwnershipTest is MudTest {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
         vm.expectRevert(PCOOwnershipHook.PCOOwnership_CannotDelete.selector);
-        NamespaceOwner.deleteRecord(world, namespaceId);
+        NamespaceOwner.deleteRecord(namespaceId);
         vm.stopBroadcast();
     }
 
@@ -132,7 +135,7 @@ contract PCOOwnershipTest is MudTest {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
         vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotFound.selector);
-        NamespaceOwner.setOwner(world, namespaceId, address(this));
+        NamespaceOwner.setOwner(namespaceId, address(this));
         vm.stopBroadcast();
     }
 
@@ -142,7 +145,7 @@ contract PCOOwnershipTest is MudTest {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
         vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotPCOOwner.selector);
-        NamespaceOwner.setOwner(world, namespaceId, address(0x1));
+        NamespaceOwner.setOwner(namespaceId, address(0x1));
         vm.stopBroadcast();
     }
 

@@ -5,11 +5,17 @@ import {Augment} from "@geo-web/mud-world-base-contracts/src/modules/augmentinst
 
 contract ModelAugment is Augment {
     bytes16[][] private componentTypes = [
-        [bytes16("NameCom"), bytes16("ModelCom")]
+        [
+            bytes16("ModelCom"),
+            bytes16("NameCom"),
+            bytes16("PositionCom"),
+            bytes16("OrientationCom"),
+            bytes16("ScaleCom")
+        ]
     ];
 
-    function getMetadataURI() external pure returns (bytes memory) {
-        return new bytes(0);
+    function getMetadataURI() external pure returns (string memory) {
+        return "";
     }
 
     function getComponentTypes() external view returns (bytes16[][] memory) {

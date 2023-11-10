@@ -2,24 +2,24 @@
 pragma solidity ^0.8.13;
 
 import "forge-std/Script.sol";
-import "../src/NFTImageAugment.sol";
+import "../src/ModelAugment.sol";
 import {IWorld} from "@geo-web/mud-world-base-contracts/src/codegen/world/IWorld.sol";
 import {AugmentComponentValue} from "@geo-web/mud-world-base-contracts/src/modules/augmentinstallation/AugmentInstallationSystem.sol";
 import {NameCom, ModelCom} from "@geo-web/mud-world-base-contracts/src/codegen/index.sol";
-import {ImageEncodingFormat} from "@geo-web/mud-world-base-contracts/src/codegen/common.sol";
+import {ModelEncodingFormat} from "@geo-web/mud-world-base-contracts/src/codegen/common.sol";
 import {PackedCounter} from "@latticexyz/store/src/PackedCounter.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {ResourceId, WorldResourceIdLib, WorldResourceIdInstance} from "@latticexyz/world/src/WorldResourceId.sol";
 import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import "forge-std/console.sol";
 import {IAugment} from "@geo-web/mud-world-base-contracts/src/modules/augmentinstallation/IAugment.sol";
-import {ImageCom, AudioCom, NFTCom, ModelCom, PositionCom, OrientationCom} from "@geo-web/mud-world-base-contracts/src/codegen/index.sol";
+import {NameCom, ModelCom, PositionCom, OrientationCom, ScaleCom} from "@geo-web/mud-world-base-contracts/src/codegen/index.sol";
 
 contract InstallAugment is Script {
-    NFTImageAugment nftImageAugment =
-        NFTImageAugment(0x0c86026c73723A8228d525EeFA5abb8dF366F579);
+    ModelAugment modelAugment =
+        ModelAugment(0x0c2819e12c930089D0F563467Fa6af4f87563019);
 
-    IWorld world = IWorld(0x000a18F809049257BfE86009de80990375475f4c);
+    IWorld world = IWorld(0x22D33a1d6A772B88C557C4e243F2f949935d35E1);
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
@@ -27,15 +27,18 @@ contract InstallAugment is Script {
 
         AugmentComponentValue[][]
             memory componentValues = new AugmentComponentValue[][](1);
-        componentValues[0] = new AugmentComponentValue[](4);
+        componentValues[0] = new AugmentComponentValue[](5);
 
-        // Create NFTImageAugment
+        // Create ModelAugment
         {
             (
                 bytes memory staticData,
                 PackedCounter encodedLengths,
                 bytes memory dynamicData
-            ) = NFTCom.encode(1, 0x518f0C4A832b998ee793D87F0E934467b8b6E587, 4);
+            ) = ModelCom.encode(
+                    ModelEncodingFormat.Glb,
+                    "ipfs://bafkreihqnpefxdmb7xtxq7hmgiim3dbgony2s43zf7kqixzipvd5pgbeja"
+                );
 
             componentValues[0][0] = AugmentComponentValue({
                 staticData: staticData,
@@ -48,7 +51,7 @@ contract InstallAugment is Script {
                 bytes memory staticData,
                 PackedCounter encodedLengths,
                 bytes memory dynamicData
-            ) = ImageCom.encode(ImageEncodingFormat.Jpeg, 1000, new bytes(0));
+            ) = NameCom.encode("Robot");
 
             componentValues[0][1] = AugmentComponentValue({
                 staticData: staticData,
@@ -83,21 +86,35 @@ contract InstallAugment is Script {
             });
         }
 
+        {
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(1, 1, 1);
+
+            componentValues[0][4] = AugmentComponentValue({
+                staticData: staticData,
+                encodedLengths: encodedLengths,
+                dynamicData: dynamicData
+            });
+        }
+
         string memory parcelStr = Strings.toString(uint256(320));
         bytes14 parcelNamespace = bytes14(bytes(parcelStr));
 
         world.grantAccess(
             WorldResourceIdLib.encodeNamespace(parcelNamespace),
-            address(nftImageAugment)
+            address(modelAugment)
         );
         world.installAugment(
-            nftImageAugment,
+            modelAugment,
             parcelNamespace,
             abi.encode(componentValues)
         );
         world.revokeAccess(
             WorldResourceIdLib.encodeNamespace(parcelNamespace),
-            address(nftImageAugment)
+            address(modelAugment)
         );
 
         vm.stopBroadcast();

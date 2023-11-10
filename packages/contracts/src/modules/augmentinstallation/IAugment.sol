@@ -13,7 +13,7 @@ interface IAugment is IERC165 {
      * @notice Return the metadata of the augment.
      * @return metadataURI The URI of the metadata as a content hash
      */
-    function getMetadataURI() external view returns (bytes memory metadataURI);
+    function getMetadataURI() external view returns (string memory metadataURI);
 
     /**
      * @notice Return the entity and component types for the augment.

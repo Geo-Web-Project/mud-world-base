@@ -30,7 +30,7 @@ FieldLayout constant _fieldLayout = FieldLayout.wrap(
 struct ImageComData {
   ImageEncodingFormat encodingFormat;
   uint16 physicalWidthInMillimeters;
-  bytes contentHash;
+  string contentURI;
 }
 
 library ImageCom {
@@ -61,7 +61,7 @@ library ImageCom {
     SchemaType[] memory _valueSchema = new SchemaType[](3);
     _valueSchema[0] = SchemaType.UINT8;
     _valueSchema[1] = SchemaType.UINT16;
-    _valueSchema[2] = SchemaType.BYTES;
+    _valueSchema[2] = SchemaType.STRING;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -83,7 +83,7 @@ library ImageCom {
     fieldNames = new string[](3);
     fieldNames[0] = "encodingFormat";
     fieldNames[1] = "physicalWidthInMillimeters";
-    fieldNames[2] = "contentHash";
+    fieldNames[2] = "contentURI";
   }
 
   /**
@@ -268,76 +268,76 @@ library ImageCom {
   }
 
   /**
-   * @notice Get contentHash.
+   * @notice Get contentURI.
    */
-  function getContentHash(ResourceId _tableId, bytes32 key) internal view returns (bytes memory contentHash) {
+  function getContentURI(ResourceId _tableId, bytes32 key) internal view returns (string memory contentURI) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
-   * @notice Get contentHash.
+   * @notice Get contentURI.
    */
-  function _getContentHash(ResourceId _tableId, bytes32 key) internal view returns (bytes memory contentHash) {
+  function _getContentURI(ResourceId _tableId, bytes32 key) internal view returns (string memory contentURI) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreCore.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
-   * @notice Get contentHash (using the specified store).
+   * @notice Get contentURI (using the specified store).
    */
-  function getContentHash(
+  function getContentURI(
     IStore _store,
     ResourceId _tableId,
     bytes32 key
-  ) internal view returns (bytes memory contentHash) {
+  ) internal view returns (string memory contentURI) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
-   * @notice Set contentHash.
+   * @notice Set contentURI.
    */
-  function setContentHash(ResourceId _tableId, bytes32 key, bytes memory contentHash) internal {
+  function setContentURI(ResourceId _tableId, bytes32 key, string memory contentURI) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((contentHash)));
+    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((contentURI)));
   }
 
   /**
-   * @notice Set contentHash.
+   * @notice Set contentURI.
    */
-  function _setContentHash(ResourceId _tableId, bytes32 key, bytes memory contentHash) internal {
+  function _setContentURI(ResourceId _tableId, bytes32 key, string memory contentURI) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((contentHash)));
+    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((contentURI)));
   }
 
   /**
-   * @notice Set contentHash (using the specified store).
+   * @notice Set contentURI (using the specified store).
    */
-  function setContentHash(IStore _store, ResourceId _tableId, bytes32 key, bytes memory contentHash) internal {
+  function setContentURI(IStore _store, ResourceId _tableId, bytes32 key, string memory contentURI) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
-    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((contentHash)));
+    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((contentURI)));
   }
 
   /**
-   * @notice Get the length of contentHash.
+   * @notice Get the length of contentURI.
    */
-  function lengthContentHash(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
+  function lengthContentURI(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -348,9 +348,9 @@ library ImageCom {
   }
 
   /**
-   * @notice Get the length of contentHash.
+   * @notice Get the length of contentURI.
    */
-  function _lengthContentHash(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
+  function _lengthContentURI(ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -361,9 +361,9 @@ library ImageCom {
   }
 
   /**
-   * @notice Get the length of contentHash (using the specified store).
+   * @notice Get the length of contentURI (using the specified store).
    */
-  function lengthContentHash(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (uint256) {
+  function lengthContentURI(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -374,56 +374,56 @@ library ImageCom {
   }
 
   /**
-   * @notice Get an item of contentHash.
+   * @notice Get an item of contentURI.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemContentHash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemContentURI(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     unchecked {
       bytes memory _blob = StoreSwitch.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
   /**
-   * @notice Get an item of contentHash.
+   * @notice Get an item of contentURI.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function _getItemContentHash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function _getItemContentURI(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     unchecked {
       bytes memory _blob = StoreCore.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
   /**
-   * @notice Get an item of contentHash (using the specified store).
+   * @notice Get an item of contentURI (using the specified store).
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemContentHash(
+  function getItemContentURI(
     IStore _store,
     ResourceId _tableId,
     bytes32 key,
     uint256 _index
-  ) internal view returns (bytes memory) {
+  ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     unchecked {
       bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
   /**
-   * @notice Push a slice to contentHash.
+   * @notice Push a slice to contentURI.
    */
-  function pushContentHash(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
+  function pushContentURI(ResourceId _tableId, bytes32 key, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -431,9 +431,9 @@ library ImageCom {
   }
 
   /**
-   * @notice Push a slice to contentHash.
+   * @notice Push a slice to contentURI.
    */
-  function _pushContentHash(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
+  function _pushContentURI(ResourceId _tableId, bytes32 key, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -441,9 +441,9 @@ library ImageCom {
   }
 
   /**
-   * @notice Push a slice to contentHash (using the specified store).
+   * @notice Push a slice to contentURI (using the specified store).
    */
-  function pushContentHash(IStore _store, ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
+  function pushContentURI(IStore _store, ResourceId _tableId, bytes32 key, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -451,9 +451,9 @@ library ImageCom {
   }
 
   /**
-   * @notice Pop a slice from contentHash.
+   * @notice Pop a slice from contentURI.
    */
-  function popContentHash(ResourceId _tableId, bytes32 key) internal {
+  function popContentURI(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -461,9 +461,9 @@ library ImageCom {
   }
 
   /**
-   * @notice Pop a slice from contentHash.
+   * @notice Pop a slice from contentURI.
    */
-  function _popContentHash(ResourceId _tableId, bytes32 key) internal {
+  function _popContentURI(ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -471,9 +471,9 @@ library ImageCom {
   }
 
   /**
-   * @notice Pop a slice from contentHash (using the specified store).
+   * @notice Pop a slice from contentURI (using the specified store).
    */
-  function popContentHash(IStore _store, ResourceId _tableId, bytes32 key) internal {
+  function popContentURI(IStore _store, ResourceId _tableId, bytes32 key) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -481,9 +481,9 @@ library ImageCom {
   }
 
   /**
-   * @notice Update a slice of contentHash at `_index`.
+   * @notice Update a slice of contentURI at `_index`.
    */
-  function updateContentHash(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateContentURI(ResourceId _tableId, bytes32 key, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -494,9 +494,9 @@ library ImageCom {
   }
 
   /**
-   * @notice Update a slice of contentHash at `_index`.
+   * @notice Update a slice of contentURI at `_index`.
    */
-  function _updateContentHash(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function _updateContentURI(ResourceId _tableId, bytes32 key, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -507,14 +507,14 @@ library ImageCom {
   }
 
   /**
-   * @notice Update a slice of contentHash (using the specified store) at `_index`.
+   * @notice Update a slice of contentURI (using the specified store) at `_index`.
    */
-  function updateContentHash(
+  function updateContentURI(
     IStore _store,
     ResourceId _tableId,
     bytes32 key,
     uint256 _index,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -578,12 +578,12 @@ library ImageCom {
     bytes32 key,
     ImageEncodingFormat encodingFormat,
     uint16 physicalWidthInMillimeters,
-    bytes memory contentHash
+    string memory contentURI
   ) internal {
     bytes memory _staticData = encodeStatic(encodingFormat, physicalWidthInMillimeters);
 
-    PackedCounter _encodedLengths = encodeLengths(contentHash);
-    bytes memory _dynamicData = encodeDynamic(contentHash);
+    PackedCounter _encodedLengths = encodeLengths(contentURI);
+    bytes memory _dynamicData = encodeDynamic(contentURI);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -599,12 +599,12 @@ library ImageCom {
     bytes32 key,
     ImageEncodingFormat encodingFormat,
     uint16 physicalWidthInMillimeters,
-    bytes memory contentHash
+    string memory contentURI
   ) internal {
     bytes memory _staticData = encodeStatic(encodingFormat, physicalWidthInMillimeters);
 
-    PackedCounter _encodedLengths = encodeLengths(contentHash);
-    bytes memory _dynamicData = encodeDynamic(contentHash);
+    PackedCounter _encodedLengths = encodeLengths(contentURI);
+    bytes memory _dynamicData = encodeDynamic(contentURI);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -621,12 +621,12 @@ library ImageCom {
     bytes32 key,
     ImageEncodingFormat encodingFormat,
     uint16 physicalWidthInMillimeters,
-    bytes memory contentHash
+    string memory contentURI
   ) internal {
     bytes memory _staticData = encodeStatic(encodingFormat, physicalWidthInMillimeters);
 
-    PackedCounter _encodedLengths = encodeLengths(contentHash);
-    bytes memory _dynamicData = encodeDynamic(contentHash);
+    PackedCounter _encodedLengths = encodeLengths(contentURI);
+    bytes memory _dynamicData = encodeDynamic(contentURI);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -640,8 +640,8 @@ library ImageCom {
   function set(ResourceId _tableId, bytes32 key, ImageComData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat, _table.physicalWidthInMillimeters);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
-    bytes memory _dynamicData = encodeDynamic(_table.contentHash);
+    PackedCounter _encodedLengths = encodeLengths(_table.contentURI);
+    bytes memory _dynamicData = encodeDynamic(_table.contentURI);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -655,8 +655,8 @@ library ImageCom {
   function _set(ResourceId _tableId, bytes32 key, ImageComData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat, _table.physicalWidthInMillimeters);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
-    bytes memory _dynamicData = encodeDynamic(_table.contentHash);
+    PackedCounter _encodedLengths = encodeLengths(_table.contentURI);
+    bytes memory _dynamicData = encodeDynamic(_table.contentURI);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -670,8 +670,8 @@ library ImageCom {
   function set(IStore _store, ResourceId _tableId, bytes32 key, ImageComData memory _table) internal {
     bytes memory _staticData = encodeStatic(_table.encodingFormat, _table.physicalWidthInMillimeters);
 
-    PackedCounter _encodedLengths = encodeLengths(_table.contentHash);
-    bytes memory _dynamicData = encodeDynamic(_table.contentHash);
+    PackedCounter _encodedLengths = encodeLengths(_table.contentURI);
+    bytes memory _dynamicData = encodeDynamic(_table.contentURI);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -696,13 +696,13 @@ library ImageCom {
   function decodeDynamic(
     PackedCounter _encodedLengths,
     bytes memory _blob
-  ) internal pure returns (bytes memory contentHash) {
+  ) internal pure returns (string memory contentURI) {
     uint256 _start;
     uint256 _end;
     unchecked {
       _end = _encodedLengths.atIndex(0);
     }
-    contentHash = (bytes(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+    contentURI = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
   }
 
   /**
@@ -718,7 +718,7 @@ library ImageCom {
   ) internal pure returns (ImageComData memory _table) {
     (_table.encodingFormat, _table.physicalWidthInMillimeters) = decodeStatic(_staticData);
 
-    (_table.contentHash) = decodeDynamic(_encodedLengths, _dynamicData);
+    (_table.contentURI) = decodeDynamic(_encodedLengths, _dynamicData);
   }
 
   /**
@@ -766,10 +766,10 @@ library ImageCom {
    * @notice Tightly pack dynamic data lengths using this table's schema.
    * @return _encodedLengths The lengths of the dynamic fields (packed into a single bytes32 value).
    */
-  function encodeLengths(bytes memory contentHash) internal pure returns (PackedCounter _encodedLengths) {
+  function encodeLengths(string memory contentURI) internal pure returns (PackedCounter _encodedLengths) {
     // Lengths are effectively checked during copy by 2**40 bytes exceeding gas limits
     unchecked {
-      _encodedLengths = PackedCounterLib.pack(bytes(contentHash).length);
+      _encodedLengths = PackedCounterLib.pack(bytes(contentURI).length);
     }
   }
 
@@ -777,8 +777,8 @@ library ImageCom {
    * @notice Tightly pack dynamic (variable length) data using this table's schema.
    * @return The dynamic data, encoded into a sequence of bytes.
    */
-  function encodeDynamic(bytes memory contentHash) internal pure returns (bytes memory) {
-    return abi.encodePacked(bytes((contentHash)));
+  function encodeDynamic(string memory contentURI) internal pure returns (bytes memory) {
+    return abi.encodePacked(bytes((contentURI)));
   }
 
   /**
@@ -790,12 +790,12 @@ library ImageCom {
   function encode(
     ImageEncodingFormat encodingFormat,
     uint16 physicalWidthInMillimeters,
-    bytes memory contentHash
+    string memory contentURI
   ) internal pure returns (bytes memory, PackedCounter, bytes memory) {
     bytes memory _staticData = encodeStatic(encodingFormat, physicalWidthInMillimeters);
 
-    PackedCounter _encodedLengths = encodeLengths(contentHash);
-    bytes memory _dynamicData = encodeDynamic(contentHash);
+    PackedCounter _encodedLengths = encodeLengths(contentURI);
+    bytes memory _dynamicData = encodeDynamic(contentURI);
 
     return (_staticData, _encodedLengths, _dynamicData);
   }

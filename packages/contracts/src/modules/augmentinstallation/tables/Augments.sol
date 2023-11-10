@@ -51,7 +51,7 @@ library Augments {
    */
   function getValueSchema() internal pure returns (Schema) {
     SchemaType[] memory _valueSchema = new SchemaType[](1);
-    _valueSchema[0] = SchemaType.BYTES;
+    _valueSchema[0] = SchemaType.STRING;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -72,7 +72,7 @@ library Augments {
    */
   function getFieldNames() internal pure returns (string[] memory fieldNames) {
     fieldNames = new string[](1);
-    fieldNames[0] = "augmentMetadata";
+    fieldNames[0] = "augmentMetadataURI";
   }
 
   /**
@@ -97,205 +97,205 @@ library Augments {
   }
 
   /**
-   * @notice Get augmentMetadata.
+   * @notice Get augmentMetadataURI.
    */
-  function getAugmentMetadata(
+  function getAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash
-  ) internal view returns (bytes memory augmentMetadata) {
+  ) internal view returns (string memory augmentMetadataURI) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     bytes memory _blob = StoreSwitch.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
-   * @notice Get augmentMetadata.
+   * @notice Get augmentMetadataURI.
    */
-  function _getAugmentMetadata(
+  function _getAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash
-  ) internal view returns (bytes memory augmentMetadata) {
+  ) internal view returns (string memory augmentMetadataURI) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     bytes memory _blob = StoreCore.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
-   * @notice Get augmentMetadata (using the specified store).
+   * @notice Get augmentMetadataURI (using the specified store).
    */
-  function getAugmentMetadata(
+  function getAugmentMetadataURI(
     IStore _store,
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash
-  ) internal view returns (bytes memory augmentMetadata) {
+  ) internal view returns (string memory augmentMetadataURI) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
-   * @notice Get augmentMetadata.
+   * @notice Get augmentMetadataURI.
    */
   function get(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash
-  ) internal view returns (bytes memory augmentMetadata) {
+  ) internal view returns (string memory augmentMetadataURI) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     bytes memory _blob = StoreSwitch.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
-   * @notice Get augmentMetadata.
+   * @notice Get augmentMetadataURI.
    */
   function _get(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash
-  ) internal view returns (bytes memory augmentMetadata) {
+  ) internal view returns (string memory augmentMetadataURI) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     bytes memory _blob = StoreCore.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
-   * @notice Get augmentMetadata (using the specified store).
+   * @notice Get augmentMetadataURI (using the specified store).
    */
   function get(
     IStore _store,
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash
-  ) internal view returns (bytes memory augmentMetadata) {
+  ) internal view returns (string memory augmentMetadataURI) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
-   * @notice Set augmentMetadata.
+   * @notice Set augmentMetadataURI.
    */
-  function setAugmentMetadata(
+  function setAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
-    bytes memory augmentMetadata
+    string memory augmentMetadataURI
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
-    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadata)));
+    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadataURI)));
   }
 
   /**
-   * @notice Set augmentMetadata.
+   * @notice Set augmentMetadataURI.
    */
-  function _setAugmentMetadata(
+  function _setAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
-    bytes memory augmentMetadata
+    string memory augmentMetadataURI
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
-    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadata)));
+    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadataURI)));
   }
 
   /**
-   * @notice Set augmentMetadata (using the specified store).
+   * @notice Set augmentMetadataURI (using the specified store).
    */
-  function setAugmentMetadata(
+  function setAugmentMetadataURI(
     IStore _store,
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
-    bytes memory augmentMetadata
+    string memory augmentMetadataURI
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
-    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadata)));
+    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadataURI)));
   }
 
   /**
-   * @notice Set augmentMetadata.
+   * @notice Set augmentMetadataURI.
    */
   function set(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
-    bytes memory augmentMetadata
+    string memory augmentMetadataURI
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
-    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadata)));
+    StoreSwitch.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadataURI)));
   }
 
   /**
-   * @notice Set augmentMetadata.
+   * @notice Set augmentMetadataURI.
    */
   function _set(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
-    bytes memory augmentMetadata
+    string memory augmentMetadataURI
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
-    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadata)));
+    StoreCore.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadataURI)));
   }
 
   /**
-   * @notice Set augmentMetadata (using the specified store).
+   * @notice Set augmentMetadataURI (using the specified store).
    */
   function set(
     IStore _store,
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
-    bytes memory augmentMetadata
+    string memory augmentMetadataURI
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
-    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadata)));
+    _store.setDynamicField(_tableId, _keyTuple, 0, bytes((augmentMetadataURI)));
   }
 
   /**
-   * @notice Get the length of augmentMetadata.
+   * @notice Get the length of augmentMetadataURI.
    */
-  function lengthAugmentMetadata(
+  function lengthAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash
@@ -311,9 +311,9 @@ library Augments {
   }
 
   /**
-   * @notice Get the length of augmentMetadata.
+   * @notice Get the length of augmentMetadataURI.
    */
-  function _lengthAugmentMetadata(
+  function _lengthAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash
@@ -329,9 +329,9 @@ library Augments {
   }
 
   /**
-   * @notice Get the length of augmentMetadata (using the specified store).
+   * @notice Get the length of augmentMetadataURI (using the specified store).
    */
-  function lengthAugmentMetadata(
+  function lengthAugmentMetadataURI(
     IStore _store,
     ResourceId _tableId,
     address augmentAddress,
@@ -348,7 +348,7 @@ library Augments {
   }
 
   /**
-   * @notice Get the length of augmentMetadata.
+   * @notice Get the length of augmentMetadataURI.
    */
   function length(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](2);
@@ -362,7 +362,7 @@ library Augments {
   }
 
   /**
-   * @notice Get the length of augmentMetadata.
+   * @notice Get the length of augmentMetadataURI.
    */
   function _length(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash) internal view returns (uint256) {
     bytes32[] memory _keyTuple = new bytes32[](2);
@@ -376,7 +376,7 @@ library Augments {
   }
 
   /**
-   * @notice Get the length of augmentMetadata (using the specified store).
+   * @notice Get the length of augmentMetadataURI (using the specified store).
    */
   function length(
     IStore _store,
@@ -395,68 +395,68 @@ library Augments {
   }
 
   /**
-   * @notice Get an item of augmentMetadata.
+   * @notice Get an item of augmentMetadataURI.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemAugmentMetadata(
+  function getItemAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index
-  ) internal view returns (bytes memory) {
+  ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     unchecked {
       bytes memory _blob = StoreSwitch.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
   /**
-   * @notice Get an item of augmentMetadata.
+   * @notice Get an item of augmentMetadataURI.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function _getItemAugmentMetadata(
+  function _getItemAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index
-  ) internal view returns (bytes memory) {
+  ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     unchecked {
       bytes memory _blob = StoreCore.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
   /**
-   * @notice Get an item of augmentMetadata (using the specified store).
+   * @notice Get an item of augmentMetadataURI (using the specified store).
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemAugmentMetadata(
+  function getItemAugmentMetadataURI(
     IStore _store,
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index
-  ) internal view returns (bytes memory) {
+  ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     unchecked {
       bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
   /**
-   * @notice Get an item of augmentMetadata.
+   * @notice Get an item of augmentMetadataURI.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
   function getItem(
@@ -464,19 +464,19 @@ library Augments {
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index
-  ) internal view returns (bytes memory) {
+  ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     unchecked {
       bytes memory _blob = StoreSwitch.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
   /**
-   * @notice Get an item of augmentMetadata.
+   * @notice Get an item of augmentMetadataURI.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
   function _getItem(
@@ -484,19 +484,19 @@ library Augments {
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index
-  ) internal view returns (bytes memory) {
+  ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     unchecked {
       bytes memory _blob = StoreCore.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
   /**
-   * @notice Get an item of augmentMetadata (using the specified store).
+   * @notice Get an item of augmentMetadataURI (using the specified store).
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
   function getItem(
@@ -505,25 +505,25 @@ library Augments {
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index
-  ) internal view returns (bytes memory) {
+  ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
 
     unchecked {
       bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
   /**
-   * @notice Push a slice to augmentMetadata.
+   * @notice Push a slice to augmentMetadataURI.
    */
-  function pushAugmentMetadata(
+  function pushAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
@@ -533,13 +533,13 @@ library Augments {
   }
 
   /**
-   * @notice Push a slice to augmentMetadata.
+   * @notice Push a slice to augmentMetadataURI.
    */
-  function _pushAugmentMetadata(
+  function _pushAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
@@ -549,14 +549,14 @@ library Augments {
   }
 
   /**
-   * @notice Push a slice to augmentMetadata (using the specified store).
+   * @notice Push a slice to augmentMetadataURI (using the specified store).
    */
-  function pushAugmentMetadata(
+  function pushAugmentMetadataURI(
     IStore _store,
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
@@ -566,9 +566,9 @@ library Augments {
   }
 
   /**
-   * @notice Push a slice to augmentMetadata.
+   * @notice Push a slice to augmentMetadataURI.
    */
-  function push(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash, bytes memory _slice) internal {
+  function push(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
@@ -577,9 +577,9 @@ library Augments {
   }
 
   /**
-   * @notice Push a slice to augmentMetadata.
+   * @notice Push a slice to augmentMetadataURI.
    */
-  function _push(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash, bytes memory _slice) internal {
+  function _push(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
@@ -588,14 +588,14 @@ library Augments {
   }
 
   /**
-   * @notice Push a slice to augmentMetadata (using the specified store).
+   * @notice Push a slice to augmentMetadataURI (using the specified store).
    */
   function push(
     IStore _store,
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
@@ -605,9 +605,9 @@ library Augments {
   }
 
   /**
-   * @notice Pop a slice from augmentMetadata.
+   * @notice Pop a slice from augmentMetadataURI.
    */
-  function popAugmentMetadata(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash) internal {
+  function popAugmentMetadataURI(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
@@ -616,9 +616,9 @@ library Augments {
   }
 
   /**
-   * @notice Pop a slice from augmentMetadata.
+   * @notice Pop a slice from augmentMetadataURI.
    */
-  function _popAugmentMetadata(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash) internal {
+  function _popAugmentMetadataURI(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
     _keyTuple[1] = argumentsHash;
@@ -627,9 +627,9 @@ library Augments {
   }
 
   /**
-   * @notice Pop a slice from augmentMetadata (using the specified store).
+   * @notice Pop a slice from augmentMetadataURI (using the specified store).
    */
-  function popAugmentMetadata(
+  function popAugmentMetadataURI(
     IStore _store,
     ResourceId _tableId,
     address augmentAddress,
@@ -643,7 +643,7 @@ library Augments {
   }
 
   /**
-   * @notice Pop a slice from augmentMetadata.
+   * @notice Pop a slice from augmentMetadataURI.
    */
   function pop(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
@@ -654,7 +654,7 @@ library Augments {
   }
 
   /**
-   * @notice Pop a slice from augmentMetadata.
+   * @notice Pop a slice from augmentMetadataURI.
    */
   function _pop(ResourceId _tableId, address augmentAddress, bytes32 argumentsHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
@@ -665,7 +665,7 @@ library Augments {
   }
 
   /**
-   * @notice Pop a slice from augmentMetadata (using the specified store).
+   * @notice Pop a slice from augmentMetadataURI (using the specified store).
    */
   function pop(IStore _store, ResourceId _tableId, address augmentAddress, bytes32 argumentsHash) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
@@ -676,14 +676,14 @@ library Augments {
   }
 
   /**
-   * @notice Update a slice of augmentMetadata at `_index`.
+   * @notice Update a slice of augmentMetadataURI at `_index`.
    */
-  function updateAugmentMetadata(
+  function updateAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
@@ -696,14 +696,14 @@ library Augments {
   }
 
   /**
-   * @notice Update a slice of augmentMetadata at `_index`.
+   * @notice Update a slice of augmentMetadataURI at `_index`.
    */
-  function _updateAugmentMetadata(
+  function _updateAugmentMetadataURI(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
@@ -716,15 +716,15 @@ library Augments {
   }
 
   /**
-   * @notice Update a slice of augmentMetadata (using the specified store) at `_index`.
+   * @notice Update a slice of augmentMetadataURI (using the specified store) at `_index`.
    */
-  function updateAugmentMetadata(
+  function updateAugmentMetadataURI(
     IStore _store,
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
@@ -737,14 +737,14 @@ library Augments {
   }
 
   /**
-   * @notice Update a slice of augmentMetadata at `_index`.
+   * @notice Update a slice of augmentMetadataURI at `_index`.
    */
   function update(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
@@ -757,14 +757,14 @@ library Augments {
   }
 
   /**
-   * @notice Update a slice of augmentMetadata at `_index`.
+   * @notice Update a slice of augmentMetadataURI at `_index`.
    */
   function _update(
     ResourceId _tableId,
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
@@ -777,7 +777,7 @@ library Augments {
   }
 
   /**
-   * @notice Update a slice of augmentMetadata (using the specified store) at `_index`.
+   * @notice Update a slice of augmentMetadataURI (using the specified store) at `_index`.
    */
   function update(
     IStore _store,
@@ -785,7 +785,7 @@ library Augments {
     address augmentAddress,
     bytes32 argumentsHash,
     uint256 _index,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](2);
     _keyTuple[0] = bytes32(uint256(uint160(augmentAddress)));
@@ -834,10 +834,10 @@ library Augments {
    * @notice Tightly pack dynamic data lengths using this table's schema.
    * @return _encodedLengths The lengths of the dynamic fields (packed into a single bytes32 value).
    */
-  function encodeLengths(bytes memory augmentMetadata) internal pure returns (PackedCounter _encodedLengths) {
+  function encodeLengths(string memory augmentMetadataURI) internal pure returns (PackedCounter _encodedLengths) {
     // Lengths are effectively checked during copy by 2**40 bytes exceeding gas limits
     unchecked {
-      _encodedLengths = PackedCounterLib.pack(bytes(augmentMetadata).length);
+      _encodedLengths = PackedCounterLib.pack(bytes(augmentMetadataURI).length);
     }
   }
 
@@ -845,8 +845,8 @@ library Augments {
    * @notice Tightly pack dynamic (variable length) data using this table's schema.
    * @return The dynamic data, encoded into a sequence of bytes.
    */
-  function encodeDynamic(bytes memory augmentMetadata) internal pure returns (bytes memory) {
-    return abi.encodePacked(bytes((augmentMetadata)));
+  function encodeDynamic(string memory augmentMetadataURI) internal pure returns (bytes memory) {
+    return abi.encodePacked(bytes((augmentMetadataURI)));
   }
 
   /**
@@ -855,10 +855,10 @@ library Augments {
    * @return The lengths of the dynamic fields (packed into a single bytes32 value).
    * @return The dyanmic (variable length) data, encoded into a sequence of bytes.
    */
-  function encode(bytes memory augmentMetadata) internal pure returns (bytes memory, PackedCounter, bytes memory) {
+  function encode(string memory augmentMetadataURI) internal pure returns (bytes memory, PackedCounter, bytes memory) {
     bytes memory _staticData;
-    PackedCounter _encodedLengths = encodeLengths(augmentMetadata);
-    bytes memory _dynamicData = encodeDynamic(augmentMetadata);
+    PackedCounter _encodedLengths = encodeLengths(augmentMetadataURI);
+    bytes memory _dynamicData = encodeDynamic(augmentMetadataURI);
 
     return (_staticData, _encodedLengths, _dynamicData);
   }

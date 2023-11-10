@@ -521,8 +521,8 @@ contract AugmentInstallationTest is MudTest {
 contract MockAugmentSingle is Augment {
     bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleCom"))]];
 
-    function getMetadataURI() external view returns (bytes memory) {
-        return new bytes(0);
+    function getMetadataURI() external view returns (string memory) {
+        return "";
     }
 
     function getComponentTypes() external view returns (bytes16[][] memory) {
@@ -537,8 +537,8 @@ contract MockAugmentMultipleComponents is Augment {
         [bytes16(bytes32("ScaleCom")), bytes16(bytes32("NameCom"))]
     ];
 
-    function getMetadataURI() external view returns (bytes memory) {
-        return new bytes(0);
+    function getMetadataURI() external view returns (string memory) {
+        return "";
     }
 
     function getComponentTypes() external view returns (bytes16[][] memory) {
@@ -554,8 +554,8 @@ contract MockAugmentMultipleEntities is Augment {
         [bytes16(bytes32("NameCom"))]
     ];
 
-    function getMetadataURI() external view returns (bytes memory) {
-        return new bytes(0);
+    function getMetadataURI() external view returns (string memory) {
+        return "";
     }
 
     function getComponentTypes() external view returns (bytes16[][] memory) {
@@ -568,8 +568,8 @@ contract MockAugmentMultipleEntities is Augment {
 contract MockAugmentSetOverride is Augment {
     bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleCom"))]];
 
-    function getMetadataURI() external view returns (bytes memory) {
-        return new bytes(0);
+    function getMetadataURI() external view returns (string memory) {
+        return "";
     }
 
     function getComponentTypes() external view returns (bytes16[][] memory) {
@@ -595,8 +595,8 @@ contract MockAugmentSetOverride is Augment {
 contract MockAugmentSpliceOverride is Augment {
     bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleCom"))]];
 
-    function getMetadataURI() external view returns (bytes memory) {
-        return new bytes(0);
+    function getMetadataURI() external view returns (string memory) {
+        return "";
     }
 
     function getComponentTypes() external view returns (bytes16[][] memory) {
