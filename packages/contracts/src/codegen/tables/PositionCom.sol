@@ -26,7 +26,7 @@ FieldLayout constant _fieldLayout = FieldLayout.wrap(
 
 struct PositionComData {
   int32 h;
-  bytes geohash;
+  string geohash;
 }
 
 library PositionCom {
@@ -56,7 +56,7 @@ library PositionCom {
   function getValueSchema() internal pure returns (Schema) {
     SchemaType[] memory _valueSchema = new SchemaType[](2);
     _valueSchema[0] = SchemaType.INT32;
-    _valueSchema[1] = SchemaType.BYTES;
+    _valueSchema[1] = SchemaType.STRING;
 
     return SchemaLib.encode(_valueSchema);
   }
@@ -167,40 +167,40 @@ library PositionCom {
   /**
    * @notice Get geohash.
    */
-  function getGeohash(ResourceId _tableId, bytes32 key) internal view returns (bytes memory geohash) {
+  function getGeohash(ResourceId _tableId, bytes32 key) internal view returns (string memory geohash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreSwitch.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
    * @notice Get geohash.
    */
-  function _getGeohash(ResourceId _tableId, bytes32 key) internal view returns (bytes memory geohash) {
+  function _getGeohash(ResourceId _tableId, bytes32 key) internal view returns (string memory geohash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = StoreCore.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
    * @notice Get geohash (using the specified store).
    */
-  function getGeohash(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (bytes memory geohash) {
+  function getGeohash(IStore _store, ResourceId _tableId, bytes32 key) internal view returns (string memory geohash) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     bytes memory _blob = _store.getDynamicField(_tableId, _keyTuple, 0);
-    return (bytes(_blob));
+    return (string(_blob));
   }
 
   /**
    * @notice Set geohash.
    */
-  function setGeohash(ResourceId _tableId, bytes32 key, bytes memory geohash) internal {
+  function setGeohash(ResourceId _tableId, bytes32 key, string memory geohash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -210,7 +210,7 @@ library PositionCom {
   /**
    * @notice Set geohash.
    */
-  function _setGeohash(ResourceId _tableId, bytes32 key, bytes memory geohash) internal {
+  function _setGeohash(ResourceId _tableId, bytes32 key, string memory geohash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -220,7 +220,7 @@ library PositionCom {
   /**
    * @notice Set geohash (using the specified store).
    */
-  function setGeohash(IStore _store, ResourceId _tableId, bytes32 key, bytes memory geohash) internal {
+  function setGeohash(IStore _store, ResourceId _tableId, bytes32 key, string memory geohash) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -270,13 +270,13 @@ library PositionCom {
    * @notice Get an item of geohash.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function getItemGeohash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function getItemGeohash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     unchecked {
       bytes memory _blob = StoreSwitch.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
@@ -284,13 +284,13 @@ library PositionCom {
    * @notice Get an item of geohash.
    * @dev Reverts with Store_IndexOutOfBounds if `_index` is out of bounds for the array.
    */
-  function _getItemGeohash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (bytes memory) {
+  function _getItemGeohash(ResourceId _tableId, bytes32 key, uint256 _index) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     unchecked {
       bytes memory _blob = StoreCore.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
@@ -303,20 +303,20 @@ library PositionCom {
     ResourceId _tableId,
     bytes32 key,
     uint256 _index
-  ) internal view returns (bytes memory) {
+  ) internal view returns (string memory) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
     unchecked {
       bytes memory _blob = _store.getDynamicFieldSlice(_tableId, _keyTuple, 0, _index * 1, (_index + 1) * 1);
-      return (bytes(_blob));
+      return (string(_blob));
     }
   }
 
   /**
    * @notice Push a slice to geohash.
    */
-  function pushGeohash(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
+  function pushGeohash(ResourceId _tableId, bytes32 key, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -326,7 +326,7 @@ library PositionCom {
   /**
    * @notice Push a slice to geohash.
    */
-  function _pushGeohash(ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
+  function _pushGeohash(ResourceId _tableId, bytes32 key, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -336,7 +336,7 @@ library PositionCom {
   /**
    * @notice Push a slice to geohash (using the specified store).
    */
-  function pushGeohash(IStore _store, ResourceId _tableId, bytes32 key, bytes memory _slice) internal {
+  function pushGeohash(IStore _store, ResourceId _tableId, bytes32 key, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -376,7 +376,7 @@ library PositionCom {
   /**
    * @notice Update a slice of geohash at `_index`.
    */
-  function updateGeohash(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function updateGeohash(ResourceId _tableId, bytes32 key, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -389,7 +389,7 @@ library PositionCom {
   /**
    * @notice Update a slice of geohash at `_index`.
    */
-  function _updateGeohash(ResourceId _tableId, bytes32 key, uint256 _index, bytes memory _slice) internal {
+  function _updateGeohash(ResourceId _tableId, bytes32 key, uint256 _index, string memory _slice) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
 
@@ -407,7 +407,7 @@ library PositionCom {
     ResourceId _tableId,
     bytes32 key,
     uint256 _index,
-    bytes memory _slice
+    string memory _slice
   ) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = key;
@@ -466,7 +466,7 @@ library PositionCom {
   /**
    * @notice Set the full data using individual values.
    */
-  function set(ResourceId _tableId, bytes32 key, int32 h, bytes memory geohash) internal {
+  function set(ResourceId _tableId, bytes32 key, int32 h, string memory geohash) internal {
     bytes memory _staticData = encodeStatic(h);
 
     PackedCounter _encodedLengths = encodeLengths(geohash);
@@ -481,7 +481,7 @@ library PositionCom {
   /**
    * @notice Set the full data using individual values.
    */
-  function _set(ResourceId _tableId, bytes32 key, int32 h, bytes memory geohash) internal {
+  function _set(ResourceId _tableId, bytes32 key, int32 h, string memory geohash) internal {
     bytes memory _staticData = encodeStatic(h);
 
     PackedCounter _encodedLengths = encodeLengths(geohash);
@@ -496,7 +496,7 @@ library PositionCom {
   /**
    * @notice Set the full data using individual values (using the specified store).
    */
-  function set(IStore _store, ResourceId _tableId, bytes32 key, int32 h, bytes memory geohash) internal {
+  function set(IStore _store, ResourceId _tableId, bytes32 key, int32 h, string memory geohash) internal {
     bytes memory _staticData = encodeStatic(h);
 
     PackedCounter _encodedLengths = encodeLengths(geohash);
@@ -566,13 +566,13 @@ library PositionCom {
   function decodeDynamic(
     PackedCounter _encodedLengths,
     bytes memory _blob
-  ) internal pure returns (bytes memory geohash) {
+  ) internal pure returns (string memory geohash) {
     uint256 _start;
     uint256 _end;
     unchecked {
       _end = _encodedLengths.atIndex(0);
     }
-    geohash = (bytes(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
+    geohash = (string(SliceLib.getSubslice(_blob, _start, _end).toBytes()));
   }
 
   /**
@@ -633,7 +633,7 @@ library PositionCom {
    * @notice Tightly pack dynamic data lengths using this table's schema.
    * @return _encodedLengths The lengths of the dynamic fields (packed into a single bytes32 value).
    */
-  function encodeLengths(bytes memory geohash) internal pure returns (PackedCounter _encodedLengths) {
+  function encodeLengths(string memory geohash) internal pure returns (PackedCounter _encodedLengths) {
     // Lengths are effectively checked during copy by 2**40 bytes exceeding gas limits
     unchecked {
       _encodedLengths = PackedCounterLib.pack(bytes(geohash).length);
@@ -644,7 +644,7 @@ library PositionCom {
    * @notice Tightly pack dynamic (variable length) data using this table's schema.
    * @return The dynamic data, encoded into a sequence of bytes.
    */
-  function encodeDynamic(bytes memory geohash) internal pure returns (bytes memory) {
+  function encodeDynamic(string memory geohash) internal pure returns (bytes memory) {
     return abi.encodePacked(bytes((geohash)));
   }
 
@@ -654,7 +654,7 @@ library PositionCom {
    * @return The lengths of the dynamic fields (packed into a single bytes32 value).
    * @return The dyanmic (variable length) data, encoded into a sequence of bytes.
    */
-  function encode(int32 h, bytes memory geohash) internal pure returns (bytes memory, PackedCounter, bytes memory) {
+  function encode(int32 h, string memory geohash) internal pure returns (bytes memory, PackedCounter, bytes memory) {
     bytes memory _staticData = encodeStatic(h);
 
     PackedCounter _encodedLengths = encodeLengths(geohash);

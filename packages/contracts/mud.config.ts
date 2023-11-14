@@ -67,7 +67,7 @@ export default mudConfig({
       storeArgument: true,
     },
     PositionCom: {
-      valueSchema: { h: "int32", geohash: "bytes" },
+      valueSchema: { h: "int32", geohash: "string" },
       tableIdArgument: true,
       storeArgument: true,
     },

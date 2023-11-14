@@ -19,7 +19,7 @@ contract InstallAugment is Script {
     ModelAugment modelAugment =
         ModelAugment(0x0c2819e12c930089D0F563467Fa6af4f87563019);
 
-    IWorld world = IWorld(0x22D33a1d6A772B88C557C4e243F2f949935d35E1);
+    IWorld world = IWorld(0x3904285496739BF5030d79C0CF259A569806F759);
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
@@ -37,7 +37,7 @@ contract InstallAugment is Script {
                 bytes memory dynamicData
             ) = ModelCom.encode(
                     ModelEncodingFormat.Glb,
-                    "ipfs://bafkreihqnpefxdmb7xtxq7hmgiim3dbgony2s43zf7kqixzipvd5pgbeja"
+                    "ipfs://bafybeihgekplpvpizo3wwk3rpfnfsovx5k63ioxcxix7dinxuzng74sxiy"
                 );
 
             componentValues[0][0] = AugmentComponentValue({
@@ -51,7 +51,7 @@ contract InstallAugment is Script {
                 bytes memory staticData,
                 PackedCounter encodedLengths,
                 bytes memory dynamicData
-            ) = NameCom.encode("Robot");
+            ) = NameCom.encode("Geo Web Logo");
 
             componentValues[0][1] = AugmentComponentValue({
                 staticData: staticData,
@@ -64,7 +64,7 @@ contract InstallAugment is Script {
                 bytes memory staticData,
                 PackedCounter encodedLengths,
                 bytes memory dynamicData
-            ) = PositionCom.encode(2000, hex"309f54ef7d784c");
+            ) = PositionCom.encode(2000, "gcpvj335pbg");
 
             componentValues[0][2] = AugmentComponentValue({
                 staticData: staticData,
