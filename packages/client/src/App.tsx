@@ -1,24 +1,13 @@
 import React from "react";
-import {
-  getComponentForParcel,
-  getTableIdForParcel,
-  getTableIdsForParcel,
-  syncWorld,
-  SyncWorldResult,
-} from "@geo-web/mud-world-base-setup";
-import {
-  Has,
-  runQuery,
-  getComponentValue,
-  defineSystem,
-} from "@latticexyz/recs";
 import { MUDChain } from "@latticexyz/common/chains";
 import { optimismGoerli } from "viem/chains";
+import { useMUD, MUDProvider } from "./MUDContext";
+import { syncWorld, SyncWorldResult } from "@geo-web/mud-world-base-setup";
 
 const chainId = import.meta.env.VITE_CHAIN_ID || 31337;
 const world = {
-  address: "0x000a18F809049257BfE86009de80990375475f4c",
-  blockNumber: 16469636,
+  address: "0x3904285496739BF5030d79C0CF259A569806F759",
+  blockNumber: 17280426,
 };
 const mudChain = {
   ...optimismGoerli,
@@ -31,10 +20,25 @@ const mudChain = {
   },
 } as MUDChain;
 
+const View = () => {
+  const { tables, useStore } = useMUD();
+
+  const records = useStore((state: any) =>
+    Object.values(state.getRecords(tables.NameCom))
+  );
+
+  return (
+    <>
+      {records.map((record: any) => {
+        return record.value.value;
+      })}
+    </>
+  );
+};
+
 export const App = () => {
-  const [worldConfig, setWorldConfig] = React.useState<
-    SyncWorldResult | undefined
-  >(undefined);
+  const [worldConfig, setWorldConfig] =
+    React.useState<SyncWorldResult>(undefined);
 
   React.useEffect(() => {
     (async () => {
@@ -48,21 +52,13 @@ export const App = () => {
     })();
   }, []);
 
-  React.useEffect(() => {
-    if (!worldConfig) return;
-
-    const { components } = worldConfig;
-
-    console.log(components);
-
-    //   setInterval(() => {
-    //     const matchingEntities = runQuery([Has(Augments)]);
-    //     const entities = Array.from(matchingEntities.values()).map((entity) =>
-    //       getComponentValue(Augments, entity)
-    //     );
-    //     console.log(entities);
-    //   }, 1000);
-  }, [worldConfig]);
-
-  return <></>;
+  if (!worldConfig) {
+    return <></>;
+  } else {
+    return (
+      <MUDProvider value={worldConfig}>
+        <View />
+      </MUDProvider>
+    );
+  }
 };
