@@ -64,7 +64,7 @@ contract InstallAugment is Script {
                 bytes memory staticData,
                 PackedCounter encodedLengths,
                 bytes memory dynamicData
-            ) = PositionCom.encode(2000, "gcpvj335pbg");
+            ) = PositionCom.encode(2000, "dr72hbykc");
 
             componentValues[0][2] = AugmentComponentValue({
                 staticData: staticData,
