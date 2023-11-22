@@ -65,7 +65,7 @@ contract InstallImageAugment is Script {
                 bytes memory staticData,
                 PackedCounter encodedLengths,
                 bytes memory dynamicData
-            ) = PositionCom.encode(1000, "dr72hbyjx");
+            ) = PositionCom.encode(1000, "dr72hbyjx00");
 
             componentValues[0][2] = AugmentComponentValue({
                 staticData: staticData,
