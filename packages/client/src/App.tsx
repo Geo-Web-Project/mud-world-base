@@ -47,6 +47,7 @@ export const App = () => {
         world,
         mudChain,
         namespaces: ["320"],
+        indexerUrl: "https://mud-testnet.geoweb.network/trpc",
       });
       setWorldConfig(_worldConfig);
     })();

@@ -62,6 +62,7 @@ export async function syncWorld(params: {
   world: { address: string; blockNumber: number };
   mudChain: MUDChain;
   namespaces: string[];
+  indexerUrl: string;
 }): Promise<any> {
   const clientOptions = {
     chain: params.mudChain as Chain,
@@ -98,6 +99,7 @@ export async function syncWorld(params: {
       .map((tableId) => {
         return { tableId };
       }),
+    indexerUrl,
   });
 
   return {
