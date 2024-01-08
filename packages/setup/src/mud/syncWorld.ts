@@ -99,7 +99,7 @@ export async function syncWorld(params: {
       .map((tableId) => {
         return { tableId };
       }),
-    indexerUrl,
+    indexerUrl: params.indexerUrl,
   });
 
   return {
