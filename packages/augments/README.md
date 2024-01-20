@@ -1,7 +1,7 @@
 ## Deployments
 
-### OP Goerli
+### OP Sepolia
 
 | Augment      | Address                                    |
 | ------------ | ------------------------------------------ |
-| ModelAugment | 0x8D88B3728871f1AAA6BE8656b8651805Ffc29615 |
+| ModelAugment | 0x73f7c7ee16c83a28952c97919a50d3048f7a7514 |

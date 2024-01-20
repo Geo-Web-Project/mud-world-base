@@ -19,4 +19,5 @@ remappings = [
 eth_rpc_url = "http://127.0.0.1:1248"
 [profile.op-goerli]
 eth_rpc_url = "https://optimism-goerli.publicnode.com"
-
+[profile.op-sepolia]
+eth_rpc_url = "https://optimism-sepolia.publicnode.com"
