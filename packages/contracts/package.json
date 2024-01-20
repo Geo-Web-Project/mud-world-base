@@ -17,7 +17,7 @@
     "build:typechain": "rimraf types && typechain --target=ethers-v5 out/IWorld.sol/IWorld.json",
     "build:types": "tsup",
     "deploy:local": "pnpm run build && mud deploy",
-    "deploy:testnet": "pnpm run build && mud deploy --profile=op-goerli",
+    "deploy:testnet": "pnpm run build && mud deploy --profile=op-sepolia",
     "dev": "pnpm mud dev-contracts",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",

@@ -4,6 +4,8 @@ import { optimismGoerli } from "viem/chains";
 import { useMUD, MUDProvider } from "./MUDContext";
 import { syncWorld, SyncWorldResult } from "@geo-web/mud-world-base-setup";
 
+localStorage.debug = "*";
+
 const chainId = import.meta.env.VITE_CHAIN_ID || 31337;
 const world = {
   address: "0x3904285496739BF5030d79C0CF259A569806F759",
