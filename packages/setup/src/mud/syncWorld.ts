@@ -63,6 +63,7 @@ export async function syncWorld(params: {
   mudChain: MUDChain;
   namespaces: string[];
   indexerUrl: string;
+  startSync: boolean;
 }): Promise<any> {
   const clientOptions = {
     chain: params.mudChain as Chain,
@@ -100,6 +101,7 @@ export async function syncWorld(params: {
         return { tableId };
       }),
     indexerUrl: params.indexerUrl,
+    startSync: params.startSync,
   });
 
   return {
