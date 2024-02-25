@@ -89,6 +89,7 @@ export async function syncWorld(params: {
     latestBlock$,
     storedBlockLogs$,
     waitForTransaction,
+    stopSync,
   } = await syncToZustand({
     config: mudConfig,
     address: params.world.address as Hex,
@@ -111,5 +112,6 @@ export async function syncWorld(params: {
     storedBlockLogs$,
     waitForTransaction,
     publicClient,
+    stopSync,
   };
 }
