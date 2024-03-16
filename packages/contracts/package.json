@@ -11,29 +11,26 @@
     "./mud.config.ts"
   ],
   "scripts": {
-    "build": "pnpm run build:mud && pnpm run build:abi && pnpm run build:typechain && pnpm run build:types",
-    "build:abi": "forge clean && forge build",
-    "build:mud": "mud tablegen && mud worldgen",
-    "build:typechain": "rimraf types && typechain --target=ethers-v5 out/IWorld.sol/IWorld.json",
-    "build:types": "tsup",
+    "build": "mud build",
+    "clean": "forge clean && rimraf src/codegen",
     "deploy:local": "pnpm run build && mud deploy",
-    "deploy:testnet": "pnpm run build && mud deploy --profile=op-sepolia",
+    "deploy:testnet": "pnpm run build && mud deploy --profile=lattice-testnet",
     "dev": "pnpm mud dev-contracts",
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
-    "test": "mud test"
+    "test": "tsc --noEmit && mud test"
   },
   "dependencies": {
     "@ethersproject/abi": "^5.7.0",
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/providers": "^5.7.2",
-    "@latticexyz/cli": "2.0.0-next.11",
-    "@latticexyz/config": "2.0.0-next.11",
-    "@latticexyz/schema-type": "2.0.0-next.11",
-    "@latticexyz/store": "2.0.0-next.11",
-    "@latticexyz/world": "2.0.0-main-f6d214e3",
-    "@latticexyz/world-modules": "2.0.0-next.11",
+    "@latticexyz/cli": "2.0.0-next.17",
+    "@latticexyz/config": "2.0.0-next.17",
+    "@latticexyz/schema-type": "2.0.0-next.17",
+    "@latticexyz/store": "2.0.0-next.17",
+    "@latticexyz/world": "2.0.0-next.17",
+    "@latticexyz/world-modules": "2.0.0-next.17",
     "@openzeppelin/contracts": "^4.9.3",
     "ethers": "^5.7.2"
   },
@@ -45,8 +42,8 @@
     "prettier": "^2.6.2",
     "prettier-plugin-solidity": "^1.0.0-beta.19",
     "solhint": "^3.3.7",
-    "solhint-config-mud": "2.0.0-next.11",
-    "solhint-plugin-mud": "2.0.0-next.11",
+    "solhint-config-mud": "2.0.0-next.17",
+    "solhint-plugin-mud": "2.0.0-next.17",
     "tsup": "^7.2.0",
     "typechain": "^8.1.1"
   }

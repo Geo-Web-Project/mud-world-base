@@ -2,10 +2,10 @@ import { mudConfig } from "@latticexyz/world/register";
 
 export default mudConfig({
   enums: {
-    ImageEncodingFormat: ["Jpeg", "Png", "Svg"],
+    // ImageEncodingFormat: ["Jpeg", "Png", "Svg"],
     ModelEncodingFormat: ["Glb", "Usdz"],
-    AudioEncodingFormat: ["Mpeg", "Mp4", "Mp3"],
-    VideoEncodingFormat: ["Mpeg", "Mp4"],
+    // AudioEncodingFormat: ["Mpeg", "Mp4", "Mp3"],
+    // VideoEncodingFormat: ["Mpeg", "Mp4"],
   },
   userTypes: {
     ResourceId: {
@@ -57,15 +57,6 @@ export default mudConfig({
       tableIdArgument: true,
       storeArgument: true,
     },
-    ImageCom: {
-      valueSchema: {
-        encodingFormat: "ImageEncodingFormat",
-        physicalWidthInMillimeters: "uint16",
-        contentURI: "string",
-      },
-      tableIdArgument: true,
-      storeArgument: true,
-    },
     PositionCom: {
       valueSchema: { h: "int32", geohash: "string" },
       tableIdArgument: true,
@@ -81,6 +72,15 @@ export default mudConfig({
       tableIdArgument: true,
       storeArgument: true,
     },
+    // ImageCom: {
+    //   valueSchema: {
+    //     encodingFormat: "ImageEncodingFormat",
+    //     physicalWidthInMillimeters: "uint16",
+    //     contentURI: "string",
+    //   },
+    //   tableIdArgument: true,
+    //   storeArgument: true,
+    // },
     // AudioCom: {
     //   valueSchema: {
     //     encodingFormat: "AudioEncodingFormat",

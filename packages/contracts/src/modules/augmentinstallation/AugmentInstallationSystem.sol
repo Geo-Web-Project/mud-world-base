@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.21;
+pragma solidity >=0.8.24;
 
-import {IAugment, AUGMENT_INTERFACE_ID} from "./IAugment.sol";
+import {IAugment} from "./IAugment.sol";
 import {System} from "@latticexyz/world/src/System.sol";
 import {WorldContextProviderLib} from "@latticexyz/world/src/WorldContext.sol";
 import {Augments} from "./tables/Augments.sol";
@@ -44,7 +44,7 @@ contract AugmentInstallationSystem is System {
         );
 
         // Require the provided address to implement the IAugment interface
-        requireInterface(address(augment), AUGMENT_INTERFACE_ID);
+        requireInterface(address(augment), type(IAugment).interfaceId);
 
         // Parse args and set records
         bytes16[][] memory augmentTypes = augment.getComponentTypes();

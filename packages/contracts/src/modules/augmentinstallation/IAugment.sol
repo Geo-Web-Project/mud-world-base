@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.19;
 
-import {IERC165, ERC165_INTERFACE_ID} from "@latticexyz/world/src/IERC165.sol";
-
-bytes4 constant AUGMENT_INTERFACE_ID = IAugment.getMetadataURI.selector ^
-    IAugment.getComponentTypes.selector ^
-    IAugment.performOverrides.selector ^
-    ERC165_INTERFACE_ID;
+import {IERC165} from "@latticexyz/world/src/IERC165.sol";
 
 interface IAugment is IERC165 {
     /**

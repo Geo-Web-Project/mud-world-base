@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.21;
+pragma solidity >=0.8.24;
 
 import "forge-std/Test.sol";
 import {MudTest} from "@latticexyz/world/test/MudTest.t.sol";
@@ -89,11 +89,8 @@ contract PCOOwnershipTest is MudTest {
         ResourceId namespaceId = registerParcel();
         mockERC721.burn(1);
 
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        vm.startBroadcast(deployerPrivateKey);
         vm.expectRevert(PCOOwnershipHook.PCOOwnership_CannotDelete.selector);
-        NamespaceOwner.deleteRecord(namespaceId);
-        vm.stopBroadcast();
+        world.renounceOwnership(namespaceId);
     }
 
     function test_CannotRegisterAnotherParcel() public {
@@ -132,74 +129,15 @@ contract PCOOwnershipTest is MudTest {
 
         ResourceId namespaceId = world.getNamespaceIdForParcel(parcelId);
 
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        vm.startBroadcast(deployerPrivateKey);
         vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotFound.selector);
-        NamespaceOwner.setOwner(namespaceId, address(this));
-        vm.stopBroadcast();
+        world.registerNamespace(namespaceId);
     }
 
     function test_CannotSetNamespaceOwnerExisting() public {
         ResourceId namespaceId = registerParcel();
 
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        vm.startBroadcast(deployerPrivateKey);
         vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotPCOOwner.selector);
-        NamespaceOwner.setOwner(namespaceId, address(0x1));
-        vm.stopBroadcast();
-    }
-
-    function test_CannotSetRecord() public {
-        uint256 parcelId = 1;
-        mockERC721.mint(address(0x1), parcelId);
-
-        ResourceId namespaceId = world.getNamespaceIdForParcel(parcelId);
-
-        bytes32[] memory _keyTuple = new bytes32[](1);
-        _keyTuple[0] = ResourceId.unwrap(namespaceId);
-
-        (
-            bytes memory _staticData,
-            PackedCounter _encodedLengths,
-            bytes memory _dynamicData
-        ) = NamespaceOwner.encode(address(this));
-
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        vm.startBroadcast(deployerPrivateKey);
-        vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotFound.selector);
-        world.setRecord(
-            NamespaceOwnerTableId,
-            _keyTuple,
-            _staticData,
-            _encodedLengths,
-            _dynamicData
-        );
-        vm.stopBroadcast();
-    }
-
-    function test_CannotSetRecordExisting() public {
-        ResourceId namespaceId = registerParcel();
-
-        bytes32[] memory _keyTuple = new bytes32[](1);
-        _keyTuple[0] = ResourceId.unwrap(namespaceId);
-
-        (
-            bytes memory _staticData,
-            PackedCounter _encodedLengths,
-            bytes memory _dynamicData
-        ) = NamespaceOwner.encode(address(0x1));
-
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
-        vm.startBroadcast(deployerPrivateKey);
-        vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotPCOOwner.selector);
-        world.setRecord(
-            NamespaceOwnerTableId,
-            _keyTuple,
-            _staticData,
-            _encodedLengths,
-            _dynamicData
-        );
-        vm.stopBroadcast();
+        world.transferOwnership(namespaceId, address(0x1));
     }
 
     function test_CannotClaimParcelNamespace() public {

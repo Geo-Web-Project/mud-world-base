@@ -11,8 +11,10 @@ import {IStoreHook} from "@latticexyz/store/src/IStoreHook.sol";
 import {PCOOwnership} from "./tables/PCOOwnership.sol";
 import {PCOOwnershipSystem} from "./PCOOwnershipSystem.sol";
 import {revertWithBytes} from "@latticexyz/world/src/revertWithBytes.sol";
-import {MODULE_NAME, TABLE_ID, SYSTEM_ID} from "./constants.sol";
+import {MODULE_NAME, TABLE_ID, SYSTEM_ID, NAMESPACE_ID} from "./constants.sol";
 import {NamespaceOwner, NamespaceOwnerTableId} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
+import {AccessControl} from "@latticexyz/world/src/AccessControl.sol";
+import {WORLD_NAMESPACE_ID} from "@latticexyz/world/src/constants.sol";
 
 contract PCOOwnershipModule is Module {
     PCOOwnershipSystem private immutable pcoOwnershipSystem =
@@ -23,17 +25,26 @@ contract PCOOwnershipModule is Module {
     }
 
     function installRoot(bytes memory args) public override {
+        // Set world namespace owner
+        NamespaceOwner._set(WORLD_NAMESPACE_ID, _msgSender());  
+
         // Deploy hook
         address pcoLicense = abi.decode(args, (address));
         IStoreHook hook = new PCOOwnershipHook(pcoLicense);
 
         IBaseWorld world = IBaseWorld(_world());
 
+        // Register pcoOwnership namespace
+        (bool success, bytes memory returnData) = address(world).delegatecall(
+            abi.encodeCall(world.registerNamespace, (NAMESPACE_ID))
+        );
+        if (!success) revertWithBytes(returnData);
+
         // Register table
         PCOOwnership._register(TABLE_ID);
 
         // Register system
-        (bool success, bytes memory returnData) = address(world).delegatecall(
+        (success, returnData) = address(world).delegatecall(
             abi.encodeCall(
                 world.registerSystem,
                 (SYSTEM_ID, pcoOwnershipSystem, true)

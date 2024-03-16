@@ -26,19 +26,16 @@ contract PostDeploy is Script {
         // Load the private key from the `PRIVATE_KEY` environment variable (in .env)
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
 
-        address parcelLicenseAddress = vm.envAddress("PARCEL_LICENSE_ADDRESS");
-
         // Start broadcasting transactions from the deployer account
         vm.startBroadcast(deployerPrivateKey);
 
-        // MockERC721 mockERC721 = new MockERC721();
+        if (isFork() == false) {
+            // Install PCOOwnershipModule
+            address parcelLicenseAddress = vm.envAddress("PARCEL_LICENSE_ADDRESS");
 
-        // uint256 parcelId = 320;
-        // mockERC721.mint(parcelId);
-
-        // Install PCOOwnershipModule
-        PCOOwnershipModule module = new PCOOwnershipModule();
-        world.installRootModule(module, abi.encode(parcelLicenseAddress));
+            PCOOwnershipModule module = new PCOOwnershipModule();
+            world.installRootModule(module, abi.encode(parcelLicenseAddress));
+        }
 
         vm.stopBroadcast();
     }

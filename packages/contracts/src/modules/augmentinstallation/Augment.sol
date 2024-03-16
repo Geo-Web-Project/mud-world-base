@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.19;
 
-import {IERC165, ERC165_INTERFACE_ID} from "@latticexyz/world/src/IERC165.sol";
-import {IAugment, AUGMENT_INTERFACE_ID} from "./IAugment.sol";
+import {IERC165} from "@latticexyz/world/src/IERC165.sol";
+import {IAugment} from "./IAugment.sol";
 import {WorldContextConsumer} from "@latticexyz/world/src/WorldContext.sol";
 
 /**
@@ -26,7 +26,7 @@ abstract contract Augment is IAugment, WorldContextConsumer {
         returns (bool)
     {
         return
-            interfaceId == AUGMENT_INTERFACE_ID ||
-            interfaceId == ERC165_INTERFACE_ID;
+            interfaceId == type(IAugment).interfaceId ||
+            interfaceId == type(IERC165).interfaceId;
     }
 }

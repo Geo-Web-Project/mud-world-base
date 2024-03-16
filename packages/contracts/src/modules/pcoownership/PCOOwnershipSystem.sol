@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.21;
+pragma solidity >=0.8.24;
 
 import {System} from "@latticexyz/world/src/System.sol";
 import {PCOOwnership, PCOOwnershipData} from "./tables/PCOOwnership.sol";
 import {ResourceId, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
 import {IBaseWorld} from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import {TABLE_ID} from "./constants.sol";
-import {CORE_SYSTEM_ID} from "@latticexyz/world/src/modules/core/constants.sol";
+import {REGISTRATION_SYSTEM_ID} from "@latticexyz/world/src/modules/init/constants.sol";
 import {Systems} from "@latticexyz/world/src/codegen/tables/Systems.sol";
-import {WorldRegistrationSystem} from "@latticexyz/world/src/modules/core/implementations/WorldRegistrationSystem.sol";
+import {WorldRegistrationSystem} from "@latticexyz/world/src/modules/init/implementations/WorldRegistrationSystem.sol";
 import {revertWithBytes} from "@latticexyz/world/src/revertWithBytes.sol";
 import {ResourceAccess} from "@latticexyz/world/src/codegen/tables/ResourceAccess.sol";
 import {NamespaceOwner} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
@@ -35,8 +35,8 @@ contract PCOOwnershipSystem is System {
         );
 
         // Register namespace
-        (address coreSystemAddress, ) = Systems._get(CORE_SYSTEM_ID);
-        (bool success, bytes memory data) = coreSystemAddress.delegatecall(
+        (address registrationSystemAddress, ) = Systems._get(REGISTRATION_SYSTEM_ID);
+        (bool success, bytes memory data) = registrationSystemAddress.delegatecall(
             abi.encodeCall(
                 WorldRegistrationSystem.registerNamespace,
                 (namespaceId)
