@@ -34,12 +34,11 @@ export default mudConfig({
     },
     Augments: {
       directory: "../modules/augmentinstallation/tables",
-      keySchema: {
+      valueSchema: {
         augmentAddress: "address",
         argumentsHash: "bytes32", // Hash of the params passed to the `install` function
-      },
-      valueSchema: {
         augmentMetadataURI: "string",
+        installedEntities: "bytes32[]",
       },
       tableIdArgument: true,
       storeArgument: true,

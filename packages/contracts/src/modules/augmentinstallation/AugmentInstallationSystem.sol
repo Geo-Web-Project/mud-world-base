@@ -56,8 +56,11 @@ contract AugmentInstallationSystem is System {
             (AugmentComponentValue[][])
         );
 
+        bytes32[] memory newEntities = new bytes32[](componentValues.length);
+
         for (uint256 x = 0; x < componentValues.length; x++) {
             bytes32 key = getUniqueEntity();
+            newEntities[x] = key;
 
             bytes32[] memory _keyTuple = new bytes32[](1);
             _keyTuple[0] = key;
@@ -91,13 +94,16 @@ contract AugmentInstallationSystem is System {
         });
 
         // Register the augment in the Augments table
+        bytes32 augmentKey = getUniqueEntity();
         Augments._set(
             AugmentInstallationLib.getAugmentsTableId(
                 WorldResourceIdLib.encodeNamespace(namespace)
             ),
+            augmentKey,
             address(augment),
             keccak256(args),
-            augment.getMetadataURI()
+            augment.getMetadataURI(),
+            newEntities
         );
     }
 }

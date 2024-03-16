@@ -17,6 +17,7 @@ import {getUniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentit
 import {Augments} from "../src/modules/augmentinstallation/tables/Augments.sol";
 import {AugmentInstallationLib, AugmentComponentValue} from "../src/modules/augmentinstallation/AugmentInstallationSystem.sol";
 import {ResourceIds} from "@latticexyz/store/src/StoreCore.sol";
+import "forge-std/console.sol";
 
 contract AugmentInstallationTest is MudTest {
     IWorld world;
@@ -93,7 +94,8 @@ contract AugmentInstallationTest is MudTest {
                 )
             )
         );
-        uint256 entityId = uint256(getUniqueEntity(world)) - 1;
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+        uint256 entityId = augmentKey - 1;
 
         assertEq(
             ScaleCom.getX(world, _tableId, bytes32(entityId)),
@@ -110,16 +112,16 @@ contract AugmentInstallationTest is MudTest {
             3,
             "Scale Z should be set"
         );
+
         assertEq(
             Augments.get(
                 world,
                 AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(bytes14("world"))
+                    WorldResourceIdLib.encodeNamespace(testNamespace)
                 ),
-                address(mockAugment),
-                keccak256(abi.encode(componentValues))
-            ),
-            mockAugment.getMetadataURI(),
+                bytes32(augmentKey)
+            ).augmentAddress,
+            address(mockAugment),
             "Augment should be installed"
         );
     }
@@ -183,7 +185,8 @@ contract AugmentInstallationTest is MudTest {
                 )
             )
         );
-        uint256 entityId = uint256(getUniqueEntity(world)) - 1;
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+        uint256 entityId = augmentKey - 1;
 
         assertEq(
             ScaleCom.getX(world, _scaleTableId, bytes32(entityId)),
@@ -209,12 +212,11 @@ contract AugmentInstallationTest is MudTest {
             Augments.get(
                 world,
                 AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(bytes14("world"))
+                    WorldResourceIdLib.encodeNamespace(testNamespace)
                 ),
-                address(mockAugment),
-                keccak256(abi.encode(componentValues))
-            ),
-            mockAugment.getMetadataURI(),
+                bytes32(augmentKey)
+            ).augmentAddress,
+            address(mockAugment),
             "Augment should be installed"
         );
     }
@@ -279,7 +281,8 @@ contract AugmentInstallationTest is MudTest {
                 )
             )
         );
-        uint256 entityId1 = uint256(getUniqueEntity(world)) - 2;
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+        uint256 entityId1 = augmentKey - 2;
         uint256 entityId2 = entityId1 + 1;
 
         assertEq(
@@ -306,12 +309,11 @@ contract AugmentInstallationTest is MudTest {
             Augments.get(
                 world,
                 AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(bytes14("world"))
+                    WorldResourceIdLib.encodeNamespace(testNamespace)
                 ),
-                address(mockAugment),
-                keccak256(abi.encode(componentValues))
-            ),
-            mockAugment.getMetadataURI(),
+                bytes32(augmentKey)
+            ).augmentAddress,
+            address(mockAugment),
             "Augment should be installed"
         );
     }
@@ -368,7 +370,8 @@ contract AugmentInstallationTest is MudTest {
                 )
             )
         );
-        uint256 entityId1 = uint256(getUniqueEntity(world)) - 2;
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+        uint256 entityId1 = augmentKey - 2;
         uint256 entityId2 = entityId1 + 1;
 
         assertEq(
@@ -395,12 +398,11 @@ contract AugmentInstallationTest is MudTest {
             Augments.get(
                 world,
                 AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(bytes14("world"))
+                    WorldResourceIdLib.encodeNamespace(testNamespace)
                 ),
-                address(mockAugment),
-                keccak256(abi.encode(componentValues))
-            ),
-            mockAugment.getMetadataURI(),
+                bytes32(augmentKey)
+            ).augmentAddress,
+            address(mockAugment),
             "Augment should be installed"
         );
     }
@@ -449,7 +451,8 @@ contract AugmentInstallationTest is MudTest {
             )
         );
 
-        uint256 entityId1 = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+        uint256 entityId1 = augmentKey - 1;
 
         assertEq(
             ScaleCom.getX(world, _scaleTableId, bytes32(entityId1)),
@@ -470,12 +473,11 @@ contract AugmentInstallationTest is MudTest {
             Augments.get(
                 world,
                 AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(bytes14("world"))
+                    WorldResourceIdLib.encodeNamespace(testNamespace)
                 ),
-                address(mockAugment),
-                keccak256(abi.encode(componentValues))
-            ),
-            mockAugment.getMetadataURI(),
+                bytes32(augmentKey)
+            ).augmentAddress,
+            address(mockAugment),
             "Augment should be installed"
         );
     }
