@@ -46,6 +46,9 @@ contract AugmentInstallationSystem is System {
         // Require the provided address to implement the IAugment interface
         requireInterface(address(augment), type(IAugment).interfaceId);
 
+        // Before install hook
+        augment.onBeforeInstall();
+
         // Parse args and set records
         bytes16[][] memory augmentTypes = augment.getComponentTypes();
         AugmentComponentValue[][] memory componentValues = abi.decode(
@@ -53,11 +56,8 @@ contract AugmentInstallationSystem is System {
             (AugmentComponentValue[][])
         );
 
-        bytes32[] memory newEntities = new bytes32[](componentValues.length);
-
         for (uint256 x = 0; x < componentValues.length; x++) {
             bytes32 key = getUniqueEntity();
-            newEntities[x] = key;
 
             bytes32[] memory _keyTuple = new bytes32[](1);
             _keyTuple[0] = key;

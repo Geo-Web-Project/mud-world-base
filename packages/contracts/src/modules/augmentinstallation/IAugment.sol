@@ -5,6 +5,11 @@ import {IERC165} from "@latticexyz/world/src/IERC165.sol";
 
 interface IAugment is IERC165 {
     /**
+     * @notice Run a hook before installation. Can be used to gate access to installing an augment
+     */
+    function onBeforeInstall() external;
+
+    /**
      * @notice Return the metadata of the augment.
      * @return metadataURI The URI of the metadata as a content hash
      */

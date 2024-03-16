@@ -516,10 +516,43 @@ contract AugmentInstallationTest is MudTest {
         );
         vm.stopPrank();
     }
+
+    function test_BeforeInstallHook() public {
+        MockAugmentSingleGated mockAugment = new MockAugmentSingleGated();
+
+        (
+            bytes memory staticData,
+            PackedCounter encodedLengths,
+            bytes memory dynamicData
+        ) = ScaleCom.encode(1, 2, 3);
+
+        AugmentComponentValue memory componentValue = AugmentComponentValue({
+            staticData: staticData,
+            encodedLengths: encodedLengths,
+            dynamicData: dynamicData
+        });
+        AugmentComponentValue[][]
+            memory componentValues = new AugmentComponentValue[][](1);
+        componentValues[0] = new AugmentComponentValue[](1);
+        componentValues[0][0] = componentValue;
+
+        vm.startPrank(address(0x1));
+        vm.expectRevert(
+            MockAugmentSingleGated.InstallFailed.selector
+        );
+        world.installAugment(
+            mockAugment,
+            testNamespace,
+            abi.encode(componentValues)
+        );
+        vm.stopPrank();
+    }
 }
 
 contract MockAugmentSingle is Augment {
     bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleCom"))]];
+
+    function onBeforeInstall() external {}
 
     function getMetadataURI() external view returns (string memory) {
         return "";
@@ -536,6 +569,8 @@ contract MockAugmentMultipleComponents is Augment {
     bytes16[][] private componentTypes = [
         [bytes16(bytes32("ScaleCom")), bytes16(bytes32("NameCom"))]
     ];
+
+    function onBeforeInstall() external {}
 
     function getMetadataURI() external view returns (string memory) {
         return "";
@@ -554,6 +589,8 @@ contract MockAugmentMultipleEntities is Augment {
         [bytes16(bytes32("NameCom"))]
     ];
 
+    function onBeforeInstall() external {}
+
     function getMetadataURI() external view returns (string memory) {
         return "";
     }
@@ -567,6 +604,8 @@ contract MockAugmentMultipleEntities is Augment {
 
 contract MockAugmentSetOverride is Augment {
     bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleCom"))]];
+
+    function onBeforeInstall() external {}
 
     function getMetadataURI() external view returns (string memory) {
         return "";
@@ -595,6 +634,8 @@ contract MockAugmentSetOverride is Augment {
 contract MockAugmentSpliceOverride is Augment {
     bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleCom"))]];
 
+    function onBeforeInstall() external {}
+
     function getMetadataURI() external view returns (string memory) {
         return "";
     }
@@ -620,4 +661,24 @@ contract MockAugmentSpliceOverride is Augment {
         );
         ScaleCom.setX(IWorld(_world()), _nameTableId, key1, 10);
     }
+}
+
+contract MockAugmentSingleGated is Augment {
+    error InstallFailed();
+
+    bytes16[][] private componentTypes = [[bytes16(bytes32("ScaleCom"))]];
+
+    function onBeforeInstall() external {
+        revert InstallFailed();
+    }
+
+    function getMetadataURI() external view returns (string memory) {
+        return "";
+    }
+
+    function getComponentTypes() external view returns (bytes16[][] memory) {
+        return componentTypes;
+    }
+
+    function performOverrides(bytes14 namespace) external {}
 }
