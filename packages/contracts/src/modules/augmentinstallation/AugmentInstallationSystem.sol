@@ -106,6 +106,85 @@ contract AugmentInstallationSystem is System {
             newEntities
         );
     }
+
+    /**
+     * @notice Updates an already installed augment.
+     * @dev Validates the given augment against the IAugment interface and delegates the installation process.
+     * @param augment The augment to be updated.
+     * @param namespace The namespace of the augment.
+     * @param augmentKey The key of the previously installed augment
+     * @param args Arguments for the augment installation.
+     */
+    function updateAugment(
+        IAugment augment,
+        bytes14 namespace,
+        bytes32 augmentKey,
+        bytes calldata args
+    ) public {
+        // Require namespace access
+        AccessControl.requireAccess(
+            WorldResourceIdLib.encodeNamespace(namespace),
+            _msgSender()
+        );
+
+        // Require the provided address to implement the IAugment interface
+        requireInterface(address(augment), type(IAugment).interfaceId);
+
+        // Parse args and update records
+        bytes16[][] memory augmentTypes = augment.getComponentTypes();
+        AugmentComponentValue[][] memory componentValues = abi.decode(
+            args,
+            (AugmentComponentValue[][])
+        );
+
+        bytes32[] memory installedEntities = Augments
+            ._get(
+                AugmentInstallationLib.getAugmentsTableId(
+                    WorldResourceIdLib.encodeNamespace(namespace)
+                ),
+                augmentKey
+            )
+            .installedEntities;
+
+        require(
+            componentValues.length == installedEntities.length,
+            "AugmentInstallationSystem: incorrect keys length"
+        );
+
+        for (uint256 x = 0; x < componentValues.length; x++) {
+            bytes32 key = installedEntities[x];
+
+            bytes32[] memory _keyTuple = new bytes32[](1);
+            _keyTuple[0] = key;
+
+            for (uint256 y = 0; y < componentValues[x].length; y++) {
+                ResourceId tableId = ResourceId.wrap(
+                    bytes32(
+                        abi.encodePacked(
+                            RESOURCE_TABLE,
+                            namespace,
+                            augmentTypes[x][y]
+                        )
+                    )
+                );
+                StoreCore.setRecord(
+                    tableId,
+                    _keyTuple,
+                    componentValues[x][y].staticData,
+                    componentValues[x][y].encodedLengths,
+                    componentValues[x][y].dynamicData
+                );
+            }
+        }
+
+        // Perform augment overrides
+        WorldContextProviderLib.callWithContextOrRevert({
+            msgSender: _msgSender(),
+            msgValue: 0,
+            target: address(augment),
+            callData: abi.encodeCall(IAugment.performOverrides, (namespace))
+        });
+    }
 }
 
 library AugmentInstallationLib {

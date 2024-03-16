@@ -26,7 +26,7 @@ contract PCOOwnershipModule is Module {
 
     function installRoot(bytes memory args) public override {
         // Set world namespace owner
-        NamespaceOwner._set(WORLD_NAMESPACE_ID, _msgSender());  
+        NamespaceOwner._set(WORLD_NAMESPACE_ID, _msgSender());
 
         // Deploy hook
         address pcoLicense = abi.decode(args, (address));

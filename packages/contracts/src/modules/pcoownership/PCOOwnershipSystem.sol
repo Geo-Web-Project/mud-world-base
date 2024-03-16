@@ -35,13 +35,16 @@ contract PCOOwnershipSystem is System {
         );
 
         // Register namespace
-        (address registrationSystemAddress, ) = Systems._get(REGISTRATION_SYSTEM_ID);
-        (bool success, bytes memory data) = registrationSystemAddress.delegatecall(
-            abi.encodeCall(
-                WorldRegistrationSystem.registerNamespace,
-                (namespaceId)
-            )
+        (address registrationSystemAddress, ) = Systems._get(
+            REGISTRATION_SYSTEM_ID
         );
+        (bool success, bytes memory data) = registrationSystemAddress
+            .delegatecall(
+                abi.encodeCall(
+                    WorldRegistrationSystem.registerNamespace,
+                    (namespaceId)
+                )
+            );
         if (!success) revertWithBytes(data);
 
         // Register Augments table

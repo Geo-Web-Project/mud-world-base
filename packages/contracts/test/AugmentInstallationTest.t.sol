@@ -114,13 +114,15 @@ contract AugmentInstallationTest is MudTest {
         );
 
         assertEq(
-            Augments.get(
-                world,
-                AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(testNamespace)
-                ),
-                bytes32(augmentKey)
-            ).augmentAddress,
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
             address(mockAugment),
             "Augment should be installed"
         );
@@ -209,13 +211,15 @@ contract AugmentInstallationTest is MudTest {
             "Name should be set"
         );
         assertEq(
-            Augments.get(
-                world,
-                AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(testNamespace)
-                ),
-                bytes32(augmentKey)
-            ).augmentAddress,
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
             address(mockAugment),
             "Augment should be installed"
         );
@@ -306,13 +310,15 @@ contract AugmentInstallationTest is MudTest {
             "Name should be set"
         );
         assertEq(
-            Augments.get(
-                world,
-                AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(testNamespace)
-                ),
-                bytes32(augmentKey)
-            ).augmentAddress,
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
             address(mockAugment),
             "Augment should be installed"
         );
@@ -395,13 +401,15 @@ contract AugmentInstallationTest is MudTest {
             "Name should be set"
         );
         assertEq(
-            Augments.get(
-                world,
-                AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(testNamespace)
-                ),
-                bytes32(augmentKey)
-            ).augmentAddress,
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
             address(mockAugment),
             "Augment should be installed"
         );
@@ -470,13 +478,15 @@ contract AugmentInstallationTest is MudTest {
             "Scale Z should be set"
         );
         assertEq(
-            Augments.get(
-                world,
-                AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(testNamespace)
-                ),
-                bytes32(augmentKey)
-            ).augmentAddress,
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
             address(mockAugment),
             "Augment should be installed"
         );
@@ -539,15 +549,114 @@ contract AugmentInstallationTest is MudTest {
         componentValues[0][0] = componentValue;
 
         vm.startPrank(address(0x1));
-        vm.expectRevert(
-            MockAugmentSingleGated.InstallFailed.selector
-        );
+        vm.expectRevert(MockAugmentSingleGated.InstallFailed.selector);
         world.installAugment(
             mockAugment,
             testNamespace,
             abi.encode(componentValues)
         );
         vm.stopPrank();
+    }
+
+    function testUpdateAugment_Single() public {
+        MockAugmentSingle mockAugment = new MockAugmentSingle();
+
+        vm.startPrank(address(0x1));
+
+        {
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(1, 2, 3);
+
+            AugmentComponentValue
+                memory componentValue = AugmentComponentValue({
+                    staticData: staticData,
+                    encodedLengths: encodedLengths,
+                    dynamicData: dynamicData
+                });
+            AugmentComponentValue[][]
+                memory componentValues = new AugmentComponentValue[][](1);
+            componentValues[0] = new AugmentComponentValue[](1);
+            componentValues[0][0] = componentValue;
+
+            world.installAugment(
+                mockAugment,
+                testNamespace,
+                abi.encode(componentValues)
+            );
+        }
+
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+
+        {
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(2, 4, 6);
+
+            AugmentComponentValue
+                memory componentValue = AugmentComponentValue({
+                    staticData: staticData,
+                    encodedLengths: encodedLengths,
+                    dynamicData: dynamicData
+                });
+            AugmentComponentValue[][]
+                memory componentValues = new AugmentComponentValue[][](1);
+            componentValues[0] = new AugmentComponentValue[](1);
+            componentValues[0][0] = componentValue;
+
+            world.updateAugment(
+                mockAugment,
+                testNamespace,
+                bytes32(augmentKey),
+                abi.encode(componentValues)
+            );
+        }
+        vm.stopPrank();
+
+        ResourceId _tableId = ResourceId.wrap(
+            bytes32(
+                abi.encodePacked(
+                    RESOURCE_TABLE,
+                    testNamespace,
+                    bytes16(bytes32("ScaleCom"))
+                )
+            )
+        );
+        uint256 entityId = augmentKey - 1;
+
+        assertEq(
+            ScaleCom.getX(world, _tableId, bytes32(entityId)),
+            2,
+            "Scale X should be updated"
+        );
+        assertEq(
+            ScaleCom.getY(world, _tableId, bytes32(entityId)),
+            4,
+            "Scale Y should be updated"
+        );
+        assertEq(
+            ScaleCom.getZ(world, _tableId, bytes32(entityId)),
+            6,
+            "Scale Z should be updated"
+        );
+
+        assertEq(
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
+            address(mockAugment),
+            "Augment should be installed"
+        );
     }
 }
 

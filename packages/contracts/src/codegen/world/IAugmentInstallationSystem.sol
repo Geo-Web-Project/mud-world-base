@@ -11,4 +11,6 @@ import { IAugment } from "./../../modules/augmentinstallation/IAugment.sol";
  */
 interface IAugmentInstallationSystem {
   function installAugment(IAugment augment, bytes14 namespace, bytes calldata args) external;
+
+  function updateAugment(IAugment augment, bytes14 namespace, bytes32 augmentKey, bytes calldata args) external;
 }
