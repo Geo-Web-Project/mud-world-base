@@ -1,26 +1,26 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+// // SPDX-License-Identifier: UNLICENSED
+// pragma solidity ^0.8.13;
 
-import {Augment} from "@geo-web/mud-world-base-contracts/src/modules/augmentinstallation/Augment.sol";
+// import {Augment} from "@geo-web/mud-world-base-contracts/src/modules/augmentinstallation/Augment.sol";
 
-contract ImageAugment is Augment {
-    bytes16[][] private componentTypes = [
-        [
-            bytes16("ImageCom"),
-            bytes16("NameCom"),
-            bytes16("PositionCom"),
-            bytes16("OrientationCom"),
-            bytes16("ScaleCom")
-        ]
-    ];
+// contract ImageAugment is Augment {
+//     bytes16[][] private componentTypes = [
+//         [
+//             bytes16("ImageCom"),
+//             bytes16("NameCom"),
+//             bytes16("PositionCom"),
+//             bytes16("OrientationCom"),
+//             bytes16("ScaleCom")
+//         ]
+//     ];
 
-    function getMetadataURI() external pure returns (string memory) {
-        return "";
-    }
+//     function getMetadataURI() external pure returns (string memory) {
+//         return "";
+//     }
 
-    function getComponentTypes() external view returns (bytes16[][] memory) {
-        return componentTypes;
-    }
+//     function getComponentTypes() external view returns (bytes16[][] memory) {
+//         return componentTypes;
+//     }
 
-    function performOverrides(bytes14 namespace) external {}
-}
+//     function performOverrides(bytes14 namespace) external {}
+// }

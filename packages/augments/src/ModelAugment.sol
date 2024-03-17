@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity >=0.8.24;
 
 import {Augment} from "@geo-web/mud-world-base-contracts/src/modules/augmentinstallation/Augment.sol";
 
@@ -14,6 +14,8 @@ contract ModelAugment is Augment {
         ]
     ];
 
+    function onBeforeInstall() external {}
+
     function getMetadataURI() external pure returns (string memory) {
         return "";
     }
@@ -22,5 +24,10 @@ contract ModelAugment is Augment {
         return componentTypes;
     }
 
-    function performOverrides(bytes14 namespace) external {}
+    function installOverrides(bytes14 namespace, bytes32 keyOffset) external {}
+
+    function uninstallOverrides(
+        bytes14 namespace,
+        bytes32 keyOffset
+    ) external {}
 }
