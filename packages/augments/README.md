@@ -4,4 +4,4 @@
 
 | Augment      | Address                                    |
 | ------------ | ------------------------------------------ |
-| ModelAugment | 0x73f7c7ee16c83a28952c97919a50d3048f7a7514 |
+| ModelAugment | 0xc1e3394f7D88E41f7dE29a513fa75f50f2a265b9 |
