@@ -22,8 +22,14 @@ interface IAugment is IERC165 {
     function getComponentTypes() external view returns (bytes16[][] memory);
 
     /**
-     * @notice Perform overrides to entities that define this augment.
+     * @notice Install overrides to entities that define this augment.
      * @dev This function should emit Store events to be read by clients.
+     * @param keyOffset The key of the first installed entity
      */
-    function performOverrides(bytes14 namespace) external;
+    function installOverrides(bytes14 namespace, bytes32 keyOffset) external;
+
+    /**
+     * @notice Uninstall overrides to entities that define this augment.
+     */
+    function uninstallOverrides(bytes14 namespace, bytes32 keyOffset) external;
 }

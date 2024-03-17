@@ -14,7 +14,7 @@ import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {TABLE_ID as UNIQUE_ENTITY_TABLE_ID} from "@latticexyz/world-modules/src/modules/uniqueentity/constants.sol";
 import {UniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentity/tables/UniqueEntity.sol";
 import {getUniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
-import {Augments} from "../src/modules/augmentinstallation/tables/Augments.sol";
+import {Augments, AugmentsData} from "../src/modules/augmentinstallation/tables/Augments.sol";
 import {AugmentInstallationLib, AugmentComponentValue} from "../src/modules/augmentinstallation/AugmentInstallationSystem.sol";
 import {ResourceIds} from "@latticexyz/store/src/StoreCore.sol";
 import "forge-std/console.sol";
@@ -609,7 +609,6 @@ contract AugmentInstallationTest is MudTest {
             componentValues[0][0] = componentValue;
 
             world.updateAugment(
-                mockAugment,
                 testNamespace,
                 bytes32(augmentKey),
                 abi.encode(componentValues)
@@ -658,6 +657,541 @@ contract AugmentInstallationTest is MudTest {
             "Augment should be installed"
         );
     }
+
+    function testUpdateAugment_SetOverride() public {
+        MockAugmentSetOverride mockAugment = new MockAugmentSetOverride();
+
+        vm.startPrank(address(0x1));
+        world.grantAccess(
+            WorldResourceIdLib.encodeNamespace(testNamespace),
+            address(mockAugment)
+        );
+
+        {
+            AugmentComponentValue[][]
+                memory componentValues = new AugmentComponentValue[][](1);
+
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(1, 2, 3);
+            componentValues[0] = new AugmentComponentValue[](1);
+            componentValues[0][0] = AugmentComponentValue(
+                staticData,
+                encodedLengths,
+                dynamicData
+            );
+
+            world.installAugment(
+                mockAugment,
+                testNamespace,
+                abi.encode(componentValues)
+            );
+        }
+
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+
+        {
+            AugmentComponentValue[][]
+                memory componentValues = new AugmentComponentValue[][](1);
+
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(2, 4, 6);
+            componentValues[0] = new AugmentComponentValue[](1);
+            componentValues[0][0] = AugmentComponentValue(
+                staticData,
+                encodedLengths,
+                dynamicData
+            );
+
+            world.updateAugment(
+                testNamespace,
+                bytes32(augmentKey),
+                abi.encode(componentValues)
+            );
+        }
+
+        world.revokeAccess(
+            WorldResourceIdLib.encodeNamespace(testNamespace),
+            address(mockAugment)
+        );
+        vm.stopPrank();
+
+        ResourceId _scaleTableId = ResourceId.wrap(
+            bytes32(
+                abi.encodePacked(
+                    RESOURCE_TABLE,
+                    testNamespace,
+                    bytes16(bytes32("ScaleCom"))
+                )
+            )
+        );
+        ResourceId _nameTableId = ResourceId.wrap(
+            bytes32(
+                abi.encodePacked(
+                    RESOURCE_TABLE,
+                    testNamespace,
+                    bytes16(bytes32("NameCom"))
+                )
+            )
+        );
+        uint256 entityId1 = augmentKey - 2;
+        uint256 entityId2 = entityId1 + 1;
+
+        assertEq(
+            ScaleCom.getX(world, _scaleTableId, bytes32(entityId1)),
+            2,
+            "Scale X should be set"
+        );
+        assertEq(
+            ScaleCom.getY(world, _scaleTableId, bytes32(entityId1)),
+            4,
+            "Scale Y should be set"
+        );
+        assertEq(
+            ScaleCom.getZ(world, _scaleTableId, bytes32(entityId1)),
+            6,
+            "Scale Z should be set"
+        );
+        assertEq(
+            NameCom.get(world, _nameTableId, bytes32(entityId2)),
+            "test1",
+            "Name should be set"
+        );
+        assertEq(
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
+            address(mockAugment),
+            "Augment should be installed"
+        );
+        assertEq(
+            UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID),
+            augmentKey,
+            "Should not create new entities"
+        );
+    }
+
+    function testUpdateAugment_SpliceOverride() public {
+        MockAugmentSpliceOverride mockAugment = new MockAugmentSpliceOverride();
+
+        vm.startPrank(address(0x1));
+        world.grantAccess(
+            WorldResourceIdLib.encodeNamespace(testNamespace),
+            address(mockAugment)
+        );
+
+        {
+            AugmentComponentValue[][]
+                memory componentValues = new AugmentComponentValue[][](1);
+
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(1, 2, 3);
+            componentValues[0] = new AugmentComponentValue[](1);
+            componentValues[0][0] = AugmentComponentValue(
+                staticData,
+                encodedLengths,
+                dynamicData
+            );
+
+            world.installAugment(
+                mockAugment,
+                testNamespace,
+                abi.encode(componentValues)
+            );
+        }
+
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+
+        {
+            AugmentComponentValue[][]
+                memory componentValues = new AugmentComponentValue[][](1);
+
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(2, 4, 6);
+            componentValues[0] = new AugmentComponentValue[](1);
+            componentValues[0][0] = AugmentComponentValue(
+                staticData,
+                encodedLengths,
+                dynamicData
+            );
+
+            world.updateAugment(
+                testNamespace,
+                bytes32(augmentKey),
+                abi.encode(componentValues)
+            );
+        }
+
+        world.revokeAccess(
+            WorldResourceIdLib.encodeNamespace(testNamespace),
+            address(mockAugment)
+        );
+        vm.stopPrank();
+
+        ResourceId _scaleTableId = ResourceId.wrap(
+            bytes32(
+                abi.encodePacked(
+                    RESOURCE_TABLE,
+                    testNamespace,
+                    bytes16(bytes32("ScaleCom"))
+                )
+            )
+        );
+
+        uint256 entityId1 = augmentKey - 1;
+
+        assertEq(
+            ScaleCom.getX(world, _scaleTableId, bytes32(entityId1)),
+            10,
+            "Scale X should be set"
+        );
+        assertEq(
+            ScaleCom.getY(world, _scaleTableId, bytes32(entityId1)),
+            4,
+            "Scale Y should be set"
+        );
+        assertEq(
+            ScaleCom.getZ(world, _scaleTableId, bytes32(entityId1)),
+            6,
+            "Scale Z should be set"
+        );
+        assertEq(
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
+            address(mockAugment),
+            "Augment should be installed"
+        );
+        assertEq(
+            UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID),
+            augmentKey,
+            "Should not create new entities"
+        );
+    }
+
+    function testUninstallAugment_Single() public {
+        MockAugmentSingle mockAugment = new MockAugmentSingle();
+
+        vm.startPrank(address(0x1));
+
+        (
+            bytes memory staticData,
+            PackedCounter encodedLengths,
+            bytes memory dynamicData
+        ) = ScaleCom.encode(1, 2, 3);
+
+        AugmentComponentValue memory componentValue = AugmentComponentValue({
+            staticData: staticData,
+            encodedLengths: encodedLengths,
+            dynamicData: dynamicData
+        });
+        AugmentComponentValue[][]
+            memory componentValues = new AugmentComponentValue[][](1);
+        componentValues[0] = new AugmentComponentValue[](1);
+        componentValues[0][0] = componentValue;
+
+        world.installAugment(
+            mockAugment,
+            testNamespace,
+            abi.encode(componentValues)
+        );
+
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+
+        world.uninstallAugment(testNamespace, bytes32(augmentKey));
+
+        vm.stopPrank();
+
+        ResourceId _tableId = ResourceId.wrap(
+            bytes32(
+                abi.encodePacked(
+                    RESOURCE_TABLE,
+                    testNamespace,
+                    bytes16(bytes32("ScaleCom"))
+                )
+            )
+        );
+        uint256 entityId = augmentKey - 1;
+
+        assertEq(
+            ScaleCom.getX(world, _tableId, bytes32(entityId)),
+            0,
+            "Scale X should be deleted"
+        );
+        assertEq(
+            ScaleCom.getY(world, _tableId, bytes32(entityId)),
+            0,
+            "Scale Y should be deleted"
+        );
+        assertEq(
+            ScaleCom.getZ(world, _tableId, bytes32(entityId)),
+            0,
+            "Scale Z should be deleted"
+        );
+
+        assertEq(
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
+            address(0x0),
+            "Augment should be uninstalled"
+        );
+    }
+
+    function testUninstallAugment_SetOverride() public {
+        MockAugmentSetOverride mockAugment = new MockAugmentSetOverride();
+
+        vm.startPrank(address(0x1));
+        world.grantAccess(
+            WorldResourceIdLib.encodeNamespace(testNamespace),
+            address(mockAugment)
+        );
+
+        {
+            AugmentComponentValue[][]
+                memory componentValues = new AugmentComponentValue[][](1);
+
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(1, 2, 3);
+            componentValues[0] = new AugmentComponentValue[](1);
+            componentValues[0][0] = AugmentComponentValue(
+                staticData,
+                encodedLengths,
+                dynamicData
+            );
+
+            world.installAugment(
+                mockAugment,
+                testNamespace,
+                abi.encode(componentValues)
+            );
+        }
+
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+
+        {
+            AugmentComponentValue[][]
+                memory componentValues = new AugmentComponentValue[][](1);
+
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(2, 4, 6);
+            componentValues[0] = new AugmentComponentValue[](1);
+            componentValues[0][0] = AugmentComponentValue(
+                staticData,
+                encodedLengths,
+                dynamicData
+            );
+
+            world.uninstallAugment(testNamespace, bytes32(augmentKey));
+        }
+
+        world.revokeAccess(
+            WorldResourceIdLib.encodeNamespace(testNamespace),
+            address(mockAugment)
+        );
+        vm.stopPrank();
+
+        ResourceId _scaleTableId = ResourceId.wrap(
+            bytes32(
+                abi.encodePacked(
+                    RESOURCE_TABLE,
+                    testNamespace,
+                    bytes16(bytes32("ScaleCom"))
+                )
+            )
+        );
+        ResourceId _nameTableId = ResourceId.wrap(
+            bytes32(
+                abi.encodePacked(
+                    RESOURCE_TABLE,
+                    testNamespace,
+                    bytes16(bytes32("NameCom"))
+                )
+            )
+        );
+        uint256 entityId1 = augmentKey - 2;
+        uint256 entityId2 = entityId1 + 1;
+
+        assertEq(
+            ScaleCom.getX(world, _scaleTableId, bytes32(entityId1)),
+            0,
+            "Scale X should be deleted"
+        );
+        assertEq(
+            ScaleCom.getY(world, _scaleTableId, bytes32(entityId1)),
+            0,
+            "Scale Y should be deleted"
+        );
+        assertEq(
+            ScaleCom.getZ(world, _scaleTableId, bytes32(entityId1)),
+            0,
+            "Scale Z should be deleted"
+        );
+        assertEq(
+            NameCom.get(world, _nameTableId, bytes32(entityId2)),
+            "",
+            "Name should be deleted"
+        );
+        assertEq(
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
+            address(0x0),
+            "Augment should be uninstalled"
+        );
+        assertEq(
+            UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID),
+            augmentKey,
+            "Should not create new entities"
+        );
+    }
+
+    function testUninstallAugment_SpliceOverride() public {
+        MockAugmentSpliceOverride mockAugment = new MockAugmentSpliceOverride();
+
+        vm.startPrank(address(0x1));
+        world.grantAccess(
+            WorldResourceIdLib.encodeNamespace(testNamespace),
+            address(mockAugment)
+        );
+
+        {
+            AugmentComponentValue[][]
+                memory componentValues = new AugmentComponentValue[][](1);
+
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(1, 2, 3);
+            componentValues[0] = new AugmentComponentValue[](1);
+            componentValues[0][0] = AugmentComponentValue(
+                staticData,
+                encodedLengths,
+                dynamicData
+            );
+
+            world.installAugment(
+                mockAugment,
+                testNamespace,
+                abi.encode(componentValues)
+            );
+        }
+
+        uint256 augmentKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+
+        {
+            AugmentComponentValue[][]
+                memory componentValues = new AugmentComponentValue[][](1);
+
+            (
+                bytes memory staticData,
+                PackedCounter encodedLengths,
+                bytes memory dynamicData
+            ) = ScaleCom.encode(2, 4, 6);
+            componentValues[0] = new AugmentComponentValue[](1);
+            componentValues[0][0] = AugmentComponentValue(
+                staticData,
+                encodedLengths,
+                dynamicData
+            );
+
+            world.uninstallAugment(testNamespace, bytes32(augmentKey));
+        }
+
+        world.revokeAccess(
+            WorldResourceIdLib.encodeNamespace(testNamespace),
+            address(mockAugment)
+        );
+        vm.stopPrank();
+
+        ResourceId _scaleTableId = ResourceId.wrap(
+            bytes32(
+                abi.encodePacked(
+                    RESOURCE_TABLE,
+                    testNamespace,
+                    bytes16(bytes32("ScaleCom"))
+                )
+            )
+        );
+
+        uint256 entityId1 = augmentKey - 1;
+
+        assertEq(
+            ScaleCom.getX(world, _scaleTableId, bytes32(entityId1)),
+            0,
+            "Scale X should be deleted"
+        );
+        assertEq(
+            ScaleCom.getY(world, _scaleTableId, bytes32(entityId1)),
+            0,
+            "Scale Y should be deleted"
+        );
+        assertEq(
+            ScaleCom.getZ(world, _scaleTableId, bytes32(entityId1)),
+            0,
+            "Scale Z should be deleted"
+        );
+        assertEq(
+            Augments
+                .get(
+                    world,
+                    AugmentInstallationLib.getAugmentsTableId(
+                        WorldResourceIdLib.encodeNamespace(testNamespace)
+                    ),
+                    bytes32(augmentKey)
+                )
+                .augmentAddress,
+            address(0x0),
+            "Augment should be uninstalled"
+        );
+        assertEq(
+            UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID),
+            augmentKey,
+            "Should not create new entities"
+        );
+    }
 }
 
 contract MockAugmentSingle is Augment {
@@ -673,7 +1207,12 @@ contract MockAugmentSingle is Augment {
         return componentTypes;
     }
 
-    function performOverrides(bytes14 namespace) external {}
+    function installOverrides(bytes14 namespace, bytes32 keyOffset) external {}
+
+    function uninstallOverrides(
+        bytes14 namespace,
+        bytes32 keyOffset
+    ) external {}
 }
 
 contract MockAugmentMultipleComponents is Augment {
@@ -691,7 +1230,12 @@ contract MockAugmentMultipleComponents is Augment {
         return componentTypes;
     }
 
-    function performOverrides(bytes14 namespace) external {}
+    function installOverrides(bytes14 namespace, bytes32 keyOffset) external {}
+
+    function uninstallOverrides(
+        bytes14 namespace,
+        bytes32 keyOffset
+    ) external {}
 }
 
 contract MockAugmentMultipleEntities is Augment {
@@ -710,7 +1254,12 @@ contract MockAugmentMultipleEntities is Augment {
         return componentTypes;
     }
 
-    function performOverrides(bytes14 namespace) external {}
+    function installOverrides(bytes14 namespace, bytes32 keyOffset) external {}
+
+    function uninstallOverrides(
+        bytes14 namespace,
+        bytes32 keyOffset
+    ) external {}
 }
 
 contract MockAugmentSetOverride is Augment {
@@ -726,8 +1275,15 @@ contract MockAugmentSetOverride is Augment {
         return componentTypes;
     }
 
-    function performOverrides(bytes14 namespace) external {
-        bytes32 key = getUniqueEntity();
+    function installOverrides(bytes14 namespace, bytes32 keyOffset) external {
+        uint256 lastKey = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID);
+
+        bytes32 key;
+        if (lastKey == uint256(keyOffset)) {
+            key = getUniqueEntity();
+        } else {
+            key = bytes32(uint256(keyOffset) + 1);
+        }
 
         ResourceId _nameTableId = ResourceId.wrap(
             bytes32(
@@ -739,6 +1295,21 @@ contract MockAugmentSetOverride is Augment {
             )
         );
         NameCom.set(IWorld(_world()), _nameTableId, key, "test1");
+    }
+
+    function uninstallOverrides(bytes14 namespace, bytes32 keyOffset) external {
+        bytes32 key = bytes32(uint256(keyOffset) + 1);
+
+        ResourceId _nameTableId = ResourceId.wrap(
+            bytes32(
+                abi.encodePacked(
+                    RESOURCE_TABLE,
+                    namespace,
+                    bytes16(bytes32("NameCom"))
+                )
+            )
+        );
+        NameCom.deleteRecord(IWorld(_world()), _nameTableId, key);
     }
 }
 
@@ -755,12 +1326,7 @@ contract MockAugmentSpliceOverride is Augment {
         return componentTypes;
     }
 
-    function performOverrides(bytes14 namespace) external {
-        uint256 keyOffset = UniqueEntity.get(UNIQUE_ENTITY_TABLE_ID) -
-            componentTypes.length;
-
-        bytes32 key1 = bytes32(keyOffset + 1);
-
+    function installOverrides(bytes14 namespace, bytes32 keyOffset) external {
         ResourceId _nameTableId = ResourceId.wrap(
             bytes32(
                 abi.encodePacked(
@@ -770,8 +1336,13 @@ contract MockAugmentSpliceOverride is Augment {
                 )
             )
         );
-        ScaleCom.setX(IWorld(_world()), _nameTableId, key1, 10);
+        ScaleCom.setX(IWorld(_world()), _nameTableId, keyOffset, 10);
     }
+
+    function uninstallOverrides(
+        bytes14 namespace,
+        bytes32 keyOffset
+    ) external {}
 }
 
 contract MockAugmentSingleGated is Augment {
@@ -791,5 +1362,10 @@ contract MockAugmentSingleGated is Augment {
         return componentTypes;
     }
 
-    function performOverrides(bytes14 namespace) external {}
+    function installOverrides(bytes14 namespace, bytes32 keyOffset) external {}
+
+    function uninstallOverrides(
+        bytes14 namespace,
+        bytes32 keyOffset
+    ) external {}
 }

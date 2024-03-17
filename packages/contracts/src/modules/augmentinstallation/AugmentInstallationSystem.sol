@@ -4,7 +4,7 @@ pragma solidity >=0.8.24;
 import {IAugment} from "./IAugment.sol";
 import {System} from "@latticexyz/world/src/System.sol";
 import {WorldContextProviderLib} from "@latticexyz/world/src/WorldContext.sol";
-import {Augments} from "./tables/Augments.sol";
+import {Augments, AugmentsData} from "./tables/Augments.sol";
 import {requireInterface} from "@latticexyz/world/src/requireInterface.sol";
 import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {ResourceId, WorldResourceIdInstance, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
@@ -90,7 +90,10 @@ contract AugmentInstallationSystem is System {
             msgSender: _msgSender(),
             msgValue: 0,
             target: address(augment),
-            callData: abi.encodeCall(IAugment.performOverrides, (namespace))
+            callData: abi.encodeCall(
+                IAugment.installOverrides,
+                (namespace, newEntities[0])
+            )
         });
 
         // Register the augment in the Augments table
@@ -110,13 +113,11 @@ contract AugmentInstallationSystem is System {
     /**
      * @notice Updates an already installed augment.
      * @dev Validates the given augment against the IAugment interface and delegates the installation process.
-     * @param augment The augment to be updated.
      * @param namespace The namespace of the augment.
      * @param augmentKey The key of the previously installed augment
      * @param args Arguments for the augment installation.
      */
     function updateAugment(
-        IAugment augment,
         bytes14 namespace,
         bytes32 augmentKey,
         bytes calldata args
@@ -126,6 +127,15 @@ contract AugmentInstallationSystem is System {
             WorldResourceIdLib.encodeNamespace(namespace),
             _msgSender()
         );
+
+        AugmentsData memory augmentsData = Augments._get(
+            AugmentInstallationLib.getAugmentsTableId(
+                WorldResourceIdLib.encodeNamespace(namespace)
+            ),
+            augmentKey
+        );
+
+        IAugment augment = IAugment(augmentsData.augmentAddress);
 
         // Require the provided address to implement the IAugment interface
         requireInterface(address(augment), type(IAugment).interfaceId);
@@ -137,14 +147,7 @@ contract AugmentInstallationSystem is System {
             (AugmentComponentValue[][])
         );
 
-        bytes32[] memory installedEntities = Augments
-            ._get(
-                AugmentInstallationLib.getAugmentsTableId(
-                    WorldResourceIdLib.encodeNamespace(namespace)
-                ),
-                augmentKey
-            )
-            .installedEntities;
+        bytes32[] memory installedEntities = augmentsData.installedEntities;
 
         require(
             componentValues.length == installedEntities.length,
@@ -182,8 +185,82 @@ contract AugmentInstallationSystem is System {
             msgSender: _msgSender(),
             msgValue: 0,
             target: address(augment),
-            callData: abi.encodeCall(IAugment.performOverrides, (namespace))
+            callData: abi.encodeCall(
+                IAugment.installOverrides,
+                (namespace, installedEntities[0])
+            )
         });
+    }
+
+    /**
+     * @notice Uninstalls an already installed augment.
+     * @dev Validates the given augment against the IAugment interface and delegates the installation process.
+     * @param namespace The namespace of the augment.
+     * @param augmentKey The key of the previously installed augment
+     */
+    function uninstallAugment(bytes14 namespace, bytes32 augmentKey) public {
+        // Require namespace access
+        AccessControl.requireAccess(
+            WorldResourceIdLib.encodeNamespace(namespace),
+            _msgSender()
+        );
+
+        AugmentsData memory augmentsData = Augments._get(
+            AugmentInstallationLib.getAugmentsTableId(
+                WorldResourceIdLib.encodeNamespace(namespace)
+            ),
+            augmentKey
+        );
+
+        IAugment augment = IAugment(augmentsData.augmentAddress);
+
+        // Require the provided address to implement the IAugment interface
+        requireInterface(address(augment), type(IAugment).interfaceId);
+
+        // Parse args and update records
+        bytes16[][] memory augmentTypes = augment.getComponentTypes();
+        bytes32[] memory installedEntities = augmentsData.installedEntities;
+
+        require(
+            augmentTypes.length == installedEntities.length,
+            "AugmentInstallationSystem: incorrect keys length"
+        );
+
+        for (uint256 x = 0; x < augmentTypes.length; x++) {
+            bytes32 key = installedEntities[x];
+            bytes32[] memory _keyTuple = new bytes32[](1);
+            _keyTuple[0] = key;
+            for (uint256 y = 0; y < augmentTypes[x].length; y++) {
+                ResourceId tableId = ResourceId.wrap(
+                    bytes32(
+                        abi.encodePacked(
+                            RESOURCE_TABLE,
+                            namespace,
+                            augmentTypes[x][y]
+                        )
+                    )
+                );
+                StoreCore.deleteRecord(tableId, _keyTuple);
+            }
+        }
+        // Perform augment overrides
+        WorldContextProviderLib.callWithContextOrRevert({
+            msgSender: _msgSender(),
+            msgValue: 0,
+            target: address(augment),
+            callData: abi.encodeCall(
+                IAugment.uninstallOverrides,
+                (namespace, installedEntities[0])
+            )
+        });
+
+        // Uninstall
+        Augments._deleteRecord(
+            AugmentInstallationLib.getAugmentsTableId(
+                WorldResourceIdLib.encodeNamespace(namespace)
+            ),
+            augmentKey
+        );
     }
 }
 
