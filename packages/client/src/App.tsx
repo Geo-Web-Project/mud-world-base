@@ -1,22 +1,24 @@
 import React from "react";
 import { MUDChain } from "@latticexyz/common/chains";
-import { optimismGoerli } from "viem/chains";
+import { optimismSepolia } from "viem/chains";
 import { useMUD, MUDProvider } from "./MUDContext";
 import { syncWorld, SyncWorldResult } from "@geo-web/mud-world-base-setup";
+import { concatHex, stringToHex } from "viem";
+import { resourceTypeIds } from "@latticexyz/common";
 
 localStorage.debug = "*";
 
 const chainId = import.meta.env.VITE_CHAIN_ID || 31337;
 const world = {
-  address: "0x3904285496739BF5030d79C0CF259A569806F759",
-  blockNumber: 17280426,
+  address: "0xed08ac7cbf41f2171e1d260418d24646b6e35519",
+  blockNumber: 9445983,
 };
 const mudChain = {
-  ...optimismGoerli,
+  ...optimismSepolia,
   rpcUrls: {
-    ...optimismGoerli.rpcUrls,
+    ...optimismSepolia.rpcUrls,
     default: {
-      http: optimismGoerli.rpcUrls.default.http,
+      http: optimismSepolia.rpcUrls.default.http,
       webSocket: [import.meta.env.VITE_PUBLIC_WS_RPC_URL],
     },
   },
@@ -25,17 +27,20 @@ const mudChain = {
 const View = () => {
   const { tables, useStore } = useMUD();
 
-  const records = useStore((state: any) =>
-    Object.values(state.getRecords(tables.NameCom))
+  const typeId = resourceTypeIds.namespace;
+  const namespaceId = concatHex([
+    stringToHex(typeId, { size: 2 }),
+    stringToHex(Number(2).toString(), { size: 14 }),
+    stringToHex("", { size: 16 }),
+  ]);
+
+  const namespaceOwner = useStore((state: any) =>
+    state.getRecord(tables.NamespaceOwner, { namespaceId })
   );
 
-  return (
-    <>
-      {records.map((record: any) => {
-        return record.value.value;
-      })}
-    </>
-  );
+  console.log("namespaceOwner: " + JSON.stringify(namespaceOwner));
+
+  return <></>;
 };
 
 export const App = () => {
@@ -48,7 +53,7 @@ export const App = () => {
         chainId,
         world,
         mudChain,
-        namespaces: ["320"],
+        namespaces: ["2"],
         indexerUrl: "https://mud-testnet.geoweb.network/trpc",
       });
       setWorldConfig(_worldConfig);
