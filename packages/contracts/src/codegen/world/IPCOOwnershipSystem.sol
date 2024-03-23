@@ -7,10 +7,11 @@ import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
 
 /**
  * @title IPCOOwnershipSystem
+ * @author MUD (https://mud.dev) by Lattice (https://lattice.xyz)
  * @dev This interface is automatically generated from the corresponding system contract. Do not edit manually.
  */
 interface IPCOOwnershipSystem {
-  function getNamespaceIdForParcel(uint256 parcelId) external view returns (ResourceId);
+  function getNamespaceIdForParcel(uint256 parcelId) external pure returns (ResourceId);
 
   function registerParcelNamespace(uint256 parcelId) external;
 

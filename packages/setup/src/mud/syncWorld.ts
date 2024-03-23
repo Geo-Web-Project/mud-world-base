@@ -14,7 +14,6 @@ import mudConfig from "@geo-web/mud-world-base-contracts/mud.config";
 import { MUDChain } from "@latticexyz/common/chains";
 import { syncToZustand } from "@latticexyz/store-sync/zustand";
 import { resourceTypeIds } from "@latticexyz/common";
-import { resolveConfig } from "@latticexyz/store";
 
 export type SyncWorldResult = Awaited<ReturnType<typeof syncWorld>>;
 
@@ -31,7 +30,7 @@ export function getTableIdForNamespace(
 }
 
 export function getTableIdsForNamespace(namespace: string): Hex[] {
-  const tableNames = Object.keys(resolveConfig(mudConfig).tables).filter(
+  const tableNames = Object.keys(mudConfig.tables).filter(
     (key) => key.endsWith("Com") || key.endsWith("Augments")
   );
   return tableNames.map((tableName) => {
@@ -52,7 +51,7 @@ export function getTablesForNamespace(namespace: string): any[] {
     (key) => key.endsWith("Com") || key.endsWith("Augments")
   );
   return tableNames.map((tableName) => {
-    const table = (resolveConfig(mudConfig).tables as any)[tableName];
+    const table = (mudConfig.tables as any)[tableName];
     return getTableForNamespace(namespace, table);
   });
 }

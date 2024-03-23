@@ -8,7 +8,7 @@ import {IWorldErrors} from "@latticexyz/world/src/IWorldErrors.sol";
 import {IAugment, Augment} from "../src/modules/augmentinstallation/Augment.sol";
 import {ScaleCom} from "../src/codegen/tables/ScaleCom.sol";
 import {NameCom} from "../src/codegen/tables/NameCom.sol";
-import {PackedCounter} from "@latticexyz/store/src/PackedCounter.sol";
+import {EncodedLengths} from "@latticexyz/store/src/EncodedLengths.sol";
 import {ResourceId, WorldResourceIdLib, WorldResourceIdInstance} from "@latticexyz/world/src/WorldResourceId.sol";
 import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {TABLE_ID as UNIQUE_ENTITY_TABLE_ID} from "@latticexyz/world-modules/src/modules/uniqueentity/constants.sol";
@@ -63,7 +63,7 @@ contract AugmentInstallationTest is MudTest {
 
         (
             bytes memory staticData,
-            PackedCounter encodedLengths,
+            EncodedLengths encodedLengths,
             bytes memory dynamicData
         ) = ScaleCom.encode(1, 2, 3);
 
@@ -138,7 +138,7 @@ contract AugmentInstallationTest is MudTest {
         {
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(1, 2, 3);
             componentValues[0][0] = AugmentComponentValue(
@@ -151,7 +151,7 @@ contract AugmentInstallationTest is MudTest {
         {
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = NameCom.encode("test");
             componentValues[0][1] = AugmentComponentValue(
@@ -234,7 +234,7 @@ contract AugmentInstallationTest is MudTest {
         {
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(1, 2, 3);
             componentValues[0] = new AugmentComponentValue[](1);
@@ -248,7 +248,7 @@ contract AugmentInstallationTest is MudTest {
         {
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = NameCom.encode("test");
             componentValues[1] = new AugmentComponentValue[](1);
@@ -332,7 +332,7 @@ contract AugmentInstallationTest is MudTest {
 
         (
             bytes memory staticData,
-            PackedCounter encodedLengths,
+            EncodedLengths encodedLengths,
             bytes memory dynamicData
         ) = ScaleCom.encode(1, 2, 3);
         componentValues[0] = new AugmentComponentValue[](1);
@@ -423,7 +423,7 @@ contract AugmentInstallationTest is MudTest {
 
         (
             bytes memory staticData,
-            PackedCounter encodedLengths,
+            EncodedLengths encodedLengths,
             bytes memory dynamicData
         ) = ScaleCom.encode(1, 2, 3);
         componentValues[0] = new AugmentComponentValue[](1);
@@ -497,7 +497,7 @@ contract AugmentInstallationTest is MudTest {
 
         (
             bytes memory staticData,
-            PackedCounter encodedLengths,
+            EncodedLengths encodedLengths,
             bytes memory dynamicData
         ) = ScaleCom.encode(1, 2, 3);
 
@@ -534,7 +534,7 @@ contract AugmentInstallationTest is MudTest {
 
         (
             bytes memory staticData,
-            PackedCounter encodedLengths,
+            EncodedLengths encodedLengths,
             bytes memory dynamicData
         ) = ScaleCom.encode(1, 2, 3);
 
@@ -566,7 +566,7 @@ contract AugmentInstallationTest is MudTest {
         {
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(1, 2, 3);
 
@@ -593,7 +593,7 @@ contract AugmentInstallationTest is MudTest {
         {
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(2, 4, 6);
 
@@ -673,7 +673,7 @@ contract AugmentInstallationTest is MudTest {
 
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(1, 2, 3);
             componentValues[0] = new AugmentComponentValue[](1);
@@ -698,7 +698,7 @@ contract AugmentInstallationTest is MudTest {
 
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(2, 4, 6);
             componentValues[0] = new AugmentComponentValue[](1);
@@ -797,7 +797,7 @@ contract AugmentInstallationTest is MudTest {
 
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(1, 2, 3);
             componentValues[0] = new AugmentComponentValue[](1);
@@ -822,7 +822,7 @@ contract AugmentInstallationTest is MudTest {
 
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(2, 4, 6);
             componentValues[0] = new AugmentComponentValue[](1);
@@ -899,7 +899,7 @@ contract AugmentInstallationTest is MudTest {
 
         (
             bytes memory staticData,
-            PackedCounter encodedLengths,
+            EncodedLengths encodedLengths,
             bytes memory dynamicData
         ) = ScaleCom.encode(1, 2, 3);
 
@@ -982,7 +982,7 @@ contract AugmentInstallationTest is MudTest {
 
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(1, 2, 3);
             componentValues[0] = new AugmentComponentValue[](1);
@@ -1007,7 +1007,7 @@ contract AugmentInstallationTest is MudTest {
 
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(2, 4, 6);
             componentValues[0] = new AugmentComponentValue[](1);
@@ -1102,7 +1102,7 @@ contract AugmentInstallationTest is MudTest {
 
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(1, 2, 3);
             componentValues[0] = new AugmentComponentValue[](1);
@@ -1127,7 +1127,7 @@ contract AugmentInstallationTest is MudTest {
 
             (
                 bytes memory staticData,
-                PackedCounter encodedLengths,
+                EncodedLengths encodedLengths,
                 bytes memory dynamicData
             ) = ScaleCom.encode(2, 4, 6);
             componentValues[0] = new AugmentComponentValue[](1);

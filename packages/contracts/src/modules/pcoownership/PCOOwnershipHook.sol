@@ -3,7 +3,7 @@ pragma solidity >=0.8.19;
 
 import {StoreHook} from "@latticexyz/store/src/StoreHook.sol";
 import {FieldLayout} from "@latticexyz/store/src/FieldLayout.sol";
-import {PackedCounter} from "@latticexyz/store/src/PackedCounter.sol";
+import {EncodedLengths} from "@latticexyz/store/src/EncodedLengths.sol";
 import {ResourceId, WorldResourceIdInstance} from "@latticexyz/world/src/WorldResourceId.sol";
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {PCOOwnership} from "./tables/PCOOwnership.sol";
@@ -30,7 +30,7 @@ contract PCOOwnershipHook is StoreHook {
         ResourceId,
         bytes32[] memory keyTuple,
         bytes memory staticData,
-        PackedCounter,
+        EncodedLengths,
         bytes memory,
         FieldLayout
     ) public override {
@@ -54,9 +54,9 @@ contract PCOOwnershipHook is StoreHook {
     }
 
     function onBeforeDeleteRecord(
-        ResourceId tableId,
-        bytes32[] memory keyTuple,
-        FieldLayout fieldLayout
+        ResourceId,
+        bytes32[] memory,
+        FieldLayout
     ) public override {
         revert PCOOwnership_CannotDelete();
     }

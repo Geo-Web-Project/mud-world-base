@@ -3,15 +3,9 @@ pragma solidity >=0.8.24;
 
 import {Augment} from "@geo-web/mud-world-base-contracts/src/modules/augmentinstallation/Augment.sol";
 
-contract ModelAugment is Augment {
+contract GalleryModelAugment is Augment {
     bytes16[][] private componentTypes = [
-        [
-            bytes16("ModelCom"),
-            bytes16("NameCom"),
-            bytes16("PositionCom"),
-            bytes16("OrientationCom"),
-            bytes16("ScaleCom")
-        ]
+        [bytes16("ModelCom"), bytes16("NameCom")]
     ];
 
     function onBeforeInstall() external {}

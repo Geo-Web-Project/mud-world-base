@@ -19,7 +19,7 @@ import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 contract PCOOwnershipSystem is System {
     function getNamespaceIdForParcel(
         uint256 parcelId
-    ) public view returns (ResourceId) {
+    ) public pure returns (ResourceId) {
         string memory parcelStr = Strings.toString(parcelId);
         return WorldResourceIdLib.encodeNamespace(bytes14(bytes(parcelStr)));
     }

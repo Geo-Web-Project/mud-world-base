@@ -12,7 +12,7 @@ import {PCOOwnership} from "./tables/PCOOwnership.sol";
 import {PCOOwnershipSystem} from "./PCOOwnershipSystem.sol";
 import {revertWithBytes} from "@latticexyz/world/src/revertWithBytes.sol";
 import {MODULE_NAME, TABLE_ID, SYSTEM_ID, NAMESPACE_ID} from "./constants.sol";
-import {NamespaceOwner, NamespaceOwnerTableId} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
+import {NamespaceOwner} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 import {AccessControl} from "@latticexyz/world/src/AccessControl.sol";
 import {WORLD_NAMESPACE_ID} from "@latticexyz/world/src/constants.sol";
 
@@ -66,7 +66,7 @@ contract PCOOwnershipModule is Module {
             abi.encodeCall(
                 world.registerStoreHook,
                 (
-                    NamespaceOwnerTableId,
+                    NamespaceOwner._tableId,
                     hook,
                     BEFORE_SET_RECORD |
                         BEFORE_SPLICE_STATIC_DATA |

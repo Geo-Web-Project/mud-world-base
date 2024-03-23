@@ -10,12 +10,12 @@ import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {ResourceId, WorldResourceIdInstance, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
 import {getUniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
 import {StoreCore} from "@latticexyz/store/src/StoreCore.sol";
-import {PackedCounter} from "@latticexyz/store/src/PackedCounter.sol";
+import {EncodedLengths} from "@latticexyz/store/src/EncodedLengths.sol";
 import {AccessControl} from "@latticexyz/world/src/AccessControl.sol";
 
 struct AugmentComponentValue {
     bytes staticData;
-    PackedCounter encodedLengths;
+    EncodedLengths encodedLengths;
     bytes dynamicData;
 }
 

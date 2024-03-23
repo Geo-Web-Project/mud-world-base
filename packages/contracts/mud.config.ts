@@ -1,6 +1,6 @@
-import { mudConfig } from "@latticexyz/world/register";
+import { defineWorld } from "@latticexyz/world";
 
-export default mudConfig({
+export default defineWorld({
   enums: {
     // ImageEncodingFormat: ["Jpeg", "Png", "Svg"],
     ModelEncodingFormat: ["Glb", "Usdz"],
@@ -9,8 +9,8 @@ export default mudConfig({
   },
   userTypes: {
     ResourceId: {
+      type: "bytes32",
       filePath: "@latticexyz/store/src/ResourceId.sol",
-      internalType: "bytes32",
     },
   },
   modules: [
@@ -21,55 +21,85 @@ export default mudConfig({
   ],
   tables: {
     PCOOwnership: {
-      directory: "../modules/pcoownership/tables",
-      keySchema: {
+      key: ["namespaceId"],
+      schema: {
         namespaceId: "ResourceId",
-      },
-      valueSchema: {
         exists: "bool",
         parcelId: "uint256",
       },
-      tableIdArgument: true,
-      storeArgument: true,
+      codegen: {
+        outputDirectory: "../modules/pcoownership/tables",
+        tableIdArgument: true,
+        storeArgument: true,
+      },
     },
     Augments: {
-      directory: "../modules/augmentinstallation/tables",
-      valueSchema: {
+      schema: {
+        key: "bytes32",
         augmentAddress: "address",
         argumentsHash: "bytes32", // Hash of the params passed to the `install` function
         augmentMetadataURI: "string",
         installedEntities: "bytes32[]",
       },
-      tableIdArgument: true,
-      storeArgument: true,
+      key: ["key"],
+      codegen: {
+        outputDirectory: "../modules/augmentinstallation/tables",
+        tableIdArgument: true,
+        storeArgument: true,
+      },
     },
     NameCom: {
-      valueSchema: "string",
-      tableIdArgument: true,
-      storeArgument: true,
+      schema: {
+        key: "bytes32",
+        value: "string",
+      },
+      key: ["key"],
+      codegen: {
+        tableIdArgument: true,
+        storeArgument: true,
+      },
     },
     ModelCom: {
-      valueSchema: {
+      schema: {
+        key: "bytes32",
         encodingFormat: "ModelEncodingFormat",
         contentURI: "string",
       },
-      tableIdArgument: true,
-      storeArgument: true,
+      key: ["key"],
+      codegen: {
+        tableIdArgument: true,
+        storeArgument: true,
+      },
     },
     PositionCom: {
-      valueSchema: { h: "int32", geohash: "string" },
-      tableIdArgument: true,
-      storeArgument: true,
+      schema: { key: "bytes32", h: "int32", geohash: "string" },
+      key: ["key"],
+      codegen: {
+        tableIdArgument: true,
+        storeArgument: true,
+      },
     },
     OrientationCom: {
-      valueSchema: { x: "int16", y: "int16", z: "int16", w: "int16" },
-      tableIdArgument: true,
-      storeArgument: true,
+      schema: {
+        key: "bytes32",
+        x: "int16",
+        y: "int16",
+        z: "int16",
+        w: "int16",
+      },
+      key: ["key"],
+      codegen: {
+        tableIdArgument: true,
+        storeArgument: true,
+      },
     },
     ScaleCom: {
-      valueSchema: { x: "int16", y: "int16", z: "int16" },
-      tableIdArgument: true,
-      storeArgument: true,
+      schema: { key: "bytes32", x: "int16", y: "int16", z: "int16" },
+      key: ["key"],
+      codegen: {
+        tableIdArgument: true,
+        storeArgument: true,
+      },
     },
     // ImageCom: {
     //   valueSchema: {
