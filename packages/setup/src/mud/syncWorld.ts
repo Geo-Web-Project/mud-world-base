@@ -14,6 +14,7 @@ import mudConfig from "@geo-web/mud-world-base-contracts/mud.config";
 import { MUDChain } from "@latticexyz/common/chains";
 import { syncToZustand } from "@latticexyz/store-sync/zustand";
 import { resourceTypeIds } from "@latticexyz/common";
+import { storeToV1 } from "@latticexyz/store/config/v2";
 
 export type SyncWorldResult = Awaited<ReturnType<typeof syncWorld>>;
 
@@ -43,6 +44,7 @@ export function getTableForNamespace(namespace: string, table: any): any {
     ...table,
     namespace: namespace,
     tableId: getTableIdForNamespace(namespace, table.name),
+    keySchema: [{ type: "bytes32", internalType: "bytes32" }],
   };
 }
 
@@ -51,7 +53,7 @@ export function getTablesForNamespace(namespace: string): any[] {
     (key) => key.endsWith("Com") || key.endsWith("Augments")
   );
   return tableNames.map((tableName) => {
-    const table = (mudConfig.tables as any)[tableName];
+    const table = (storeToV1(mudConfig).tables as any)[tableName];
     return getTableForNamespace(namespace, table);
   });
 }
@@ -72,6 +74,16 @@ export async function syncWorld(params: {
 
   const publicClient = createPublicClient(clientOptions);
 
+  const extraTables = params.namespaces
+    .map((namespace) => getTablesForNamespace(namespace))
+    .reduceRight((prev, cur) => {
+      let newTables = { ...prev };
+      for (const table of cur) {
+        newTables[table.name] = table;
+      }
+      return newTables;
+    }, {} as any);
+
   const {
     tables,
     useStore,
@@ -84,6 +96,7 @@ export async function syncWorld(params: {
     address: params.world.address as Hex,
     publicClient,
     startBlock: BigInt(params.world.blockNumber),
+    tables: extraTables,
     filters: params.namespaces
       .flatMap((namespace) => getTableIdsForNamespace(namespace))
       .map((tableId) => {
