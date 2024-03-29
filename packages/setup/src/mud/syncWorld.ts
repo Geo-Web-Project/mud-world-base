@@ -40,11 +40,19 @@ export function getTableIdsForNamespace(namespace: string): Hex[] {
 }
 
 export function getTableForNamespace(namespace: string, table: any): any {
+  let valueSchema: Record<string, any> = {};
+  Object.keys(table.schema)
+    .filter((k) => !table.key.includes(k))
+    .forEach((key) => {
+      valueSchema[key] = table.schema[key];
+    });
+
   return {
     ...table,
     namespace: namespace,
     tableId: getTableIdForNamespace(namespace, table.name),
-    keySchema: [{ type: "bytes32", internalType: "bytes32" }],
+    keySchema: table.key.map((k: any) => table.schema[k]),
+    valueSchema,
   };
 }
 
@@ -53,7 +61,7 @@ export function getTablesForNamespace(namespace: string): any[] {
     (key) => key.endsWith("Com") || key.endsWith("Augments")
   );
   return tableNames.map((tableName) => {
-    const table = (storeToV1(mudConfig).tables as any)[tableName];
+    const table = (mudConfig.tables as any)[tableName];
     return getTableForNamespace(namespace, table);
   });
 }

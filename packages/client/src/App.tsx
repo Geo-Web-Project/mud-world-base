@@ -38,11 +38,11 @@ const View = () => {
     stringToHex("", { size: 16 }),
   ]);
 
-  const namespaceOwner = useStore((state: any) =>
-    state.getRecord(tables.NamespaceOwner, { namespaceId })
+  const modelComponents = useStore((state: any) =>
+    Object.values(state.getRecords(tables.ModelCom))
   );
-
-  console.log("namespaceOwner: " + JSON.stringify(namespaceOwner));
+  console.log(tables);
+  console.log(modelComponents);
 
   return <></>;
 };
