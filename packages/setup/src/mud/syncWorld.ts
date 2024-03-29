@@ -72,16 +72,6 @@ export async function syncWorld(params: {
 
   const publicClient = createPublicClient(clientOptions);
 
-  const extraTables = params.namespaces
-    .map((namespace) => getTablesForNamespace(namespace))
-    .reduceRight((prev, cur) => {
-      let newTables = { ...prev };
-      for (const table of cur) {
-        newTables[table.name] = table;
-      }
-      return newTables;
-    }, {} as any);
-
   const {
     tables,
     useStore,
@@ -94,7 +84,6 @@ export async function syncWorld(params: {
     address: params.world.address as Hex,
     publicClient,
     startBlock: BigInt(params.world.blockNumber),
-    tables: extraTables,
     filters: params.namespaces
       .flatMap((namespace) => getTableIdsForNamespace(namespace))
       .map((tableId) => {

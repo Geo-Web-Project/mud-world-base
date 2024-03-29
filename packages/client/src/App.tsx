@@ -2,7 +2,11 @@ import React from "react";
 import { MUDChain } from "@latticexyz/common/chains";
 import { optimismSepolia } from "viem/chains";
 import { useMUD, MUDProvider } from "./MUDContext";
-import { syncWorld, SyncWorldResult } from "@geo-web/mud-world-base-setup";
+import {
+  syncWorld,
+  SyncWorldResult,
+  getTableIdsForNamespace,
+} from "@geo-web/mud-world-base-setup";
 import { concatHex, stringToHex } from "viem";
 import { resourceTypeIds } from "@latticexyz/common";
 
@@ -10,8 +14,8 @@ localStorage.debug = "*";
 
 const chainId = import.meta.env.VITE_CHAIN_ID || 31337;
 const world = {
-  address: "0xed08ac7cbf41f2171e1d260418d24646b6e35519",
-  blockNumber: 9445983,
+  address: "0x74d3cb0f25de0b8349324fc49d7947a6b8e35ea9",
+  blockNumber: 9685561,
 };
 const mudChain = {
   ...optimismSepolia,
