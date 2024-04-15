@@ -26,10 +26,10 @@ interface IAugment is IERC165 {
      * @dev This function should emit Store events to be read by clients.
      * @param keyOffset The key of the first installed entity
      */
-    function installOverrides(bytes14 namespace, bytes32 keyOffset) external;
+    function installOverrides(bytes32 keyOffset) external;
 
     /**
      * @notice Uninstall overrides to entities that define this augment.
      */
-    function uninstallOverrides(bytes14 namespace, bytes32 keyOffset) external;
+    function uninstallOverrides(bytes32 keyOffset) external;
 }

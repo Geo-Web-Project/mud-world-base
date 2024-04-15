@@ -13,6 +13,7 @@ export default defineWorld({
       filePath: "@latticexyz/store/src/ResourceId.sol",
     },
   },
+  excludeSystems: ["AugmentInstallSystem"],
   modules: [
     {
       name: "UniqueEntityModule",
