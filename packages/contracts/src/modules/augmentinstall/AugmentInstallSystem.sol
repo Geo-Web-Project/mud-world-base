@@ -9,10 +9,11 @@ import {requireInterface} from "@latticexyz/world/src/requireInterface.sol";
 import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {ResourceId, WorldResourceIdInstance, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
 import {getUniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
-import {StoreCore} from "@latticexyz/store/src/StoreCore.sol";
 import {EncodedLengths} from "@latticexyz/store/src/EncodedLengths.sol";
 import {AccessControl} from "@latticexyz/world/src/AccessControl.sol";
 import {Utils} from "@latticexyz/world/src/Utils.sol";
+import {StoreSwitch} from "@latticexyz/store/src/StoreSwitch.sol";
+import {IStore} from "@latticexyz/store/src/IStore.sol";
 
 struct AugmentComponentValue {
     bytes staticData;
@@ -39,7 +40,7 @@ contract AugmentInstallSystem is System {
         requireInterface(address(augment), type(IAugment).interfaceId);
 
         // Before install hook
-        augment.onBeforeInstall();
+        augment.onBeforeInstall(IStore(_world()), namespace);
 
         // Parse args and set records
         bytes16[][] memory augmentTypes = augment.getComponentTypes();
@@ -67,7 +68,7 @@ contract AugmentInstallSystem is System {
                         )
                     )
                 );
-                StoreCore.setRecord(
+                StoreSwitch.setRecord(
                     tableId,
                     _keyTuple,
                     componentValues[x][y].staticData,
@@ -78,7 +79,7 @@ contract AugmentInstallSystem is System {
         }
 
         // Perform augment overrides
-        augment.installOverrides(newEntities[0]);
+        augment.installOverrides(IStore(_world()), namespace, newEntities[0]);
 
         // Register the augment in the Augments table
         bytes32 augmentKey = getUniqueEntity();
@@ -92,6 +93,13 @@ contract AugmentInstallSystem is System {
             augment.getMetadataURI(),
             newEntities
         );
+        Augments.setInstalledEntities(
+            AugmentInstallLib.getAugmentsTableId(
+                WorldResourceIdLib.encodeNamespace(namespace)
+            ),
+            augmentKey,
+            newEntities
+        );
     }
 
     /**
@@ -103,7 +111,7 @@ contract AugmentInstallSystem is System {
     function updateAugment(bytes32 augmentKey, bytes calldata args) public {
         bytes14 namespace = Utils.systemNamespace();
 
-        AugmentsData memory augmentsData = Augments._get(
+        AugmentsData memory augmentsData = Augments.get(
             AugmentInstallLib.getAugmentsTableId(
                 WorldResourceIdLib.encodeNamespace(namespace)
             ),
@@ -145,7 +153,7 @@ contract AugmentInstallSystem is System {
                         )
                     )
                 );
-                StoreCore.setRecord(
+                StoreSwitch.setRecord(
                     tableId,
                     _keyTuple,
                     componentValues[x][y].staticData,
@@ -156,7 +164,11 @@ contract AugmentInstallSystem is System {
         }
 
         // Perform augment overrides
-        augment.installOverrides(installedEntities[0]);
+        augment.installOverrides(
+            IStore(_world()),
+            namespace,
+            installedEntities[0]
+        );
     }
 
     /**
@@ -167,7 +179,7 @@ contract AugmentInstallSystem is System {
     function uninstallAugment(bytes32 augmentKey) public {
         bytes14 namespace = Utils.systemNamespace();
 
-        AugmentsData memory augmentsData = Augments._get(
+        AugmentsData memory augmentsData = Augments.get(
             AugmentInstallLib.getAugmentsTableId(
                 WorldResourceIdLib.encodeNamespace(namespace)
             ),
@@ -202,18 +214,23 @@ contract AugmentInstallSystem is System {
                         )
                     )
                 );
-                StoreCore.deleteRecord(tableId, _keyTuple);
+                StoreSwitch.deleteRecord(tableId, _keyTuple);
             }
         }
         // Perform augment overrides
-        augment.uninstallOverrides(installedEntities[0]);
+        augment.uninstallOverrides(
+            IStore(_world()),
+            namespace,
+            installedEntities[0]
+        );
 
         // Uninstall
-        Augments.deleteRecord(
+        Augments.setInstalledEntities(
             AugmentInstallLib.getAugmentsTableId(
                 WorldResourceIdLib.encodeNamespace(namespace)
             ),
-            augmentKey
+            augmentKey,
+            new bytes32[](0)
         );
     }
 }

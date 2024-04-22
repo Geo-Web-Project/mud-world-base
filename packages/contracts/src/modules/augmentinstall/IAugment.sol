@@ -2,12 +2,13 @@
 pragma solidity >=0.8.19;
 
 import {IERC165} from "@latticexyz/world/src/IERC165.sol";
+import {IStore} from "@latticexyz/store/src/IStore.sol";
 
 interface IAugment is IERC165 {
     /**
      * @notice Run a hook before installation. Can be used to gate access to installing an augment
      */
-    function onBeforeInstall() external;
+    function onBeforeInstall(IStore store, bytes14 namespace) external;
 
     /**
      * @notice Return the metadata of the augment.
@@ -26,10 +27,18 @@ interface IAugment is IERC165 {
      * @dev This function should emit Store events to be read by clients.
      * @param keyOffset The key of the first installed entity
      */
-    function installOverrides(bytes32 keyOffset) external;
+    function installOverrides(
+        IStore store,
+        bytes14 namespace,
+        bytes32 keyOffset
+    ) external;
 
     /**
      * @notice Uninstall overrides to entities that define this augment.
      */
-    function uninstallOverrides(bytes32 keyOffset) external;
+    function uninstallOverrides(
+        IStore store,
+        bytes14 namespace,
+        bytes32 keyOffset
+    ) external;
 }
