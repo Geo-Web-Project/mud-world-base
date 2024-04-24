@@ -18,10 +18,19 @@ interface IAugment is IERC165 {
     function getComponentTypes() external view returns (bytes16[][] memory);
 
     /**
-     * @notice Return the tables the Augment needs access to in order to install
-     * @return The tables the Augment needs access to in order to install.
+     * @notice Return the tables the Augment needs registered in order to install
+     * @return Table IDs.
      */
-    function getRequiredPermissions() external view returns (bytes16[] memory);
+    function getRequiredComponents() external view returns (bytes16[] memory);
+
+    /**
+     * @notice Return the tables the Augment needs access to in order to install
+     * @return Table IDs.
+     */
+    function getRequiredOverrideComponents()
+        external
+        view
+        returns (bytes16[] memory);
 
     /**
      * @notice Run a hook before installation. Can be used to gate access to installing an augment

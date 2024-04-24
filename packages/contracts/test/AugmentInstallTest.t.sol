@@ -81,7 +81,7 @@ contract AugmentInstallTest is MudTest {
     }
 
     function grantAccessToTables(IAugment mockAugment) internal {
-        bytes16[] memory tables = mockAugment.getRequiredPermissions();
+        bytes16[] memory tables = mockAugment.getRequiredOverrideComponents();
         for (uint256 i = 0; i < tables.length; i++) {
             ResourceId _tableId = ResourceId.wrap(
                 bytes32(
@@ -1321,7 +1321,17 @@ contract MockAugmentSingle is Augment {
         return componentTypes;
     }
 
-    function getRequiredPermissions() external view returns (bytes16[] memory) {
+    function getRequiredComponents() external view returns (bytes16[] memory) {
+        bytes16[] memory tables = new bytes16[](1);
+        tables[0] = bytes16(bytes32("ScaleCom"));
+        return tables;
+    }
+
+    function getRequiredOverrideComponents()
+        external
+        view
+        returns (bytes16[] memory)
+    {
         return new bytes16[](0);
     }
 
@@ -1353,7 +1363,18 @@ contract MockAugmentMultipleComponents is Augment {
         return componentTypes;
     }
 
-    function getRequiredPermissions() external view returns (bytes16[] memory) {
+    function getRequiredComponents() external view returns (bytes16[] memory) {
+        bytes16[] memory tables = new bytes16[](2);
+        tables[0] = bytes16(bytes32("ScaleCom"));
+        tables[1] = bytes16(bytes32("NameCom"));
+        return tables;
+    }
+
+    function getRequiredOverrideComponents()
+        external
+        view
+        returns (bytes16[] memory)
+    {
         return new bytes16[](0);
     }
 
@@ -1386,7 +1407,18 @@ contract MockAugmentMultipleEntities is Augment {
         return componentTypes;
     }
 
-    function getRequiredPermissions() external view returns (bytes16[] memory) {
+    function getRequiredComponents() external view returns (bytes16[] memory) {
+        bytes16[] memory tables = new bytes16[](2);
+        tables[0] = bytes16(bytes32("ScaleCom"));
+        tables[1] = bytes16(bytes32("NameCom"));
+        return tables;
+    }
+
+    function getRequiredOverrideComponents()
+        external
+        view
+        returns (bytes16[] memory)
+    {
         return new bytes16[](0);
     }
 
@@ -1416,7 +1448,18 @@ contract MockAugmentSetOverride is Augment {
         return componentTypes;
     }
 
-    function getRequiredPermissions() external view returns (bytes16[] memory) {
+    function getRequiredComponents() external view returns (bytes16[] memory) {
+        bytes16[] memory tables = new bytes16[](2);
+        tables[0] = bytes16(bytes32("ScaleCom"));
+        tables[1] = bytes16(bytes32("NameCom"));
+        return tables;
+    }
+
+    function getRequiredOverrideComponents()
+        external
+        view
+        returns (bytes16[] memory)
+    {
         bytes16[] memory tables = new bytes16[](1);
         tables[0] = bytes16(bytes32("NameCom"));
         return tables;
@@ -1479,7 +1522,17 @@ contract MockAugmentSpliceOverride is Augment {
         return componentTypes;
     }
 
-    function getRequiredPermissions() external view returns (bytes16[] memory) {
+    function getRequiredComponents() external view returns (bytes16[] memory) {
+        bytes16[] memory tables = new bytes16[](1);
+        tables[0] = bytes16(bytes32("ScaleCom"));
+        return tables;
+    }
+
+    function getRequiredOverrideComponents()
+        external
+        view
+        returns (bytes16[] memory)
+    {
         bytes16[] memory tables = new bytes16[](1);
         tables[0] = bytes16(bytes32("ScaleCom"));
         return tables;
@@ -1526,7 +1579,17 @@ contract MockAugmentSingleGated is Augment {
         return componentTypes;
     }
 
-    function getRequiredPermissions() external view returns (bytes16[] memory) {
+    function getRequiredComponents() external view returns (bytes16[] memory) {
+        bytes16[] memory tables = new bytes16[](1);
+        tables[0] = bytes16(bytes32("ScaleCom"));
+        return tables;
+    }
+
+    function getRequiredOverrideComponents()
+        external
+        view
+        returns (bytes16[] memory)
+    {
         return new bytes16[](0);
     }
 
