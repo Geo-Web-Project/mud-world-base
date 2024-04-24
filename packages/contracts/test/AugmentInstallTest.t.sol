@@ -80,6 +80,18 @@ contract AugmentInstallTest is MudTest {
         vm.stopPrank();
     }
 
+    function grantAccessToTables(IAugment mockAugment) internal {
+        bytes16[] memory tables = mockAugment.getRequiredPermissions();
+        for (uint256 i = 0; i < tables.length; i++) {
+            ResourceId _tableId = ResourceId.wrap(
+                bytes32(
+                    abi.encodePacked(RESOURCE_TABLE, testNamespace, tables[i])
+                )
+            );
+            world.grantAccess(_tableId, address(mockAugment));
+        }
+    }
+
     function testInstallAugment_Single() public {
         MockAugmentSingle mockAugment = new MockAugmentSingle();
 
@@ -392,7 +404,7 @@ contract AugmentInstallTest is MudTest {
         );
 
         vm.startPrank(address(0x1));
-        world.grantAccess(_nameTableId, address(mockAugment));
+        grantAccessToTables(mockAugment);
         world.call(
             world.getAugmentInstallSystemResource(testNamespace),
             abi.encodeWithSignature(
@@ -471,7 +483,7 @@ contract AugmentInstallTest is MudTest {
         );
 
         vm.startPrank(address(0x1));
-        world.grantAccess(_scaleTableId, address(mockAugment));
+        grantAccessToTables(mockAugment);
         world.call(
             world.getAugmentInstallSystemResource(testNamespace),
             abi.encodeWithSignature(
@@ -795,7 +807,7 @@ contract AugmentInstallTest is MudTest {
                 dynamicData
             );
 
-            world.grantAccess(_nameTableId, address(mockAugment));
+            grantAccessToTables(mockAugment);
             world.call(
                 world.getAugmentInstallSystemResource(testNamespace),
                 abi.encodeWithSignature(
@@ -910,7 +922,7 @@ contract AugmentInstallTest is MudTest {
                 dynamicData
             );
 
-            world.grantAccess(_scaleTableId, address(mockAugment));
+            grantAccessToTables(mockAugment);
             world.call(
                 world.getAugmentInstallSystemResource(testNamespace),
                 abi.encodeWithSignature(
@@ -1108,7 +1120,7 @@ contract AugmentInstallTest is MudTest {
                 dynamicData
             );
 
-            world.grantAccess(_nameTableId, address(mockAugment));
+            grantAccessToTables(mockAugment);
             world.call(
                 world.getAugmentInstallSystemResource(testNamespace),
                 abi.encodeWithSignature(
@@ -1220,7 +1232,7 @@ contract AugmentInstallTest is MudTest {
                 dynamicData
             );
 
-            world.grantAccess(_scaleTableId, address(mockAugment));
+            grantAccessToTables(mockAugment);
             world.call(
                 world.getAugmentInstallSystemResource(testNamespace),
                 abi.encodeWithSignature(
@@ -1309,6 +1321,10 @@ contract MockAugmentSingle is Augment {
         return componentTypes;
     }
 
+    function getRequiredPermissions() external view returns (bytes16[] memory) {
+        return new bytes16[](0);
+    }
+
     function installOverrides(
         IStore store,
         bytes14 namespace,
@@ -1335,6 +1351,10 @@ contract MockAugmentMultipleComponents is Augment {
 
     function getComponentTypes() external view returns (bytes16[][] memory) {
         return componentTypes;
+    }
+
+    function getRequiredPermissions() external view returns (bytes16[] memory) {
+        return new bytes16[](0);
     }
 
     function installOverrides(
@@ -1366,6 +1386,10 @@ contract MockAugmentMultipleEntities is Augment {
         return componentTypes;
     }
 
+    function getRequiredPermissions() external view returns (bytes16[] memory) {
+        return new bytes16[](0);
+    }
+
     function installOverrides(
         IStore store,
         bytes14 namespace,
@@ -1390,6 +1414,12 @@ contract MockAugmentSetOverride is Augment {
 
     function getComponentTypes() external view returns (bytes16[][] memory) {
         return componentTypes;
+    }
+
+    function getRequiredPermissions() external view returns (bytes16[] memory) {
+        bytes16[] memory tables = new bytes16[](1);
+        tables[0] = bytes16(bytes32("NameCom"));
+        return tables;
     }
 
     function installOverrides(
@@ -1449,6 +1479,12 @@ contract MockAugmentSpliceOverride is Augment {
         return componentTypes;
     }
 
+    function getRequiredPermissions() external view returns (bytes16[] memory) {
+        bytes16[] memory tables = new bytes16[](1);
+        tables[0] = bytes16(bytes32("ScaleCom"));
+        return tables;
+    }
+
     function installOverrides(
         IStore store,
         bytes14 namespace,
@@ -1488,6 +1524,10 @@ contract MockAugmentSingleGated is Augment {
 
     function getComponentTypes() external view returns (bytes16[][] memory) {
         return componentTypes;
+    }
+
+    function getRequiredPermissions() external view returns (bytes16[] memory) {
+        return new bytes16[](0);
     }
 
     function installOverrides(

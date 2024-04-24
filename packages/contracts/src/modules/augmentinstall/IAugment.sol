@@ -6,11 +6,6 @@ import {IStore} from "@latticexyz/store/src/IStore.sol";
 
 interface IAugment is IERC165 {
     /**
-     * @notice Run a hook before installation. Can be used to gate access to installing an augment
-     */
-    function onBeforeInstall(IStore store, bytes14 namespace) external;
-
-    /**
      * @notice Return the metadata of the augment.
      * @return metadataURI The URI of the metadata as a content hash
      */
@@ -21,6 +16,17 @@ interface IAugment is IERC165 {
      * @return The types of the augment as a bytes16[][] two dimensional array.
      */
     function getComponentTypes() external view returns (bytes16[][] memory);
+
+    /**
+     * @notice Return the tables the Augment needs access to in order to install
+     * @return The tables the Augment needs access to in order to install.
+     */
+    function getRequiredPermissions() external view returns (bytes16[] memory);
+
+    /**
+     * @notice Run a hook before installation. Can be used to gate access to installing an augment
+     */
+    function onBeforeInstall(IStore store, bytes14 namespace) external;
 
     /**
      * @notice Install overrides to entities that define this augment.
