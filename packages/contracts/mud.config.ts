@@ -44,7 +44,7 @@ export default defineWorld({
       },
       key: ["key"],
       codegen: {
-        outputDirectory: "../modules/augmentinstallation/tables",
+        outputDirectory: "../modules/augmentinstall/tables",
         tableIdArgument: true,
         storeArgument: true,
       },
@@ -96,6 +96,14 @@ export default defineWorld({
     },
     ScaleCom: {
       schema: { key: "bytes32", x: "int16", y: "int16", z: "int16" },
+      key: ["key"],
+      codegen: {
+        tableIdArgument: true,
+        storeArgument: true,
+      },
+    },
+    GeoAnchorCom: {
+      schema: { key: "bytes32", h: "int32", geohash: "string" },
       key: ["key"],
       codegen: {
         tableIdArgument: true,
