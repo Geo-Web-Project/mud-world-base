@@ -13,7 +13,7 @@ import {revertWithBytes} from "@latticexyz/world/src/revertWithBytes.sol";
 import {ResourceAccess} from "@latticexyz/world/src/codegen/tables/ResourceAccess.sol";
 import {NamespaceOwner} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
 import {AugmentInstallSystem, AugmentInstallLib} from "../augmentinstall/AugmentInstallSystem.sol";
-import {Augments} from "../augmentinstallation/tables/Augments.sol";
+import {Augments} from "../augmentinstall/tables/Augments.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {SystemSwitch} from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
