@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "build": "mud build",
+    "build:types": "pnpm typechain --target ethers-v5 '**/**.sol/*.json'",
     "clean": "forge clean && rimraf src/codegen",
     "deploy:local": "pnpm run build && mud deploy",
     "deploy:testnet": "pnpm run build && mud deploy --profile=lattice-testnet",
