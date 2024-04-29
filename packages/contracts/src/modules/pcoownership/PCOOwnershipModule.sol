@@ -52,15 +52,6 @@ contract PCOOwnershipModule is Module {
         );
         if (!success) revertWithBytes(returnData);
 
-        // Register system's functions
-        (success, returnData) = address(world).delegatecall(
-            abi.encodeCall(
-                world.registerFunctionSelector,
-                (SYSTEM_ID, "registerParcelNamespace(uint256)")
-            )
-        );
-        if (!success) revertWithBytes(returnData);
-
         // Register a hook that is called when a value is set in the source table
         (success, returnData) = address(world).delegatecall(
             abi.encodeCall(

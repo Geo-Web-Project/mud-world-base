@@ -11,7 +11,11 @@ import { ResourceId } from "@latticexyz/world/src/WorldResourceId.sol";
  * @dev This interface is automatically generated from the corresponding system contract. Do not edit manually.
  */
 interface IPCOOwnershipSystem {
+  function getNamespaceForParcel(uint256 parcelId) external pure returns (bytes14);
+
   function getNamespaceIdForParcel(uint256 parcelId) external pure returns (ResourceId);
+
+  function getAugmentInstallSystemResource(bytes14 namespace) external pure returns (ResourceId);
 
   function registerParcelNamespace(uint256 parcelId) external;
 

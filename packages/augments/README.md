@@ -2,7 +2,7 @@
 
 ### OP Sepolia
 
-| Augment             | Address                                     |
-| ------------------- | ------------------------------------------- |
-| ModelAugment        | 0x9922C084543443dB278E207bB670451060f237d5  |
-| GalleryModelAugment | 0xC8d51FD35D9054b08Ee3b630CF7F3d186C8dFe49. |
+| Augment               | Address                                      |
+| --------------------- | -------------------------------------------- |
+| GeoAnchorModelAugment | 0xC33bAC8dc0699FA6766082063cAE852bBA44d9Fd.  |
+| GalleryModelAugment   | 0x7eCED86efE23707226DaAa2754C215d23B2bdA86.. |

@@ -9,9 +9,11 @@ import {requireInterface} from "@latticexyz/world/src/requireInterface.sol";
 import {RESOURCE_TABLE} from "@latticexyz/world/src/worldResourceTypes.sol";
 import {ResourceId, WorldResourceIdInstance, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
 import {getUniqueEntity} from "@latticexyz/world-modules/src/modules/uniqueentity/getUniqueEntity.sol";
-import {StoreCore} from "@latticexyz/store/src/StoreCore.sol";
 import {EncodedLengths} from "@latticexyz/store/src/EncodedLengths.sol";
 import {AccessControl} from "@latticexyz/world/src/AccessControl.sol";
+import {Utils} from "@latticexyz/world/src/Utils.sol";
+import {StoreSwitch} from "@latticexyz/store/src/StoreSwitch.sol";
+import {IStore} from "@latticexyz/store/src/IStore.sol";
 
 struct AugmentComponentValue {
     bytes staticData;
@@ -23,31 +25,22 @@ struct AugmentComponentValue {
  * @title Augment Installation System
  * @dev A system contract to handle the installation of Augments in the World.
  */
-contract AugmentInstallationSystem is System {
+contract AugmentInstallSystem is System {
     /**
      * @notice Installs an augment into the World under a specified namespace.
      * @dev Validates the given augment against the IAugment interface and delegates the installation process.
      * The augment is then registered in the InstalledAugment table.
      * @param augment The augment to be installed.
-     * @param namespace The namespace to install the augment.
      * @param args Arguments for the augment installation.
      */
-    function installAugment(
-        IAugment augment,
-        bytes14 namespace,
-        bytes calldata args
-    ) public {
-        // Require namespace access
-        AccessControl.requireAccess(
-            WorldResourceIdLib.encodeNamespace(namespace),
-            _msgSender()
-        );
+    function installAugment(IAugment augment, bytes calldata args) public {
+        bytes14 namespace = Utils.systemNamespace();
 
         // Require the provided address to implement the IAugment interface
         requireInterface(address(augment), type(IAugment).interfaceId);
 
         // Before install hook
-        augment.onBeforeInstall();
+        augment.onBeforeInstall(IStore(_world()), namespace);
 
         // Parse args and set records
         bytes16[][] memory augmentTypes = augment.getComponentTypes();
@@ -75,7 +68,7 @@ contract AugmentInstallationSystem is System {
                         )
                     )
                 );
-                StoreCore.setRecord(
+                StoreSwitch.setRecord(
                     tableId,
                     _keyTuple,
                     componentValues[x][y].staticData,
@@ -86,20 +79,12 @@ contract AugmentInstallationSystem is System {
         }
 
         // Perform augment overrides
-        WorldContextProviderLib.callWithContextOrRevert({
-            msgSender: _msgSender(),
-            msgValue: 0,
-            target: address(augment),
-            callData: abi.encodeCall(
-                IAugment.installOverrides,
-                (namespace, newEntities[0])
-            )
-        });
+        augment.installOverrides(IStore(_world()), namespace, newEntities[0]);
 
         // Register the augment in the Augments table
         bytes32 augmentKey = getUniqueEntity();
-        Augments._set(
-            AugmentInstallationLib.getAugmentsTableId(
+        Augments.set(
+            AugmentInstallLib.getAugmentsTableId(
                 WorldResourceIdLib.encodeNamespace(namespace)
             ),
             augmentKey,
@@ -108,28 +93,26 @@ contract AugmentInstallationSystem is System {
             augment.getMetadataURI(),
             newEntities
         );
+        Augments.setInstalledEntities(
+            AugmentInstallLib.getAugmentsTableId(
+                WorldResourceIdLib.encodeNamespace(namespace)
+            ),
+            augmentKey,
+            newEntities
+        );
     }
 
     /**
      * @notice Updates an already installed augment.
      * @dev Validates the given augment against the IAugment interface and delegates the installation process.
-     * @param namespace The namespace of the augment.
      * @param augmentKey The key of the previously installed augment
      * @param args Arguments for the augment installation.
      */
-    function updateAugment(
-        bytes14 namespace,
-        bytes32 augmentKey,
-        bytes calldata args
-    ) public {
-        // Require namespace access
-        AccessControl.requireAccess(
-            WorldResourceIdLib.encodeNamespace(namespace),
-            _msgSender()
-        );
+    function updateAugment(bytes32 augmentKey, bytes calldata args) public {
+        bytes14 namespace = Utils.systemNamespace();
 
-        AugmentsData memory augmentsData = Augments._get(
-            AugmentInstallationLib.getAugmentsTableId(
+        AugmentsData memory augmentsData = Augments.get(
+            AugmentInstallLib.getAugmentsTableId(
                 WorldResourceIdLib.encodeNamespace(namespace)
             ),
             augmentKey
@@ -170,7 +153,7 @@ contract AugmentInstallationSystem is System {
                         )
                     )
                 );
-                StoreCore.setRecord(
+                StoreSwitch.setRecord(
                     tableId,
                     _keyTuple,
                     componentValues[x][y].staticData,
@@ -181,32 +164,23 @@ contract AugmentInstallationSystem is System {
         }
 
         // Perform augment overrides
-        WorldContextProviderLib.callWithContextOrRevert({
-            msgSender: _msgSender(),
-            msgValue: 0,
-            target: address(augment),
-            callData: abi.encodeCall(
-                IAugment.installOverrides,
-                (namespace, installedEntities[0])
-            )
-        });
+        augment.installOverrides(
+            IStore(_world()),
+            namespace,
+            installedEntities[0]
+        );
     }
 
     /**
      * @notice Uninstalls an already installed augment.
      * @dev Validates the given augment against the IAugment interface and delegates the installation process.
-     * @param namespace The namespace of the augment.
      * @param augmentKey The key of the previously installed augment
      */
-    function uninstallAugment(bytes14 namespace, bytes32 augmentKey) public {
-        // Require namespace access
-        AccessControl.requireAccess(
-            WorldResourceIdLib.encodeNamespace(namespace),
-            _msgSender()
-        );
+    function uninstallAugment(bytes32 augmentKey) public {
+        bytes14 namespace = Utils.systemNamespace();
 
-        AugmentsData memory augmentsData = Augments._get(
-            AugmentInstallationLib.getAugmentsTableId(
+        AugmentsData memory augmentsData = Augments.get(
+            AugmentInstallLib.getAugmentsTableId(
                 WorldResourceIdLib.encodeNamespace(namespace)
             ),
             augmentKey
@@ -240,31 +214,28 @@ contract AugmentInstallationSystem is System {
                         )
                     )
                 );
-                StoreCore.deleteRecord(tableId, _keyTuple);
+                StoreSwitch.deleteRecord(tableId, _keyTuple);
             }
         }
         // Perform augment overrides
-        WorldContextProviderLib.callWithContextOrRevert({
-            msgSender: _msgSender(),
-            msgValue: 0,
-            target: address(augment),
-            callData: abi.encodeCall(
-                IAugment.uninstallOverrides,
-                (namespace, installedEntities[0])
-            )
-        });
+        augment.uninstallOverrides(
+            IStore(_world()),
+            namespace,
+            installedEntities[0]
+        );
 
         // Uninstall
-        Augments._deleteRecord(
-            AugmentInstallationLib.getAugmentsTableId(
+        Augments.setInstalledEntities(
+            AugmentInstallLib.getAugmentsTableId(
                 WorldResourceIdLib.encodeNamespace(namespace)
             ),
-            augmentKey
+            augmentKey,
+            new bytes32[](0)
         );
     }
 }
 
-library AugmentInstallationLib {
+library AugmentInstallLib {
     /**
      * @notice Get table Id for Augments in a particular namespace
      */

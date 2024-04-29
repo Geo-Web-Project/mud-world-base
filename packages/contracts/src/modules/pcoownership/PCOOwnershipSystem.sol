@@ -6,25 +6,48 @@ import {PCOOwnership, PCOOwnershipData} from "./tables/PCOOwnership.sol";
 import {ResourceId, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
 import {IBaseWorld} from "@latticexyz/world/src/codegen/interfaces/IBaseWorld.sol";
 import {TABLE_ID} from "./constants.sol";
-import {REGISTRATION_SYSTEM_ID} from "@latticexyz/world/src/modules/init/constants.sol";
+import {RESOURCE_SYSTEM, REGISTRATION_SYSTEM_ID} from "@latticexyz/world/src/modules/init/constants.sol";
 import {Systems} from "@latticexyz/world/src/codegen/tables/Systems.sol";
 import {WorldRegistrationSystem} from "@latticexyz/world/src/modules/init/implementations/WorldRegistrationSystem.sol";
 import {revertWithBytes} from "@latticexyz/world/src/revertWithBytes.sol";
 import {ResourceAccess} from "@latticexyz/world/src/codegen/tables/ResourceAccess.sol";
 import {NamespaceOwner} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
-import {AugmentInstallationLib} from "../augmentinstallation/AugmentInstallationSystem.sol";
-import {Augments} from "../augmentinstallation/tables/Augments.sol";
+import {AugmentInstallSystem, AugmentInstallLib} from "../augmentinstall/AugmentInstallSystem.sol";
+import {Augments} from "../augmentinstall/tables/Augments.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
+import {SystemSwitch} from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
 contract PCOOwnershipSystem is System {
+    AugmentInstallSystem private immutable augmentInstallSystem =
+        new AugmentInstallSystem();
+
+    function getNamespaceForParcel(
+        uint256 parcelId
+    ) public pure returns (bytes14) {
+        string memory parcelStr = Strings.toString(parcelId);
+        return bytes14(bytes(parcelStr));
+    }
+
     function getNamespaceIdForParcel(
         uint256 parcelId
     ) public pure returns (ResourceId) {
-        string memory parcelStr = Strings.toString(parcelId);
-        return WorldResourceIdLib.encodeNamespace(bytes14(bytes(parcelStr)));
+        return
+            WorldResourceIdLib.encodeNamespace(getNamespaceForParcel(parcelId));
+    }
+
+    function getAugmentInstallSystemResource(
+        bytes14 namespace
+    ) public pure returns (ResourceId) {
+        return
+            WorldResourceIdLib.encode(
+                RESOURCE_SYSTEM,
+                namespace,
+                "AugmentInstall"
+            );
     }
 
     function registerParcelNamespace(uint256 parcelId) public {
+        bytes14 namespace = getNamespaceForParcel(parcelId);
         ResourceId namespaceId = getNamespaceIdForParcel(parcelId);
 
         // Set PCOOwnership hash
@@ -35,20 +58,42 @@ contract PCOOwnershipSystem is System {
         );
 
         // Register namespace
-        (address registrationSystemAddress, ) = Systems._get(
-            REGISTRATION_SYSTEM_ID
+        SystemSwitch.call(
+            abi.encodeCall(
+                WorldRegistrationSystem.registerNamespace,
+                (namespaceId)
+            )
         );
-        (bool success, bytes memory data) = registrationSystemAddress
-            .delegatecall(
-                abi.encodeCall(
-                    WorldRegistrationSystem.registerNamespace,
-                    (namespaceId)
-                )
-            );
-        if (!success) revertWithBytes(data);
+
+        // Register AugmentInstallationSystem
+        ResourceId systemResource = getAugmentInstallSystemResource(namespace);
+        SystemSwitch.call(
+            abi.encodeCall(
+                WorldRegistrationSystem.registerSystem,
+                (systemResource, augmentInstallSystem, false)
+            )
+        );
+        SystemSwitch.call(
+            abi.encodeCall(
+                WorldRegistrationSystem.registerFunctionSelector,
+                (systemResource, "installAugment(IAugment,bytes)")
+            )
+        );
+        SystemSwitch.call(
+            abi.encodeCall(
+                WorldRegistrationSystem.registerFunctionSelector,
+                (systemResource, "updateAugment(bytes32,bytes)")
+            )
+        );
+        SystemSwitch.call(
+            abi.encodeCall(
+                WorldRegistrationSystem.registerFunctionSelector,
+                (systemResource, "uninstallAugment(bytes32)")
+            )
+        );
 
         // Register Augments table
-        ResourceId augmentsTableId = AugmentInstallationLib.getAugmentsTableId(
+        ResourceId augmentsTableId = AugmentInstallLib.getAugmentsTableId(
             namespaceId
         );
         Augments._register(augmentsTableId);
