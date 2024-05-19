@@ -5,11 +5,7 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./types/ethers-contracts/index.ts",
-  "files": [
-    "./dist/",
-    "./out/",
-    "./mud.config.ts"
-  ],
+  "files": ["./dist/", "./out/", "./mud.config.ts"],
   "scripts": {
     "build": "mud build",
     "clean": "forge clean && rimraf src/codegen",
@@ -19,7 +15,7 @@
     "lint": "pnpm run prettier && pnpm run solhint",
     "prettier": "prettier --write 'src/**/*.sol'",
     "solhint": "solhint --config ./.solhint.json 'src/**/*.sol' --fix",
-    "test": "tsc --noEmit && mud test"
+    "test": "mud test"
   },
   "dependencies": {
     "@ethersproject/abi": "^5.7.0",

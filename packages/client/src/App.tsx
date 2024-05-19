@@ -14,8 +14,8 @@ localStorage.debug = "*";
 
 const chainId = import.meta.env.VITE_CHAIN_ID || 31337;
 const world = {
-  address: "0x74d3cb0f25de0b8349324fc49d7947a6b8e35ea9",
-  blockNumber: 9685561,
+  address: "0x9a2a2f21295da1f3ec107774784d206db574072e",
+  blockNumber: 11279237,
 };
 const mudChain = {
   ...optimismSepolia,
@@ -39,7 +39,7 @@ const View = () => {
   ]);
 
   const modelComponents = useStore((state: any) =>
-    Object.values(state.getRecords(tables.ModelCom))
+    Object.values(state.getRecords(tables.ModelCom)),
   );
   console.log(tables);
   console.log(modelComponents);

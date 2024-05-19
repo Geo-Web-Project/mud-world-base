@@ -18,9 +18,6 @@ import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {SystemSwitch} from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
 
 contract PCOOwnershipSystem is System {
-    AugmentInstallSystem private immutable augmentInstallSystem =
-        new AugmentInstallSystem();
-
     function getNamespaceForParcel(
         uint256 parcelId
     ) public pure returns (bytes14) {
@@ -46,7 +43,7 @@ contract PCOOwnershipSystem is System {
             );
     }
 
-    function registerParcelNamespace(uint256 parcelId) public {
+    function registerParcelNamespace(uint256 parcelId, AugmentInstallSystem augmentInstallSystem) public {
         bytes14 namespace = getNamespaceForParcel(parcelId);
         ResourceId namespaceId = getNamespaceIdForParcel(parcelId);
 

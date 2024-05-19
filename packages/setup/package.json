@@ -4,9 +4,7 @@
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "pnpm run build:js",
     "build:js": "tsup",
@@ -18,9 +16,9 @@
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
     "@geo-web/mud-world-base-contracts": "workspace:*",
-    "@latticexyz/common": "^2.0.0",
-    "@latticexyz/store-sync": "^2.0.0",
-    "@latticexyz/store": "^2.0.0",
+    "@latticexyz/common": "2.0.10",
+    "@latticexyz/store-sync": "2.0.10",
+    "@latticexyz/store": "2.0.10",
     "ethers": "^5.7.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
