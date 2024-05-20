@@ -16,8 +16,12 @@ import {AugmentInstallSystem, AugmentInstallLib} from "../augmentinstall/Augment
 import {Augments} from "../augmentinstall/tables/Augments.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {SystemSwitch} from "@latticexyz/world-modules/src/utils/SystemSwitch.sol";
+import {Clones} from "@openzeppelin/contracts/proxy/Clones.sol";
 
 contract PCOOwnershipSystem is System {
+    AugmentInstallSystem private immutable augmentInstallSystem =
+        new AugmentInstallSystem();
+
     function getNamespaceForParcel(
         uint256 parcelId
     ) public pure returns (bytes14) {
@@ -43,7 +47,7 @@ contract PCOOwnershipSystem is System {
             );
     }
 
-    function registerParcelNamespace(uint256 parcelId, AugmentInstallSystem augmentInstallSystem) public {
+    function registerParcelNamespace(uint256 parcelId) public {
         bytes14 namespace = getNamespaceForParcel(parcelId);
         ResourceId namespaceId = getNamespaceIdForParcel(parcelId);
 
@@ -63,11 +67,12 @@ contract PCOOwnershipSystem is System {
         );
 
         // Register AugmentInstallationSystem
+        address augmentInstallSystemClone = Clones.clone(address(augmentInstallSystem));
         ResourceId systemResource = getAugmentInstallSystemResource(namespace);
         SystemSwitch.call(
             abi.encodeCall(
                 WorldRegistrationSystem.registerSystem,
-                (systemResource, augmentInstallSystem, false)
+                (systemResource, AugmentInstallSystem(augmentInstallSystemClone), false)
             )
         );
         SystemSwitch.call(

@@ -8,10 +8,8 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {PCOOwnershipHook} from "../src/modules/pcoownership/PCOOwnershipHook.sol";
 import {PCOOwnershipModule} from "../src/modules/pcoownership/PCOOwnershipModule.sol";
 import {NamespaceOwner} from "@latticexyz/world/src/codegen/tables/NamespaceOwner.sol";
-import {ResourceIds} from "@latticexyz/store/src/codegen/tables/ResourceIds.sol";
 import {ResourceId, WorldResourceIdLib} from "@latticexyz/world/src/WorldResourceId.sol";
 import {StoreSwitch} from "@latticexyz/store/src/StoreSwitch.sol";
-import {AugmentInstallSystem} from "../src/modules/augmentinstall/AugmentInstallSystem.sol";
 
 contract MockERC721 is ERC721 {
     constructor() ERC721("name", "symbol") {}
@@ -55,8 +53,7 @@ contract PCOOwnershipTest is MudTest {
 
         ResourceId namespaceId = world.getNamespaceIdForParcel(parcelId);
 
-        AugmentInstallSystem augmentInstallSystem = new AugmentInstallSystem();
-        world.registerParcelNamespace(parcelId, augmentInstallSystem);
+        world.registerParcelNamespace(parcelId);
 
         return namespaceId;
     }
@@ -68,12 +65,6 @@ contract PCOOwnershipTest is MudTest {
             NamespaceOwner.get(namespaceId),
             address(this),
             "PCO owner should be namespace owner"
-        );
-
-        assertEq(
-            ResourceIds.get(namespaceId),
-            true,
-            "Namespace does not exist"
         );
     }
 
@@ -105,10 +96,8 @@ contract PCOOwnershipTest is MudTest {
         uint256 parcelId = 1;
         mockERC721.mint(address(0x1), parcelId);
 
-        AugmentInstallSystem augmentInstallSystem = new AugmentInstallSystem();
-
         vm.expectRevert(PCOOwnershipHook.PCOOwnership_NotPCOOwner.selector);
-        world.registerParcelNamespace(parcelId, augmentInstallSystem);
+        world.registerParcelNamespace(parcelId);
     }
 
     function test_CannotRegisterAnotherNamespace() public {
